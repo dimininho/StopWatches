@@ -67,18 +67,18 @@ Rectangle {
         height: 10
         radius: 5
         anchors{
-            top:parent.top
-            right:parent.right
+            top:watch.top
+            right:watch.right
             rightMargin: 15
             topMargin: 15
         }
-        color: parent.run ? "yellow" : "grey"
+        color: watch.run ? "yellow" : "grey"
 
     }
 
     MouseArea {
-        anchors.fill: parent
-        onDoubleClicked: parent.run = !parent.run
+        anchors.fill: watch
+        onDoubleClicked: watch.run = !watch.run
     }
 
 

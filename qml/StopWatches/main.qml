@@ -1,6 +1,4 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.1
-import QtQuick.Controls.Styles 1.1
 
 
 
@@ -31,40 +29,65 @@ Item {
 
     Watch {
         x:40
-        y:50
+        y:60
     }
 
     Watch {
-        x:300
+        x:270
         y:300
     }
 
 
-    Row{
-       // anchors.top : parent.top
-         anchors.horizontalCenter:  parent.horizontalCenter
-        spacing: 10
-        Button  {
-            id: startButton
 
-            text: "Start all"
-            onClicked: {
-              //  mainTimer.start()
-                mainItem.startWatches()
+    Rectangle {
+        id: mainPanel
+        width: mainItem.width
+        height: 50
+        color: "plum"
+        anchors.top: parent.top
+        //z:1
+
+        Row{
+           // anchors.top : parent.top
+            //anchors.horizontalCenter:  mainPanel.horizontalCenter
+            anchors.centerIn:  mainPanel
+
+            spacing: 20
+            Button  {
+                id: startButton
+                buttonText: "Start all"
+                onButtonClick: {
+                    //  mainTimer.start()
+                    mainItem.startWatches()
+                }
             }
 
-        }
-        Button  {
-            id: stopButton
-            text: "Stop all"
+            Button  {
+                id: stopButton
+                buttonText: "Stop all"
+                onButtonClick: {
+                    //mainTimer.stop()
+                    mainItem.stopWatches()
+                }
 
-            onClicked: {
-              //  mainTimer.stop()
-                mainItem.stopWatches()
             }
 
+            Button  {
+                id: addNew
+                buttonText: "Add new"
+                onButtonClick: {
+                    //mainTimer.stop()
+
+
+                }
+
+            }
         }
+
     }
+
+
+
 
 
 }
