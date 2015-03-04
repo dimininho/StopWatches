@@ -1,6 +1,6 @@
 import QtQuick 2.0
-
-
+import QtQuick.Layouts 1.1
+import "control.js" as Control
 
 Item {
     id: mainItem
@@ -26,17 +26,6 @@ Item {
         repeat:true
         onTriggered: mainItem.timerStep();
     }
-
-    Watch {
-        x:40
-        y:60
-    }
-
-    Watch {
-        x:270
-        y:300
-    }
-
 
 
     Rectangle {
@@ -76,9 +65,7 @@ Item {
                 id: addNew
                 buttonText: "Add new"
                 onButtonClick: {
-                    //mainTimer.stop()
-
-
+                    Control.addButton(layout);
                 }
 
             }
@@ -88,6 +75,22 @@ Item {
 
 
 
+    GridLayout {
+        id:layout
+        anchors.top: mainPanel.bottom
+        anchors.left: mainItem.left
+        anchors.right: mainItem.right
+        columns: 2
+
+        Watch {}
+
+
+    }
+
+
+    onWidthChanged: {
+        console.log(mainItem.width);
+    }
 
 
 }
