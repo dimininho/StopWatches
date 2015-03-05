@@ -1,11 +1,16 @@
-import QtQuick 2.0
 import QtQuick.Layouts 1.1
+import QtQuick 2.0
+//import QtQuick.Window 2.0
 import "control.js" as Control
 
 Item {
     id: mainItem
+
+    property int watchWidth: 200
+
     width:500
     height: 500
+
     MouseArea {
         anchors.fill: parent
 
@@ -17,6 +22,9 @@ Item {
     onStartWatches: {}
     signal stopWatches
     onStopWatches: {}
+
+
+
 
 
     Timer{
@@ -77,19 +85,22 @@ Item {
 
     GridLayout {
         id:layout
+        property int colNumber: 2
         anchors.top: mainPanel.bottom
         anchors.left: mainItem.left
         anchors.right: mainItem.right
-        columns: 2
+        columns: colNumber
 
-        Watch {}
+        Watch {
+            id: w1
+        }
 
 
     }
 
 
     onWidthChanged: {
-        console.log(mainItem.width);
+        Control.changeColumnsNumber()
     }
 
 
