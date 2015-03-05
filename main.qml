@@ -95,9 +95,7 @@ Window {
         anchors.right: mainItem.right
         columns: colNumber
 
-        Watch {
-            id: w1
-        }
+        Watch { }
 
 
     }

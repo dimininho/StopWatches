@@ -46,20 +46,13 @@ Rectangle {
     }
     smooth:true
 
- //   anchors.centerIn: parent
-
-    Text {
-        text: parent.watchName
-        font.pixelSize: 15
-        anchors.centerIn: parent
-    }
 
     Text {
         text: parent.hour + ":" + parent.min + ":" + parent.sec
-        // anchors.top: parent.top
-       // anchors.left: parent.left
         anchors.horizontalCenter:  parent.horizontalCenter
-       // anchors.topMargin: 40
+        anchors.top: parent.top
+        anchors.topMargin: 40
+        font.pointSize: 17
     }
 
     Rectangle {
@@ -78,9 +71,37 @@ Rectangle {
 
     MouseArea {
         anchors.fill: watch
-        onDoubleClicked: watch.run = !watch.run
+        onClicked: watch.run = !watch.run
     }
 
+
+
+    MouseArea {
+        anchors{
+            top: watch.top
+            left: watch.left
+            right: watch.right
+            topMargin: 0.55*watch.width
+        }
+        width: input.contentWidth < 100 ? 100 : input.contentWidth
+
+        height: input.contentHeight
+        hoverEnabled: true
+        onDoubleClicked: input.focus = true;
+        onExited: input.focus = false;
+
+        TextInput {
+            id: input
+            text: watch.watchName
+            font.pixelSize: 15
+            anchors.fill:  parent
+            cursorVisible: false
+            wrapMode: TextInput.WordWrap
+            horizontalAlignment:  TextInput.AlignHCenter
+            maximumLength: 50
+        }
+
+    }
 
     Connections{
         target: mainItem
