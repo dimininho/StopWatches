@@ -1,15 +1,19 @@
+import QtQuick 2.2
+import QtQuick.Window 2.1
 import QtQuick.Layouts 1.1
-import QtQuick 2.0
-//import QtQuick.Window 2.0
+
 import "control.js" as Control
 
-Item {
+Window {
     id: mainItem
 
     property int watchWidth: 200
 
     width:500
     height: 500
+    minimumWidth: watchWidth
+    minimumHeight: watchWidth
+    visible: true
 
     MouseArea {
         anchors.fill: parent
@@ -107,3 +111,35 @@ Item {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+Window {
+    visible: true
+    width: 360
+    height: 360
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            Qt.quit();
+        }
+    }
+
+    Text {
+        text: qsTr("Hello World")
+        anchors.centerIn: parent
+    }
+}
+*/
