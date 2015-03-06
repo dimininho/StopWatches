@@ -1,4 +1,6 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.2
+
 
 Rectangle {
     property string watchName: "Project name"
@@ -71,7 +73,11 @@ Rectangle {
 
     MouseArea {
         anchors.fill: watch
-        onClicked: watch.run = !watch.run
+        acceptedButtons: Qt.LeftButton | Qt.RightButton;
+        onClicked: {
+            if (mouse.button == Qt.RightButton)  popupMenu.popup(mouseX,mouseY);
+            if (mouse.button == Qt.LeftButton)  watch.run = !watch.run;
+        }
     }
 
 
@@ -102,6 +108,22 @@ Rectangle {
         }
 
     }
+
+
+    Menu{
+        id: popupMenu
+        MenuItem{
+            text: "Color"
+        }
+        MenuItem{
+            text: "Seconds"
+        }
+        MenuItem{
+            text: "Set Name"
+        }
+    }
+
+
 
     Connections{
         target: mainItem
