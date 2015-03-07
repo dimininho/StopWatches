@@ -1,6 +1,8 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.1
+import QtQuick.Dialogs 1.1
 
+import QtQuick.Controls.Styles 1.1
 
 Rectangle {
     property string watchName: "Project name"
@@ -8,8 +10,12 @@ Rectangle {
     property int hour: 0
     property int sec: 0
     property int time: 0
+    property bool seeSeconds: false
 
     property bool run: false
+
+    property color fillColor: "lightsteelblue"
+
 
 
 
@@ -31,26 +37,24 @@ Rectangle {
     id: watch
     width: 200
     height: 200
-    color: "#76efa6"
+    //color: "#76efa6"
     radius: 26
     border.width: 0
     border.color: "#1b50da"
 
     gradient: Gradient {
-        GradientStop {
-            position: 0
-            color: "#76efa6"
-        }
-        GradientStop {
-            position: 1
-            color: "#2694cc"
-        }
+        GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.3) }
+        GradientStop { position: 0.67; color: Qt.darker(fillColor, 1.35) }
     }
     smooth:true
+    antialiasing: true
 
 
     Text {
-        text: parent.hour + ":" + parent.min + ":" + parent.sec
+        text: {
+            if  (seeSeconds) return parent.hour + ":" + parent.min + ":" + parent.sec
+            else return parent.hour + ":" + parent.min
+        }
         anchors.horizontalCenter:  parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 40
@@ -113,15 +117,37 @@ Rectangle {
     Menu{
         id: popupMenu
         MenuItem{
-            text: "Color"
+            text: "Set color"
+            onTriggered: colorDialog.visible = true;
         }
         MenuItem{
-            text: "Seconds"
+            text: "Enable seconds"
+            onTriggered: {
+                seeSeconds = !seeSeconds
+                if (seeSeconds) text = "Disable seconds"
+                else text = "Enable seconds"
+             }
         }
         MenuItem{
             text: "Set Name"
         }
+
+
+       // visible: true
     }
+
+    Component{
+        id:menuStyle
+        Rectangle{
+            color: "green"
+            width: 50
+            height: 100
+            visible: true
+        }
+
+    }
+
+
 
 
 
@@ -130,6 +156,19 @@ Rectangle {
         onTimerStep: {watch.nextMoment()}
         onStartWatches: watch.run = true
         onStopWatches: watch.run = false
+    }
+
+
+
+    ColorDialog {
+        id: colorDialog
+        visible: false
+        //modality: colorDialogModal.checked ? Qt.WindowModal : Qt.NonModal
+        title: "Choose a color"
+        color: "green"
+
+        onAccepted: { fillColor = color; }
+        onRejected: { console.log("Rejected") }
     }
 
 }
