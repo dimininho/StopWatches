@@ -1,10 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
-
+import "control.js" as Control
 import QtQuick.Controls.Styles 1.1
 
 Rectangle {
+    id: watch
+    property int serialNr:0
+
     property string watchName: "Project name"
     property int min: 0
     property int hour: 0
@@ -15,7 +18,6 @@ Rectangle {
     property bool run: false
 
     property color fillColor: "lightsteelblue"
-
 
 
 
@@ -34,10 +36,8 @@ Rectangle {
     }
 
 
-    id: watch
     width: 200
     height: 200
-    //color: "#76efa6"
     radius: 26
     border.width: 0
     border.color: "#1b50da"
@@ -82,6 +82,7 @@ Rectangle {
             if (mouse.button == Qt.RightButton)  popupMenu.popup(mouseX,mouseY);
             if (mouse.button == Qt.LeftButton)  watch.run = !watch.run;
         }
+
     }
 
 
@@ -130,6 +131,15 @@ Rectangle {
         }
         MenuItem{
             text: "Set Name"
+            onTriggered: console.log(watch.serialNr + "  ----------");
+        }
+
+        MenuItem{
+            text: "Remove watch"
+            onTriggered: {
+                //var itemId = parent.parent.id
+                Control.destroyItem(2);
+             }
         }
 
 
@@ -170,5 +180,8 @@ Rectangle {
         onAccepted: { fillColor = color; }
         onRejected: { console.log("Rejected") }
     }
+
+
+
 
 }
