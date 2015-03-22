@@ -13,3 +13,10 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 DISTFILES +=
+
+OTHER_FILES += \
+    ContexMenu.qml \
+    PopMenu.qml \
+    Global.js \
+    ContextItem.qml \
+    PMenu.qml

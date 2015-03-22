@@ -4,6 +4,7 @@ import QtQuick.Dialogs 1.1
 import "control.js" as Control
 import QtQuick.Controls.Styles 1.1
 
+
 Rectangle {
     id: watch
     property int serialNr:0
@@ -18,7 +19,6 @@ Rectangle {
     property bool run: false
 
     property color fillColor: "lightsteelblue"
-
 
 
     function nextMoment() {
@@ -52,8 +52,12 @@ Rectangle {
 
     Text {
         text: {
-            if  (seeSeconds) return parent.hour + ":" + parent.min + ":" + parent.sec
-            else return parent.hour + ":" + parent.min
+            var str;
+            str = (hour>9) ? parent.hour : "0"+parent.hour;
+            str = (min>9) ? str + ":" + parent.min : str + ":0" + parent.min
+            if (seeSeconds)
+                str = (sec>9) ? str + ":" + parent.sec : str + ":0" + parent.sec
+            return str;
         }
         anchors.horizontalCenter:  parent.horizontalCenter
         anchors.top: parent.top
@@ -79,7 +83,11 @@ Rectangle {
         anchors.fill: watch
         acceptedButtons: Qt.LeftButton | Qt.RightButton;
         onClicked: {
-            if (mouse.button == Qt.RightButton)  popupMenu.popup(mouseX,mouseY);
+            if (mouse.button == Qt.RightButton) {
+                popMenu.x = mouseX;
+                popMenu.y = mouseY;
+                popMenu.isOpen = true //popupMenu.popup(mouseX,mouseY);
+            }
             if (mouse.button == Qt.LeftButton)  watch.run = !watch.run;
         }
 
@@ -138,7 +146,7 @@ Rectangle {
             text: "Remove watch"
             onTriggered: {
                 //var itemId = parent.parent.id
-                Control.destroyItem(2);
+                Control.destroyItem(serialNr);
              }
         }
 
@@ -146,6 +154,22 @@ Rectangle {
        // visible: true
     }
 
+
+    ContexMenu {
+        id: popMenu
+    }
+/*
+    PMenu {
+       // onItemClicked: myText.text = "clicked red item: " + index
+        id: pMenu
+
+        model: ListModel {
+        ListElement {name: "Red Item 0"}
+        ListElement {name: "Red Item 1"}
+        ListElement {name: "Red Item 2"}
+        }
+    }
+*/
     Component{
         id:menuStyle
         Rectangle{

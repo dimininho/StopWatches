@@ -77,7 +77,7 @@ Window {
                 id: addNew
                 buttonText: "Add new"
                 onButtonClick: {
-                    Control.addButton(layout);
+                    Control.addButton(layout,mainItem);
                 }
 
             }
@@ -95,16 +95,18 @@ Window {
         anchors.right: mainItem.right
         columns: colNumber
 
-        Watch { }
+       // Watch { }
 
 
     }
 
 
     onWidthChanged: {
-        Control.changeColumnsNumber()
+       // Control.changeColumnsNumber()
+         layout.colNumber = mainItem.width / mainItem.watchWidth;
     }
 
+    onSceneGraphInitialized:   Control.addButton(layout,mainItem);
 
 }
 
