@@ -4,5 +4,6 @@
         <file>Button.qml</file>
         <file>Watch.qml</file>
         <file>control.js</file>
+        <file>Global.js</file>
     </qresource>
 </RCC>

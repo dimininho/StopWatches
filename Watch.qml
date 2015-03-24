@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
 import "control.js" as Control
-import QtQuick.Controls.Styles 1.1
+import QtQuick.Controls.Styles 1.3
 
 
 Rectangle {
@@ -84,9 +84,10 @@ Rectangle {
         acceptedButtons: Qt.LeftButton | Qt.RightButton;
         onClicked: {
             if (mouse.button == Qt.RightButton) {
-                popMenu.x = mouseX;
-                popMenu.y = mouseY;
-                popMenu.isOpen = true //popupMenu.popup(mouseX,mouseY);
+                //popMenu.x = mouseX;
+               // popMenu.y = mouseY;
+               // popMenu.isOpen = true
+                popupMenu.popup(mouseX,mouseY);
             }
             if (mouse.button == Qt.LeftButton)  watch.run = !watch.run;
         }
@@ -125,10 +126,7 @@ Rectangle {
 
     Menu{
         id: popupMenu
-        MenuItem{
-            text: "Set color"
-            onTriggered: colorDialog.visible = true;
-        }
+
         MenuItem{
             text: "Enable seconds"
             onTriggered: {
@@ -138,47 +136,73 @@ Rectangle {
              }
         }
         MenuItem{
+            text: "Set color"
+            onTriggered: colorDialog.visible = true;
+        }
+
+        MenuItem{
             text: "Set Name"
-            onTriggered: console.log(watch.serialNr + "  ----------");
+            onTriggered: {
+                input.selectAll();
+                input.focus = true;
+            }
+        }
+
+        MenuItem{
+            text: "Reset watch"
+            onTriggered: {
+                watch.time = -1;
+                nextMoment();
+                watch.run = false;
+             }
+
         }
 
         MenuItem{
             text: "Remove watch"
             onTriggered: {
-                //var itemId = parent.parent.id
                 Control.destroyItem(serialNr);
              }
+
         }
 
 
-       // visible: true
+       style: menuStyle
     }
 
 
-    ContexMenu {
-        id: popMenu
-    }
-/*
-    PMenu {
-       // onItemClicked: myText.text = "clicked red item: " + index
-        id: pMenu
+    property Component menuStyle: MenuStyle {
 
-        model: ListModel {
-        ListElement {name: "Red Item 0"}
-        ListElement {name: "Red Item 1"}
-        ListElement {name: "Red Item 2"}
+        //__backgroundColor : "transparent"
+        itemDelegate.background:  Rectangle {
+            height: 22
+            width: 100
+            color: "gray"
+            antialiasing: true
+            border.color: "gray"
+            Rectangle {
+                  anchors.fill: parent
+                  anchors.margins: 1
+                  color: styleData.selected ? "#999999" : "#333333"
+                  antialiasing: true
+                  visible: true
+                  border.color: "black"
+           }
         }
-    }
+        itemDelegate.label: Text{
+            text:  styleData.text
+            color: "white"
+            font.pointSize: 12
+            font.bold: styleData.pressed ? true : false
+        }
+
+ /*       frame: Rectangle{
+            color: "gray"
+            border.color: "transparent"
+            border.width: 0
+
+        }
 */
-    Component{
-        id:menuStyle
-        Rectangle{
-            color: "green"
-            width: 50
-            height: 100
-            visible: true
-        }
-
     }
 
 
