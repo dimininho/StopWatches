@@ -6,11 +6,11 @@ Rectangle {
     property int buttonWidth: 100
     property int buttonHeigth: 30
 
-    property color fillColor: "#b3cbcc"
+    property color fillColor: "#383838"
     property color borderColor: "transparent"
-    property color onHoverBorderColor: "red"
-     //property color onHoverBorderColor: "#b4c3d5"
-    property color labelColor: "black"
+    property color onHoverBorderColor: "#888888"
+    property color onHoverFillColor: "#888888"
+    property color labelColor: "white"
 
     property string buttonText: "Button"
     property int fontSize: 13
@@ -23,11 +23,14 @@ Rectangle {
     smooth: true
     antialiasing: true
 
-    border.color: borderColor
+    //border.color: borderColor
     border.width: 2
 
-    color:buttonMouseArea.pressed ? Qt.darker(fillColor,1.5) : fillColor
-    Behavior on color {ColorAnimation { duration: 100 }}
+
+    color: fillColor
+    //color:buttonMouseArea.pressed ? Qt.darker(fillColor,1.5) : fillColor
+    border.color:buttonMouseArea.pressed ? "white" : borderColor
+    Behavior on border.color {ColorAnimation { duration: 100 }}
 
     Text{
         anchors.centerIn: parent
@@ -43,7 +46,7 @@ Rectangle {
 
         onClicked: buttonClick()
 
-        onEntered: parent.border.color = onHoverBorderColor
-        onExited: parent.border.color = borderColor
+        onEntered: parent.color = onHoverFillColor
+        onExited: parent.color = fillColor
     }
 }

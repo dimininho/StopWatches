@@ -7,13 +7,16 @@ import "control.js" as Control
 Window {
     id: mainItem
 
-    property int watchWidth: 200
+    property int watchWidth: 180
 
     width:500
     height: 500
     minimumWidth: watchWidth
     minimumHeight: watchWidth
     visible: true
+    color: "#676767"
+   // flags: Qt.FramelessWindowHint;
+
 
     MouseArea {
         anchors.fill: parent
@@ -26,7 +29,6 @@ Window {
     onStartWatches: {}
     signal stopWatches
     onStopWatches: {}
-
 
 
 
@@ -44,7 +46,7 @@ Window {
         id: mainPanel
         width: mainItem.width
         height: 50
-        color: "plum"
+        color: "#383838"
         anchors.top: parent.top
         //z:1
 

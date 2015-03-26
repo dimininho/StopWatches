@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
 import "control.js" as Control
@@ -18,7 +18,9 @@ Rectangle {
 
     property bool run: false
 
-    property color fillColor: "lightsteelblue"
+    property color fillColor: "#434c53"
+    property color labelColor: "white"
+    property int watchWidth:180
 
 
     function nextMoment() {
@@ -36,16 +38,13 @@ Rectangle {
     }
 
 
-    width: 200
-    height: 200
+    width: 180
+    height: 180
+    color: fillColor
     radius: 26
     border.width: 0
     border.color: "#1b50da"
 
-    gradient: Gradient {
-        GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.3) }
-        GradientStop { position: 0.67; color: Qt.darker(fillColor, 1.35) }
-    }
     smooth:true
     antialiasing: true
 
@@ -63,6 +62,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 40
         font.pointSize: 17
+        color: parent.labelColor
     }
 
     Rectangle {
@@ -114,6 +114,7 @@ Rectangle {
             id: input
             text: watch.watchName
             font.pixelSize: 15
+            color: watch.labelColor
             anchors.fill:  parent
             cursorVisible: false
             wrapMode: TextInput.WordWrap
@@ -166,7 +167,6 @@ Rectangle {
 
         }
 
-
        style: menuStyle
     }
 
@@ -180,6 +180,7 @@ Rectangle {
             color: "gray"
             antialiasing: true
             border.color: "gray"
+            //opacity: 0.7
             Rectangle {
                   anchors.fill: parent
                   anchors.margins: 1
@@ -196,13 +197,14 @@ Rectangle {
             font.bold: styleData.pressed ? true : false
         }
 
- /*       frame: Rectangle{
+
+        frame: Rectangle{
             color: "gray"
             border.color: "transparent"
             border.width: 0
 
         }
-*/
+
     }
 
 
