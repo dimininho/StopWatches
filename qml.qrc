@@ -1,9 +1,14 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Button.qml</file>
         <file>Watch.qml</file>
+        <file>MenuButton.qml</file>
+        <file>global.js</file>
         <file>control.js</file>
-        <file>Global.js</file>
+        <file>main.cpp</file>
+        <file>img/black_menu1.png</file>
+        <file>img/black_menu2.png</file>
+        <file>img/white_menu1.png</file>
+        <file>img/white_menu2.png</file>
     </qresource>
 </RCC>

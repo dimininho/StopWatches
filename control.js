@@ -1,5 +1,5 @@
 //.pragma library
-.import "Global.js" as Global
+.import "global.js" as Global
 
 var component;
 var buttonObject;
@@ -9,7 +9,7 @@ var serialNr = Global.serialNr;
 
 
 function addButton(parentItem,main) {
-    ++serialNr;    
+    ++serialNr;
     if (component == null)
         component = Qt.createComponent("Watch.qml");
     buttonObject = component.createObject(parentItem,{
@@ -37,5 +37,3 @@ function destroyItem(number)
    Global.watchesContainer[number].destroy();
    Global.watchesContainer[number] = null;
 }
-
-

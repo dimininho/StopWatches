@@ -40,7 +40,11 @@ Rectangle {
 
     width: 180
     height: 180
-    color: fillColor
+    //color: fillColor
+    gradient: Gradient {
+        GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.3) }
+        GradientStop { position: 0.67; color: Qt.darker(fillColor, 1.35) }
+    }
     radius: 26
     border.width: 0
     border.color: "#1b50da"

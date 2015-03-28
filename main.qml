@@ -1,8 +1,10 @@
-import QtQuick 2.2
-import QtQuick.Window 2.1
+import QtQuick 2.3
+import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
-
+import QtQuick.Controls 1.2
 import "control.js" as Control
+
+import QtQuick.Controls.Styles 1.3
 
 Window {
     id: mainItem
@@ -50,13 +52,33 @@ Window {
         anchors.top: parent.top
         //z:1
 
+       /* RowLayout{
+            id: rowlayout
+            anchors.centerIn:  mainPanel
+
+*/
+        Button {
+            id: mainMenuButton
+            //text:"="
+            menu: mainMenu
+            //width: 60
+            style: menuButtonStyle
+            iconSource: "./img/white_menu1.png"
+            anchors.left:mainPanel.left
+            anchors.verticalCenter:  mainPanel.verticalCenter
+
+        }
+
         Row{
            // anchors.top : parent.top
             //anchors.horizontalCenter:  mainPanel.horizontalCenter
-            anchors.centerIn:  mainPanel
+            //anchors.centerIn:  mainPanel
+            anchors.verticalCenter:  mainPanel.verticalCenter
+            anchors.horizontalCenter: mainPanel.horizontalCenter
+            anchors.left: mainMenuButton.right
 
             spacing: 20
-            Button  {
+            MenuButton{
                 id: startButton
                 buttonText: "Start all"
                 onButtonClick: {
@@ -65,7 +87,7 @@ Window {
                 }
             }
 
-            Button  {
+            MenuButton  {
                 id: stopButton
                 buttonText: "Stop all"
                 onButtonClick: {
@@ -75,7 +97,7 @@ Window {
 
             }
 
-            Button  {
+            MenuButton  {
                 id: addNew
                 buttonText: "Add new"
                 onButtonClick: {
@@ -83,10 +105,59 @@ Window {
                 }
 
             }
+
         }
+
+        //}
 
     }
 
+
+
+    Menu{
+        id: mainMenu
+        style:  menuStyle
+
+        MenuItem{
+            text: "Save watches"
+            onTriggered: {
+
+             }
+        }
+        MenuItem{
+            text: "Load watches"
+            onTriggered: {
+
+             }
+        }
+        MenuItem{
+            text: "Settings"
+            onTriggered: {
+
+             }
+        }
+        MenuItem{
+            text: "Exit"
+            onTriggered: {
+                Qt.quit();
+             }
+        }
+    }
+
+    property Component menuButtonStyle: ButtonStyle {
+        background: Rectangle {
+            implicitHeight: 30
+            implicitWidth: 50
+            color:  control.hovered ? "#888888" :  "#383838"
+            //color: control.pressed ? "green" :  "#383838"
+            antialiasing: true
+            border.color: "transparent"
+            radius: 5
+
+        }
+
+
+    }
 
 
     GridLayout {
@@ -110,9 +181,46 @@ Window {
 
     onSceneGraphInitialized:   Control.addButton(layout,mainItem);
 
+
+
+
+
+    property Component menuStyle: MenuStyle {
+
+        //__backgroundColor : "transparent"
+        itemDelegate.background:  Rectangle {
+            height: 22
+            width: 100
+            color: "gray"
+            antialiasing: true
+            border.color: "gray"
+            //opacity: 0.7
+            Rectangle {
+                  anchors.fill: parent
+                  anchors.margins: 1
+                  color: styleData.selected ? "#999999" : "#333333"
+                  antialiasing: true
+                  visible: true
+                  border.color: "black"
+           }
+        }
+        itemDelegate.label: Text{
+            text:  styleData.text
+            color: "white"
+            font.pointSize: 12
+            font.bold: styleData.pressed ? true : false
+        }
+
+
+        frame: Rectangle{
+            color: "gray"
+            border.color: "transparent"
+            border.width: 0
+
+        }
+
+    }
+
+
+
 }
-
-
-
-
-
