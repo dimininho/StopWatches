@@ -34,7 +34,6 @@ Window {
 
 
 
-
     Timer{
         id: mainTimer
         interval: 1000
@@ -121,12 +120,19 @@ Window {
         MenuItem{
             text: "Save watches"
             onTriggered: {
-
+                fileio.write("check.txt","CHECK. AAA\n");
+                //fileio.write("check.txt","Ukraine");
              }
         }
         MenuItem{
             text: "Load watches"
             onTriggered: {
+                var data;
+                //if (fileio.read("check.txt",data)) console.log(data);
+                data = fileio.read2("check.txt");
+                console.log(data);
+                data = fileio.read2("check.txt");
+                console.log(data);
 
              }
         }
