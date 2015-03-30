@@ -50,7 +50,7 @@ public slots:
         readPos = in.pos();
 
 
-        qDebug()<<readPos;
+        //qDebug()<<readPos;
         return str;
     }
 

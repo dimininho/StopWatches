@@ -9,7 +9,8 @@ Rectangle {
     id: watch
     property int serialNr:0
 
-    property string watchName: "Project name"
+    //property string watchName: "Project name"
+    property alias watchName: input.text
     property int min: 0
     property int hour: 0
     property int sec: 0
@@ -116,7 +117,8 @@ Rectangle {
 
         TextInput {
             id: input
-            text: watch.watchName
+            //text: watch.watchName
+            text: "Project name"
             font.pixelSize: 15
             color: watch.labelColor
             anchors.fill:  parent

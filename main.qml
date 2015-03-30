@@ -126,15 +126,7 @@ Window {
         MenuItem{
             text: "Load watches"
             onTriggered: {
-                var data;
-                //if (fileio.read("check.txt",data)) console.log(data);
-                data = fileio.read("check.txt");
-                console.log(data);
-                data = fileio.read("check.txt");
-                console.log(data);
-                data = fileio.read("check.txt");
-                console.log(data);
-
+                Control.readWatchesFromFile(layout);
              }
         }
         MenuItem{
