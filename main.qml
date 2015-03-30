@@ -120,8 +120,7 @@ Window {
         MenuItem{
             text: "Save watches"
             onTriggered: {
-                fileio.write("check.txt","CHECK. AAA\n");
-                //fileio.write("check.txt","Ukraine");
+                Control.writeWatchesToFile();
              }
         }
         MenuItem{
@@ -129,9 +128,11 @@ Window {
             onTriggered: {
                 var data;
                 //if (fileio.read("check.txt",data)) console.log(data);
-                data = fileio.read2("check.txt");
+                data = fileio.read("check.txt");
                 console.log(data);
-                data = fileio.read2("check.txt");
+                data = fileio.read("check.txt");
+                console.log(data);
+                data = fileio.read("check.txt");
                 console.log(data);
 
              }
@@ -139,7 +140,7 @@ Window {
         MenuItem{
             text: "Settings"
             onTriggered: {
-
+                Control.writeFile();
              }
         }
         MenuItem{

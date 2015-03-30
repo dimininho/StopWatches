@@ -25,30 +25,16 @@ public slots:
         //out.setDevice(&file);
         out.seek(writePos);
         out << data;
-        writePos = out.pos();
+        writePos = data.length();
         qDebug()<<writePos;
         file.close();
 
         return true;
     }
 
-    bool read(const QString& source, QString& data)
-    {
-        if (source.isEmpty()) return false;
-
-        QFile file(source);
-        if (!file.open(QFile::ReadOnly))
-            return false;
-
-        QTextStream in(&file);
 
 
-        in >> data;
-        file.close();
-        return true;
-    }
-
-    QString read2(const QString& source)
+    QString read(const QString& source)
     {
         if (source.isEmpty()) return "NAN";
 
@@ -58,13 +44,13 @@ public slots:
 
         QString str;
         QTextStream in(&file);
-        in.setDevice(&file);
-        //in.seek(readPos);
+        //in.setDevice(&file);
+        in.seek(readPos);
         in >> str;
         readPos = in.pos();
-        file.close();
 
-        qDebug()<<writePos;
+
+        qDebug()<<readPos;
         return str;
     }
 
