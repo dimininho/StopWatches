@@ -20,6 +20,7 @@ Window {
    // flags: Qt.FramelessWindowHint;
 
 
+
     MouseArea {
         anchors.fill: parent
 
@@ -132,7 +133,7 @@ Window {
         MenuItem{
             text: "Settings"
             onTriggered: {
-                Control.writeFile();
+                settingPanel.state = "SETTINGS_OPEN"
              }
         }
         MenuItem{
@@ -159,10 +160,18 @@ Window {
     }
 
 
+    SettingsPanel{
+        id: settingPanel
+        width: mainItem.width
+        anchors.top :mainPanel.bottom
+        anchors.left: mainItem.left
+        anchors.right: mainItem.right
+    }
+
     GridLayout {
         id:layout
         property int colNumber: 2
-        anchors.top: mainPanel.bottom
+        anchors.top: settingPanel.bottom
         anchors.left: mainItem.left
         anchors.right: mainItem.right
         columns: colNumber
