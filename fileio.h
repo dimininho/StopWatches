@@ -39,7 +39,8 @@ public slots:
         if (source.isEmpty()) return "NAN";
 
        QFile file(source);
-        if (!file.open(QFile::ReadOnly))
+       if (!file.exists()) return "";
+       if (!file.open(QFile::ReadOnly))
             return "NAN";
 
         QString str;

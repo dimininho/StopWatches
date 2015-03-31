@@ -7,6 +7,7 @@ var buttonObject;
 //var parentItem = "layout"
 var maxQty = 7;
 var serialNr = Global.serialNr;
+var endingChar = "#^#"
 var watchesPropeties = new Array();
 
 function WatchType(object){
@@ -15,6 +16,7 @@ function WatchType(object){
     this.color = object.fillColor;
     this.time = object.time
 }
+
 
 
 function addButton(parentItem,main) {
@@ -69,7 +71,7 @@ function writeWatchesToFile()
     {
         if (Global.watchesContainer[i]) {
         watchesData+=Global.watchesContainer[i].serialNr + " "
-                    +Global.watchesContainer[i].watchName + " "
+                    +Global.watchesContainer[i].watchName + " " + endingChar + " "
                     +Global.watchesContainer[i].fillColor + " "
                     +Global.watchesContainer[i].labelColor + " "
                     +Global.watchesContainer[i].run + " "
@@ -84,19 +86,28 @@ function writeWatchesToFile()
 function readWatchesFromFile(parentItem)
 {
     var fileName = "watches.txt";
-    var number,name,fillcolor,labelcolor,run,seeSecs,time;
+    var number,name,fillcolor,labelcolor,run,seeSecs,time,subname;
     var i=0;
+    var reading = true;
 
     if (component == null)
         component = Qt.createComponent("Watch.qml");
 
     removeAllWatches();
 
-    while (i<5)
+    while (reading)
     {
         ++i;
         number = fileio.read(fileName);
-        name = fileio.read(fileName);
+        //name = fileio.read(fileName);
+        name = "";
+        subname = fileio.read(fileName);
+        while(subname && subname !== endingChar)
+        {
+            name += subname + " ";
+            subname = fileio.read(fileName);
+        }
+
         fillcolor = fileio.read(fileName);
         labelcolor = fileio.read(fileName);
         run = (fileio.read(fileName)==="true");
@@ -104,17 +115,20 @@ function readWatchesFromFile(parentItem)
         time = fileio.read(fileName);
 
         //console.log(number + " " + name + " " +fillcolor + " " + labelcolor  + " " + run  + " " + seeSecs  + " " +time);
+        reading = ((fillcolor) ? true : false);
 
+        if (reading){
+            buttonObject = component.createObject(parentItem,{
+                                                              "serialNr": i,
+                                                              "watchName": name,
+                                                              "fillColor": fillcolor,
+                                                              "labelColor": labelcolor,
+                                                              "run": run,
+                                                              "seeSeconds": seeSecs,
+                                                              "time": time      });
 
-        buttonObject = component.createObject(parentItem,{
-                                                          "serialNr": i,
-                                                          "watchName": name,
-                                                          "fillColor": fillcolor,
-                                                          "labelColor": labelcolor,
-                                                          "run": run,
-                                                          "seeSeconds": seeSecs,
-                                                          "time": time      });
+            Global.watchesContainer.push(buttonObject);
+        }
 
-        Global.watchesContainer.push(buttonObject);
     }
 }
