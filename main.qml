@@ -162,10 +162,12 @@ Window {
 
     SettingsPanel{
         id: settingPanel
+        //y: 200
         width: mainItem.width
-        anchors.top :mainPanel.bottom
+        //anchors.top :mainPanel.bottom
         anchors.left: mainItem.left
         anchors.right: mainItem.right
+       // state:"SETTINGS_CLOSE"
     }
 
     GridLayout {
