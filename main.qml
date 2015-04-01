@@ -50,7 +50,8 @@ Window {
         height: 50
         color: "#383838"
         anchors.top: parent.top
-        //z:1
+        z:2
+
 
        /* RowLayout{
             id: rowlayout
@@ -162,23 +163,22 @@ Window {
 
     SettingsPanel{
         id: settingPanel
-        //y: 200
+        z: 1
         width: mainItem.width
-        //anchors.top :mainPanel.bottom
+        yPos: mainPanel.height
         anchors.left: mainItem.left
         anchors.right: mainItem.right
-       // state:"SETTINGS_CLOSE"
+        //state:"SETTINGS_CLOSE"
     }
 
     GridLayout {
         id:layout
         property int colNumber: 2
         anchors.top: settingPanel.bottom
+        //anchors.top :mainPanel.bottom
         anchors.left: mainItem.left
         anchors.right: mainItem.right
         columns: colNumber
-
-       // Watch { }
 
 
     }
@@ -189,7 +189,10 @@ Window {
          layout.colNumber = mainItem.width / mainItem.watchWidth;
     }
 
-    onSceneGraphInitialized:   Control.addButton(layout,mainItem);
+    onSceneGraphInitialized:  {
+       //Control.loadSettings();
+        Control.addButton(layout,mainItem);
+    }
 
 
 

@@ -9,6 +9,7 @@ var maxQty = 7;
 var serialNr = Global.serialNr;
 var endingChar = "#^#"
 var watchesPropeties = new Array();
+var settingFile = "settings.txt"
 
 function WatchType(object){
     this.number = object.serialNr;
@@ -18,15 +19,16 @@ function WatchType(object){
 }
 
 
-
 function addButton(parentItem,main) {
 
-    if (component == null)
+    if (component === undefined)
         component = Qt.createComponent("Watch.qml");
     buttonObject = component.createObject(parentItem,{
                                                       "serialNr": serialNr,
                                                       "width":main.watchWidth,
-                                                      "height":main.watchWidth});
+                                                      "height":main.watchWidth,
+                                                      "watchName":Global.settings.defName,
+                                                      "seeSeconds": Global.settings.enableSeconds});
 
    // Global.watchesContainer[serialNr] = buttonObject;
     Global.watchesContainer.push(buttonObject);
@@ -131,4 +133,33 @@ function readWatchesFromFile(parentItem)
         }
 
     }
+}
+
+
+
+function writeSettingsToFile() {
+
+    var settingsData = "";
+    settingsData = Global.settings.enableSeconds + " "
+                +Global.settings.onlyOneRun + " "
+                +Global.settings.loadOnStart + " "
+                +Global.settings.theme + " "
+                +Global.settings.defName +"\n";
+    fileio.write(settingFile,settingsData);
+}
+
+
+
+function loadSettings() {
+    var subName,name = "";
+
+    Global.settings.enableSeconds = fileio.read(settingFile);
+    Global.settings.onlyOneRun = fileio.read(settingFile);
+    Global.settings.loadOnStart = fileio.read(settingFile);
+    Global.settings.theme = fileio.read(settingFile);
+    do{
+        subname = fileio.read(settingFile);
+        name += subname;
+    }while(subName);
+    Global.settings.defName = name;
 }

@@ -1,12 +1,16 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
+import "global.js" as Global
+import "control.js" as Control
 
 Rectangle {
     id: settingPanel
+
+    property int yPos:200
+
     color:"#678080"
     width:400
-    y: -150
     state: "SETTINGS_CLOSE"
     height: 150
 
@@ -23,15 +27,18 @@ Rectangle {
 
         CheckBox{
             id: countingRegime
+            text: "Only one watch can go"
             checked: false;
         }
 
         CheckBox{
             id: enableSeconds
+            text: "Enable seconds"
             checked: false;
         }
         CheckBox{
             id: loadSavedWatches
+            text: "Load saved watches on start"
             checked: false;
         }
 
@@ -42,6 +49,17 @@ Rectangle {
 
         TextField {
             id: defaultName
+            text:"Project name"
+        }
+
+        MenuButton{
+            id: saveButton
+            buttonText: "Save"
+            onButtonClick: {
+                Global.saveSettings(enableSeconds.checked,countingRegime.checked,loadSavedWatches.checked,
+                                    themeChoice.currentText,defaultName.text);
+                Control.writeSettingsToFile();
+            }
         }
     }
 
@@ -51,14 +69,14 @@ Rectangle {
             name: "SETTINGS_OPEN"
             PropertyChanges {
                 target: settingPanel
-                y: mainPanel.height
+                y: settingPanel.yPos
             }
         },
         State {
             name: "SETTINGS_CLOSE"
             PropertyChanges {
                 target: settingPanel
-                y:-mainPanel.height
+                y:settingPanel.yPos - settingPanel.height
             }
         }
     ]
