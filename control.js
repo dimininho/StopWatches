@@ -208,3 +208,7 @@ function loadSettings() {
 
 */
 
+function stopAllWatches()
+{
+    mainItem.stopWatches();
+}

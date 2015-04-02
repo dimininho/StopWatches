@@ -86,6 +86,7 @@ Window {
                 onButtonClick: {
                     //  mainTimer.start()
                     mainItem.startWatches()
+
                 }
             }
 
@@ -195,6 +196,8 @@ Window {
         Control.loadSettings();
         settingPanel.setSettingToPanel();
         Control.addButton(layout,mainItem);
+        if (Control.settings.loadOnStart)
+            Control.readWatchesFromFile(layout);
     }
 
 

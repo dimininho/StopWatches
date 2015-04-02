@@ -18,7 +18,14 @@ function Settings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName) {
 var settings =  new Settings(false,false,false,"Dark",1,"Task");
 
 
-
-
-
-
+/*
+function Theme() {
+    this.buttonFillColor
+    this.buttonLabelColor
+    this.mainPanelColor
+    this.mainItemColor
+    this.watchColor
+    this.watchLabelColor
+    this.watchIndicatorColor
+}
+*/

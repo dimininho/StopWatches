@@ -94,7 +94,13 @@ Rectangle {
                // popMenu.isOpen = true
                 popupMenu.popup(mouseX,mouseY);
             }
-            if (mouse.button == Qt.LeftButton)  watch.run = !watch.run;
+            if (mouse.button == Qt.LeftButton)    {
+                if (Control.settings.onlyOneRun)
+                        Control.stopAllWatches();
+
+                watch.run = !watch.run;
+
+             }
         }
 
     }
