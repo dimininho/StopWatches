@@ -8,11 +8,26 @@ Rectangle {
     id: settingPanel
 
     property int yPos:200
+/*
+    property alias onlyOne: countingRegime.checked
+    property alias enableSeconds: enableSecs.checked
+    property alias loadSavedWatches: loadSavedWatches.checked
+    property alias defaultName: defaultNameField.text
+    property alias theme: themeChoice.currentText   */
 
     color:"#678080"
     width:400
     state: "SETTINGS_CLOSE"
     height: 150
+
+
+    function setSettingToPanel() {
+       countingRegime.checked = Global.settings.onlyOneRun;
+       enableSecs.checked = Global.settings.enableSeconds;
+       loadSavedWatches.checked = Global.settings.loadOnStart;
+       defaultNameField.text = Global.settings.defName;
+       themeChoice.currentIndex = Global.settings.themeNr;
+    }
 
 
     MouseArea{
@@ -22,42 +37,59 @@ Rectangle {
 
     GridLayout{
         id: grid
-        columns: 2
-        anchors.fill: settingPanel
+        //columns: 2
+        //anchors.centerIn:  settingPanel
+        rowSpacing: 12
+        columnSpacing: 30
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.margins: 30
 
-        CheckBox{
-            id: countingRegime
-            text: "Only one watch can go"
-            checked: false;
+        ColumnLayout{
+            anchors.margins: 50
+
+            CheckBox{
+                id: countingRegime
+                text: "Only one watch can go"
+                checked: false;
+
+            }
+
+            CheckBox{
+                id: enableSecs
+                text: "Enable seconds"
+                checked: false;
+
+            }
+            CheckBox{
+                id: loadSavedWatches
+                text: "Load saved watches on start"
+                checked: false;
+
+            }
         }
 
-        CheckBox{
-            id: enableSeconds
-            text: "Enable seconds"
-            checked: false;
-        }
-        CheckBox{
-            id: loadSavedWatches
-            text: "Load saved watches on start"
-            checked: false;
-        }
+        Column {
+            ComboBox {
+                id: themeChoice
+                model: ["White","Dark"]
 
-        ComboBox {
-            id: themeChoice
-            model: ["White","Dark"]
-        }
+            }
 
-        TextField {
-            id: defaultName
-            text:"Project name"
+            TextField {
+                id: defaultNameField
+                text:"Project name"
+
+            }
         }
 
         MenuButton{
             id: saveButton
             buttonText: "Save"
+            Layout.row : 1
             onButtonClick: {
-                Global.saveSettings(enableSeconds.checked,countingRegime.checked,loadSavedWatches.checked,
-                                    themeChoice.currentText,defaultName.text);
+                Control.saveSettings(enableSecs.checked,countingRegime.checked,loadSavedWatches.checked,
+                                    themeChoice.currentText,themeChoice.currentIndex,defaultNameField.text);
                 Control.writeSettingsToFile();
             }
         }

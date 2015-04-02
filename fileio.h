@@ -18,12 +18,13 @@ public slots:
             return false;
 
         QFile file(source);
-        if (!file.open(QFile::WriteOnly))   //| QFile::Truncate
+        if (!file.open(QFile::WriteOnly | QFile::Truncate))
             return false;
+
 
         QTextStream out(&file);
         //out.setDevice(&file);
-        out.seek(writePos);
+       // out.seek(writePos);
         out << data;
         writePos = data.length();
         qDebug()<<writePos;
@@ -36,12 +37,12 @@ public slots:
 
     QString read(const QString& source)
     {
-        if (source.isEmpty()) return "NAN";
+        if (source.isEmpty()) return "";
 
        QFile file(source);
        if (!file.exists()) return "";
        if (!file.open(QFile::ReadOnly))
-            return "NAN";
+            return "";
 
         QString str;
         QTextStream in(&file);
@@ -53,6 +54,18 @@ public slots:
 
         //qDebug()<<readPos;
         return str;
+    }
+
+    void resetStream()
+    {
+       readPos = 0;
+    }
+
+    bool exist(const QString& source)
+    {
+        QFile file(source);
+        if (!file.exists()) return false;
+        return true;
     }
 
 public:

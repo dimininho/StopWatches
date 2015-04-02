@@ -3,6 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 import "control.js" as Control
+import "global.js" as Global
 
 import QtQuick.Controls.Styles 1.3
 
@@ -190,7 +191,9 @@ Window {
     }
 
     onSceneGraphInitialized:  {
-       //Control.loadSettings();
+       // Control.initializeSettings();
+        Control.loadSettings();
+        settingPanel.setSettingToPanel();
         Control.addButton(layout,mainItem);
     }
 

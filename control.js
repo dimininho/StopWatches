@@ -8,8 +8,11 @@ var buttonObject;
 var maxQty = 7;
 var serialNr = Global.serialNr;
 var endingChar = "#^#"
-var watchesPropeties = new Array();
 var settingFile = "settings.txt"
+var fileName = "watches.txt";
+
+var settings = Global.settings;
+var watchesContainer = Global.watchesContainer;
 
 function WatchType(object){
     this.number = object.serialNr;
@@ -27,11 +30,11 @@ function addButton(parentItem,main) {
                                                       "serialNr": serialNr,
                                                       "width":main.watchWidth,
                                                       "height":main.watchWidth,
-                                                      "watchName":Global.settings.defName,
-                                                      "seeSeconds": Global.settings.enableSeconds});
+                                                      "watchName":settings.defName,
+                                                      "seeSeconds": settings.enableSeconds});
 
    // Global.watchesContainer[serialNr] = buttonObject;
-    Global.watchesContainer.push(buttonObject);
+    watchesContainer.push(buttonObject);
     ++serialNr;
 
     for(var i=0; i<maxQty;++i){
@@ -49,9 +52,9 @@ function changeColumnsNumber(){
 
 function destroyItem(number)
 {
-   Global.watchesContainer[number].destroy();
-   //Global.watchesContainer[number] = null;
-   delete Global.watchesContainer[number];
+   watchesContainer[number].destroy();
+   //watchesContainer[number] = null;
+   delete watchesContainer[number];
 
 }
 
@@ -59,7 +62,7 @@ function removeAllWatches()
 {
     for(var i=0; i< Global.watchesContainer.length;++i)
     {
-        if (Global.watchesContainer[i])
+        if (watchesContainer[i])
             destroyItem(i);
     }
 }
@@ -69,25 +72,24 @@ function writeWatchesToFile()
 {
 
     var watchesData = "";
-    for(var i=0;i<Global.watchesContainer.length; ++i)
+    for(var i=0;i<watchesContainer.length; ++i)
     {
-        if (Global.watchesContainer[i]) {
-        watchesData+=Global.watchesContainer[i].serialNr + " "
-                    +Global.watchesContainer[i].watchName + " " + endingChar + " "
-                    +Global.watchesContainer[i].fillColor + " "
-                    +Global.watchesContainer[i].labelColor + " "
-                    +Global.watchesContainer[i].run + " "
-                    +Global.watchesContainer[i].seeSeconds + " "
-                    +Global.watchesContainer[i].time +  " \n" ;
+        if (watchesContainer[i]) {
+        watchesData+=watchesContainer[i].serialNr + " "
+                    +watchesContainer[i].watchName + " " + endingChar + " "
+                    +watchesContainer[i].fillColor + " "
+                    +watchesContainer[i].labelColor + " "
+                    +watchesContainer[i].run + " "
+                    +watchesContainer[i].seeSeconds + " "
+                    +watchesContainer[i].time +  " \n" ;
         }
     }
-    fileio.write("watches.txt",watchesData);
+    fileio.write(fileName,watchesData);
 }
 
 
 function readWatchesFromFile(parentItem)
 {
-    var fileName = "watches.txt";
     var number,name,fillcolor,labelcolor,run,seeSecs,time,subname;
     var i=0;
     var reading = true;
@@ -96,6 +98,8 @@ function readWatchesFromFile(parentItem)
         component = Qt.createComponent("Watch.qml");
 
     removeAllWatches();
+
+    fileio.resetStream();
 
     while (reading)
     {
@@ -116,7 +120,7 @@ function readWatchesFromFile(parentItem)
         seeSecs = (fileio.read(fileName)==="true");
         time = fileio.read(fileName);
 
-        //console.log(number + " " + name + " " +fillcolor + " " + labelcolor  + " " + run  + " " + seeSecs  + " " +time);
+        console.log(number + " " + name + " " +fillcolor + " " + labelcolor  + " " + run  + " " + seeSecs  + " " +time);
         reading = ((fillcolor) ? true : false);
 
         if (reading){
@@ -129,10 +133,24 @@ function readWatchesFromFile(parentItem)
                                                               "seeSeconds": seeSecs,
                                                               "time": time      });
 
-            Global.watchesContainer.push(buttonObject);
+            watchesContainer.push(buttonObject);
         }
 
     }
+}
+
+
+function initializeSettings() {
+    settings = new Global.Settings(false,false,false,"Dark",1,"Task");
+}
+
+function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName){
+    settings.enableSeconds = enableSeconds;
+    settings.onlyOneRun = onlyOneRun;
+    settings.loadOnStart = loadOnStart
+    settings.theme = theme
+    settings.themeNr = themeNr
+    settings.defName = defName
 }
 
 
@@ -140,26 +158,53 @@ function readWatchesFromFile(parentItem)
 function writeSettingsToFile() {
 
     var settingsData = "";
-    settingsData = Global.settings.enableSeconds + " "
-                +Global.settings.onlyOneRun + " "
-                +Global.settings.loadOnStart + " "
-                +Global.settings.theme + " "
-                +Global.settings.defName +"\n";
+    settingsData = settings.enableSeconds + " "
+                +settings.onlyOneRun + " "
+                +settings.loadOnStart + " "
+                +settings.themeNr + " "
+                +settings.defName +"\n";
     fileio.write(settingFile,settingsData);
+
 }
 
 
 
 function loadSettings() {
     var subName,name = "";
+    var temp = "";
 
-    Global.settings.enableSeconds = fileio.read(settingFile);
-    Global.settings.onlyOneRun = fileio.read(settingFile);
-    Global.settings.loadOnStart = fileio.read(settingFile);
-    Global.settings.theme = fileio.read(settingFile);
-    do{
-        subname = fileio.read(settingFile);
-        name += subname;
-    }while(subName);
-    Global.settings.defName = name;
+    fileio.resetStream();
+
+    if (fileio.exist(settingFile))  {
+        settings.enableSeconds = (fileio.read(settingFile)==="true");
+        settings.onlyOneRun = (fileio.read(settingFile)==="true");
+        settings.loadOnStart = (fileio.read(settingFile)==="true");
+        temp = fileio.read(settingFile);
+        if (!isNaN(temp))
+            settings.themeNr = +temp;
+
+        do{
+            subName = fileio.read(settingFile);
+            if (subName)
+               name += subName;
+        }while(subName);
+        settings.defName = name;
+
+    }
+
 }
+
+
+
+/*
+
+
+    for (var prop in  Global.settings) {
+
+      console.log(prop +" :"+ Global.settings[prop]);
+
+    }
+
+
+*/
+

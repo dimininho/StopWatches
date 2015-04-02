@@ -6,23 +6,19 @@ var maxQty = 10;
 var watchesContainer = [];
 
 
-function Settings(enableSeconds,onlyOneRun,loadOnStart,theme,defName) {
+function Settings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName) {
     this.enableSeconds = enableSeconds
     this.onlyOneRun = onlyOneRun
     this.loadOnStart = loadOnStart
     this.theme = theme
+    this.themeNr = themeNr
     this.defName = defName
 }
 
+var settings =  new Settings(false,false,false,"Dark",1,"Task");
 
 
-var settings = new Settings(false,false,false,"Dark","Task");
 
 
-function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,defName){
-    settings.enableSeconds = enableSeconds;
-    settings.onlyOneRun = onlyOneRun;
-    settings.loadOnStart = loadOnStart
-    settings.theme = theme
-    settings.defName = defName
-}
+
+
