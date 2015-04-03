@@ -15,7 +15,7 @@ Rectangle {
     property alias defaultName: defaultNameField.text
     property alias theme: themeChoice.currentText   */
 
-    color:"#678080"
+    color: Global.currentTheme.settingsPanelColor
     width:400
     state: "SETTINGS_CLOSE"
     height: 150
@@ -72,7 +72,7 @@ Rectangle {
         Column {
             ComboBox {
                 id: themeChoice
-                model: ["White","Dark"]
+                model: [Control.whiteThemeName,Control.darkThemeName]
 
             }
 

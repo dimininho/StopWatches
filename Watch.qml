@@ -3,7 +3,7 @@ import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
 import "control.js" as Control
 import QtQuick.Controls.Styles 1.3
-
+import "global.js" as Global
 
 Rectangle {
     id: watch
@@ -19,8 +19,9 @@ Rectangle {
 
     property bool run: false
 
-    property color fillColor: "#434c53"
-    property color labelColor: "white"
+    //property color fillColor: "#434c53"
+    property color fillColor: Control.currentTheme.watchFillColor;
+    property color labelColor: Control.currentTheme.watchLabelColor
     property int watchWidth:180
 
 

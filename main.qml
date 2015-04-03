@@ -17,7 +17,7 @@ Window {
     minimumWidth: watchWidth
     minimumHeight: watchWidth
     visible: true
-    color: "#676767"
+    color: Control.currentTheme.mainItemColor
    // flags: Qt.FramelessWindowHint;
 
 
@@ -49,7 +49,7 @@ Window {
         id: mainPanel
         width: mainItem.width
         height: 50
-        color: "#383838"
+        color: Control.currentTheme.mainPanelColor
         anchors.top: parent.top
         z:2
 
@@ -193,7 +193,7 @@ Window {
 
     onSceneGraphInitialized:  {
        // Control.initializeSettings();
-        Control.loadSettings();
+        Control.loadSettingsFromFile();
         settingPanel.setSettingToPanel();
         Control.addButton(layout,mainItem);
         if (Control.settings.loadOnStart)

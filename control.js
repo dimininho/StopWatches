@@ -10,9 +10,13 @@ var serialNr = Global.serialNr;
 var endingChar = "#^#"
 var settingFile = "settings.txt"
 var fileName = "watches.txt";
+//var currentTheme = new Global.Theme();
+var currentTheme = Global.currentTheme;
 
 var settings = Global.settings;
 var watchesContainer = Global.watchesContainer;
+var darkThemeName = "Dark";
+var whiteThemeName = "White";
 
 function WatchType(object){
     this.number = object.serialNr;
@@ -144,6 +148,7 @@ function initializeSettings() {
     settings = new Global.Settings(false,false,false,"Dark",1,"Task");
 }
 
+
 function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName){
     settings.enableSeconds = enableSeconds;
     settings.onlyOneRun = onlyOneRun;
@@ -151,6 +156,12 @@ function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName
     settings.theme = theme
     settings.themeNr = themeNr
     settings.defName = defName
+
+    Global.changeTheme(theme);
+
+    console.log(currentTheme.mainItemColor);
+    mainItem.update();
+    mainItem.color = currentTheme.mainItemColor;
 }
 
 
@@ -169,7 +180,7 @@ function writeSettingsToFile() {
 
 
 
-function loadSettings() {
+function loadSettingsFromFile() {
     var subName,name = "";
     var temp = "";
 
