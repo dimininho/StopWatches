@@ -19,7 +19,7 @@ Rectangle {
     width:400
     state: "SETTINGS_CLOSE"
     height: 150
-
+    clip: true
 
     function setSettingToPanel() {
        countingRegime.checked = Global.settings.onlyOneRun;
@@ -91,6 +91,7 @@ Rectangle {
                 Control.saveSettings(enableSecs.checked,countingRegime.checked,loadSavedWatches.checked,
                                     themeChoice.currentText,themeChoice.currentIndex,defaultNameField.text);
                 Control.writeSettingsToFile();
+                settingPanel.update();
             }
         }
     }

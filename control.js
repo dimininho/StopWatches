@@ -160,8 +160,10 @@ function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName
     Global.changeTheme(theme);
 
     console.log(currentTheme.mainItemColor);
-    mainItem.update();
-    mainItem.color = currentTheme.mainItemColor;
+
+    //mainItem.update();
+   // mainItem.changeColor();
+   // mainItem.color = Global.currentTheme.mainItemColor;
 }
 
 

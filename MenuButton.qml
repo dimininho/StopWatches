@@ -14,7 +14,7 @@ Rectangle {
 
     property string buttonText: "Button"
     property int fontSize: 13
-
+//buttonHoverFillColor
     signal buttonClick()
 
     width: buttonWidth

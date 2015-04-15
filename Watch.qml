@@ -90,14 +90,15 @@ Rectangle {
         acceptedButtons: Qt.LeftButton | Qt.RightButton;
         onClicked: {
             if (mouse.button == Qt.RightButton) {
-                //popMenu.x = mouseX;
-               // popMenu.y = mouseY;
-               // popMenu.isOpen = true
                 popupMenu.popup(mouseX,mouseY);
             }
             if (mouse.button == Qt.LeftButton)    {
                 if (Control.settings.onlyOneRun)
-                        Control.stopAllWatches();
+                {
+                    var temprun = watch.run; //for correct work, when clock's state is "RUN"
+                    Control.stopAllWatches();
+                    watch.run = temprun;
+                }
 
                 watch.run = !watch.run;
 
