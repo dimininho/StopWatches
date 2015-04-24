@@ -29,6 +29,17 @@ Rectangle {
        themeChoice.currentIndex = Global.settings.themeNr;
     }
 
+    function repaint() {
+       settingPanel.color = Global.currentTheme.mainItemColor
+       var children = settingPanel.children;
+        for(var i = 0; i<children.length;++i) {
+           console.log("   ---- " + children[i]);
+
+            if (typeof (children[i].repaint) === "function")
+                children[i].repaint();
+        }
+    }
+
 
     MouseArea{
         anchors.fill:settingPanel
@@ -91,7 +102,8 @@ Rectangle {
                 Control.saveSettings(enableSecs.checked,countingRegime.checked,loadSavedWatches.checked,
                                     themeChoice.currentText,themeChoice.currentIndex,defaultNameField.text);
                 Control.writeSettingsToFile();
-                settingPanel.update();
+                //settingPanel.update();
+                settingPanel.state = "SETTINGS_CLOSE";
             }
         }
     }

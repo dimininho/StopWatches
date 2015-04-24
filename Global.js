@@ -31,26 +31,34 @@ function Theme() {
 }
 
 var dark = new Theme();
-    dark.buttonFillColor = "#434c53";
+    dark.buttonFillColor = "#383838";
     dark.buttonLabelColor = "white"
+    dark.buttonBorderColor = "transparent"
+    dark.buttonOnHoverFillColor = "#888888"
+    dark.buttonOnPressBorderColor = "white"
     dark.mainPanelColor = "#383838"
     dark.mainItemColor = "#676767"
     dark.settingsPanelColor = "#678080"
     dark.watchFillColor = "#434c53"
     dark.watchLabelColor = "white"
     dark.watchIndicatorColor = "#ffffff"
+    dark.mainMenuIcon = "white_menu1.png"
 
 
 
 var white = new Theme();
-    white.buttonFillColor = "#434c53";
-    white.buttonLabelColor = "white"
+    white.buttonFillColor = "white";
+    white.buttonLabelColor = "black"
+    white.buttonBorderColor = "transparent"
+    white.buttonOnHoverFillColor = "#cccccc"
+    white.buttonOnPressBorderColor = "black"
     white.mainPanelColor = "#eeeeff"
     white.mainItemColor = "#ffeeff"
     white.settingsPanelColor = "#ddeeff"
     white.watchFillColor = "white"
     white.watchLabelColor = "black"
     white.watchIndicatorColor = "#ffffff"
+    white.mainMenuIcon = "black_menu1.png"
 
 
 

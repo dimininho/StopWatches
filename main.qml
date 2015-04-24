@@ -34,7 +34,16 @@ Window {
     signal stopWatches
     onStopWatches: {}
 
+    function repaint() {
+       mainItem.color = Global.currentTheme.mainItemColor
+       var children = mainItem.contentItem.children;
+        for(var i = 0; i<children.length;++i) {
+           console.log(children[i]);
 
+            if (typeof (children[i].repaint) === "function")
+                children[i].repaint();
+        }
+    }
 
     Timer{
         id: mainTimer
@@ -53,6 +62,16 @@ Window {
         anchors.top: parent.top
         z:2
 
+        function repaint() {
+           mainPanel.color = Global.currentTheme.mainPanelColor
+           var children = mainPanel.children;
+            for(var i = 0; i<children.length;++i) {
+               console.log("  ++ " + children[i]);
+
+                if (typeof (children[i].repaint) === "function")
+                    children[i].repaint();
+            }
+        }
 
        /* RowLayout{
             id: rowlayout
@@ -65,9 +84,15 @@ Window {
             menu: mainMenu
             //width: 60
             style: menuButtonStyle
-            iconSource: "./img/white_menu1.png"
+            iconSource: "./img/" + Control.currentTheme.mainMenuIcon
+            //iconSource: "./img/white_menu1.png"
             anchors.left:mainPanel.left
             anchors.verticalCenter:  mainPanel.verticalCenter
+
+            function repaint() {
+              mainMenuButton.iconSource =  "./img/" + Control.currentTheme.mainMenuIcon;
+                mainMenuButton.update();
+            }
 
         }
 
@@ -80,6 +105,19 @@ Window {
             anchors.left: mainMenuButton.right
 
             spacing: 20
+
+
+            function repaint() {
+
+               var children = this.children;
+                for(var i = 0; i<children.length;++i) {
+                   console.log("  +*+ " + children[i]);
+
+                    if (typeof (children[i].repaint) === "function")
+                        children[i].repaint();
+                }
+            }
+
             MenuButton{
                 id: startButton
                 buttonText: "Start all"
@@ -151,7 +189,7 @@ Window {
         background: Rectangle {
             implicitHeight: 30
             implicitWidth: 50
-            color:  control.hovered ? "#888888" :  "#383838"
+            color:  control.hovered ? Control.currentTheme.buttonOnHoverFillColor :  Control.currentTheme.mainPanelColor
             //color: control.pressed ? "green" :  "#383838"
             antialiasing: true
             border.color: "transparent"
