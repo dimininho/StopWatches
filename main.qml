@@ -10,29 +10,29 @@ import QtQuick.Controls.Styles 1.3
 Window {
     id: mainItem
 
-    property int watchWidth: 180
+    property int clockWidth: 180
 
     width:500
     height: 500
-    minimumWidth: watchWidth
-    minimumHeight: watchWidth
+    minimumWidth: clockWidth
+    minimumHeight: clockWidth
     visible: true
     color: Control.currentTheme.mainItemColor
    // flags: Qt.FramelessWindowHint;
 
-
+    //width: JS.getSettings(windowWidth)
 
     MouseArea {
         anchors.fill: parent
 
     }
 
-    signal timerStep    //signal to Watches
+    signal timerStep    //signal to clocks
     onTimerStep: {}
-    signal startWatches
-    onStartWatches: {}
-    signal stopWatches
-    onStopWatches: {}
+    signal startClocks
+    onStartClocks: {}
+    signal stopClocks
+    onStopClocks: {}
 
     function repaint() {
        mainItem.color = Global.currentTheme.mainItemColor
@@ -43,6 +43,7 @@ Window {
             if (typeof (children[i].repaint) === "function")
                 children[i].repaint();
         }
+
     }
 
     Timer{
@@ -70,8 +71,12 @@ Window {
 
                 if (typeof (children[i].repaint) === "function")
                     children[i].repaint();
+
             }
+            //sceneGraphInvalidated();
+            //colorChanged("red");
         }
+        //Only items which specifies QQuickItem::ItemHasContents are allowed to call QQuickItem::update().
 
        /* RowLayout{
             id: rowlayout
@@ -86,12 +91,14 @@ Window {
             style: menuButtonStyle
             iconSource: "./img/" + Control.currentTheme.mainMenuIcon
             //iconSource: "./img/white_menu1.png"
+           // iconSource: mainItem.width>400 ? "./img/black_menu1.png" : "./img/white_menu1.png"
             anchors.left:mainPanel.left
             anchors.verticalCenter:  mainPanel.verticalCenter
 
             function repaint() {
-              mainMenuButton.iconSource =  "./img/" + Control.currentTheme.mainMenuIcon;
-                mainMenuButton.update();
+              iconSource =  "./img/" + Global.currentTheme.mainMenuIcon;
+              style = null;
+              style = menuButtonStyle; //need for correct updating
             }
 
         }
@@ -116,6 +123,7 @@ Window {
                     if (typeof (children[i].repaint) === "function")
                         children[i].repaint();
                 }
+
             }
 
             MenuButton{
@@ -123,7 +131,7 @@ Window {
                 buttonText: "Start all"
                 onButtonClick: {
                     //  mainTimer.start()
-                    mainItem.startWatches()
+                    mainItem.startClocks()
 
                 }
             }
@@ -133,7 +141,7 @@ Window {
                 buttonText: "Stop all"
                 onButtonClick: {
                     //mainTimer.stop()
-                    mainItem.stopWatches()
+                    mainItem.stopClocks()
                 }
 
             }
@@ -142,7 +150,7 @@ Window {
                 id: addNew
                 buttonText: "Add new"
                 onButtonClick: {
-                    Control.addButton(layout,mainItem);
+                    Control.addClock(layout,mainItem);
                 }
 
             }
@@ -160,15 +168,15 @@ Window {
         style:  menuStyle
 
         MenuItem{
-            text: "Save watches"
+            text: "Save clocks"
             onTriggered: {
-                Control.writeWatchesToFile();
+                Control.writeClocksToFile();
              }
         }
         MenuItem{
-            text: "Load watches"
+            text: "Load clocks"
             onTriggered: {
-                Control.readWatchesFromFile(layout);
+                Control.readClocksFromFile(layout);
              }
         }
         MenuItem{
@@ -186,10 +194,11 @@ Window {
     }
 
     property Component menuButtonStyle: ButtonStyle {
+        id: menuButtonStyleID
         background: Rectangle {
             implicitHeight: 30
             implicitWidth: 50
-            color:  control.hovered ? Control.currentTheme.buttonOnHoverFillColor :  Control.currentTheme.mainPanelColor
+            color:  control.hovered ? Global.currentTheme.buttonOnHoverFillColor :  Global.currentTheme.mainPanelColor
             //color: control.pressed ? "green" :  "#383838"
             antialiasing: true
             border.color: "transparent"
@@ -203,7 +212,7 @@ Window {
 
     SettingsPanel{
         id: settingPanel
-        z: 1
+        z: 1        //above mainItem
         width: mainItem.width
         yPos: mainPanel.height
         anchors.left: mainItem.left
@@ -226,19 +235,21 @@ Window {
 
     onWidthChanged: {
        // Control.changeColumnsNumber()
-         layout.colNumber = mainItem.width / mainItem.watchWidth;
+         layout.colNumber = mainItem.width / mainItem.clockWidth;
     }
 
     onSceneGraphInitialized:  {
        // Control.initializeSettings();
-        Control.loadSettingsFromFile();
-        settingPanel.setSettingToPanel();
-        Control.addButton(layout,mainItem);
+      Control.loadSettingsFromFile();
+       settingPanel.setSettingToPanel();
+        Control.addClock(layout,mainItem);
         if (Control.settings.loadOnStart)
-            Control.readWatchesFromFile(layout);
+            Control.readClocksFromFile(layout);
     }
 
 
+    //onBeforeRendering:  {       // Control.loadSettingsFromFile();
+       // settingPanel.setSettingToPanel();}
 
 
 

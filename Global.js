@@ -2,8 +2,8 @@
 
 var serialNr = 0;
 var maxQty = 10;
-//var watchesContainer = new Array(maxQty);
-var watchesContainer = [];
+//var clocksContainer = new Array(maxQty);
+var clocksContainer = [];
 
 
 function Settings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName) {
@@ -25,9 +25,9 @@ function Theme() {
     this.mainPanelColor = "#ffffff"
     this.mainItemColor = "#ffffff"
     this.settingsPanelColor = "#ffffff"
-    this.watchColor = "#ffffff"
-    this.watchLabelColor = "#ffffff"
-    this.watchIndicatorColor = "#ffffff"
+    this.clockColor = "#ffffff"
+    this.clockLabelColor = "#ffffff"
+    this.clockIndicatorColor = "#ffffff"
 }
 
 var dark = new Theme();
@@ -38,26 +38,26 @@ var dark = new Theme();
     dark.buttonOnPressBorderColor = "white"
     dark.mainPanelColor = "#383838"
     dark.mainItemColor = "#676767"
-    dark.settingsPanelColor = "#678080"
-    dark.watchFillColor = "#434c53"
-    dark.watchLabelColor = "white"
-    dark.watchIndicatorColor = "#ffffff"
+    dark.settingsPanelColor = "#8498A9"
+    dark.clockFillColor = "#434c53"
+    dark.clockLabelColor = "white"
+    dark.clockIndicatorColor = "#ffffff"
     dark.mainMenuIcon = "white_menu1.png"
 
 
 
 var white = new Theme();
-    white.buttonFillColor = "white";
+    white.buttonFillColor = "#D8EDFD";
     white.buttonLabelColor = "black"
     white.buttonBorderColor = "transparent"
-    white.buttonOnHoverFillColor = "#cccccc"
-    white.buttonOnPressBorderColor = "black"
-    white.mainPanelColor = "#eeeeff"
-    white.mainItemColor = "#ffeeff"
-    white.settingsPanelColor = "#ddeeff"
-    white.watchFillColor = "white"
-    white.watchLabelColor = "black"
-    white.watchIndicatorColor = "#ffffff"
+    white.buttonOnHoverFillColor = "#64BCED"
+    white.buttonOnPressBorderColor = "white"
+    white.mainPanelColor = "#D8EDFD"
+    white.mainItemColor = "white"
+    white.settingsPanelColor = "#EAF8FA"
+    white.clockFillColor = "#D1E8FA"
+    white.clockLabelColor = "black"
+    white.clockIndicatorColor = "#ffffff"
     white.mainMenuIcon = "black_menu1.png"
 
 

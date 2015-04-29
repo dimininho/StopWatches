@@ -27,11 +27,13 @@ Rectangle {
        button.onPressBorderColor = Global.currentTheme.buttonOnPressBorderColor
        button.onHoverFillColor = Global.currentTheme.buttonOnHoverFillColor
        button.labelColor = Global.currentTheme.buttonLabelColor
+       button.color = fillColor; //need for correct colour updating
     }
+
+    //onColorChanged: console.log("Button color changed");
 
     property string buttonText: "Button"
     property int fontSize: 13
-//buttonHoverFillColor
     signal buttonClick()
 
     width: buttonWidth

@@ -11,7 +11,7 @@ Rectangle {
 /*
     property alias onlyOne: countingRegime.checked
     property alias enableSeconds: enableSecs.checked
-    property alias loadSavedWatches: loadSavedWatches.checked
+    property alias loadSavedClocks: loadSavedClocks.checked
     property alias defaultName: defaultNameField.text
     property alias theme: themeChoice.currentText   */
 
@@ -24,13 +24,13 @@ Rectangle {
     function setSettingToPanel() {
        countingRegime.checked = Global.settings.onlyOneRun;
        enableSecs.checked = Global.settings.enableSeconds;
-       loadSavedWatches.checked = Global.settings.loadOnStart;
+       loadSavedClocks.checked = Global.settings.loadOnStart;
        defaultNameField.text = Global.settings.defName;
        themeChoice.currentIndex = Global.settings.themeNr;
     }
 
     function repaint() {
-       settingPanel.color = Global.currentTheme.mainItemColor
+       settingPanel.color = Global.currentTheme.settingsPanelColor
        var children = settingPanel.children;
         for(var i = 0; i<children.length;++i) {
            console.log("   ---- " + children[i]);
@@ -56,12 +56,22 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.margins: 30
 
+        function repaint() {
+           var children = grid.children;
+            for(var i = 0; i<children.length;++i) {
+               console.log("   -+&-- " + children[i]);
+
+                if (typeof (children[i].repaint) === "function")
+                    children[i].repaint();
+            }
+        }
+
         ColumnLayout{
             anchors.margins: 50
 
             CheckBox{
                 id: countingRegime
-                text: "Only one watch can go"
+                text: "Only one clock can go"
                 checked: false;
 
             }
@@ -73,8 +83,8 @@ Rectangle {
 
             }
             CheckBox{
-                id: loadSavedWatches
-                text: "Load saved watches on start"
+                id: loadSavedClocks
+                text: "Load saved clocks on start"
                 checked: false;
 
             }
@@ -99,7 +109,7 @@ Rectangle {
             buttonText: "Save"
             Layout.row : 1
             onButtonClick: {
-                Control.saveSettings(enableSecs.checked,countingRegime.checked,loadSavedWatches.checked,
+                Control.saveSettings(enableSecs.checked,countingRegime.checked,loadSavedClocks.checked,
                                     themeChoice.currentText,themeChoice.currentIndex,defaultNameField.text);
                 Control.writeSettingsToFile();
                 //settingPanel.update();

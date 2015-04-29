@@ -9,36 +9,36 @@ var maxQty = 7;
 var serialNr = Global.serialNr;
 var endingChar = "#^#"
 var settingFile = "settings.txt"
-var fileName = "watches.txt";
+var fileName = "clocks.txt";
 //var currentTheme = new Global.Theme();
 var currentTheme = Global.currentTheme;
 
 var settings = Global.settings;
-var watchesContainer = Global.watchesContainer;
+var clocksContainer = Global.clocksContainer;
 var darkThemeName = "Dark";
 var whiteThemeName = "White";
 
-function WatchType(object){
+function ClockType(object){
     this.number = object.serialNr;
-    this.name = object.watchName;
+    this.name = object.clockName;
     this.color = object.fillColor;
     this.time = object.time
 }
 
 
-function addButton(parentItem,main) {
+function addClock(parentItem,main) {
 
     if (component === undefined)
-        component = Qt.createComponent("Watch.qml");
+        component = Qt.createComponent("Clock.qml");
     buttonObject = component.createObject(parentItem,{
                                                       "serialNr": serialNr,
-                                                      "width":main.watchWidth,
-                                                      "height":main.watchWidth,
-                                                      "watchName":settings.defName,
+                                                      "width":main.clockWidth,
+                                                      "height":main.clockWidth,
+                                                      "clockName":settings.defName,
                                                       "seeSeconds": settings.enableSeconds});
 
-   // Global.watchesContainer[serialNr] = buttonObject;
-    watchesContainer.push(buttonObject);
+   // Global.clocksContainer[serialNr] = buttonObject;
+    clocksContainer.push(buttonObject);
     ++serialNr;
 
     for(var i=0; i<maxQty;++i){
@@ -56,52 +56,52 @@ function changeColumnsNumber(){
 
 function destroyItem(number)
 {
-   watchesContainer[number].destroy();
-   //watchesContainer[number] = null;
-   delete watchesContainer[number];
+   clocksContainer[number].destroy();
+   //clocksContainer[number] = null;
+   delete clocksContainer[number];
 
 }
 
-function removeAllWatches()
+function removeAllClocks()
 {
-    for(var i=0; i< Global.watchesContainer.length;++i)
+    for(var i=0; i< Global.clocksContainer.length;++i)
     {
-        if (watchesContainer[i])
+        if (clocksContainer[i])
             destroyItem(i);
     }
 }
 
 
-function writeWatchesToFile()
+function writeClocksToFile()
 {
 
-    var watchesData = "";
+    var clocksData = "";
     for(var i=0;i<watchesContainer.length; ++i)
     {
-        if (watchesContainer[i]) {
-        watchesData+=watchesContainer[i].serialNr + " "
-                    +watchesContainer[i].watchName + " " + endingChar + " "
-                    +watchesContainer[i].fillColor + " "
-                    +watchesContainer[i].labelColor + " "
-                    +watchesContainer[i].run + " "
-                    +watchesContainer[i].seeSeconds + " "
-                    +watchesContainer[i].time +  " \n" ;
+        if (clocksContainer[i]) {
+        clocksData+=clocksContainer[i].serialNr + " "
+                    +clocksContainer[i].clockName + " " + endingChar + " "
+                    +clocksContainer[i].fillColor + " "
+                    +clocksContainer[i].labelColor + " "
+                    +clocksContainer[i].run + " "
+                    +clocksContainer[i].seeSeconds + " "
+                    +clocksContainer[i].time +  " \n" ;
         }
     }
-    fileio.write(fileName,watchesData);
+    fileio.write(fileName,clocksData);
 }
 
 
-function readWatchesFromFile(parentItem)
+function readClocksFromFile(parentItem)
 {
     var number,name,fillcolor,labelcolor,run,seeSecs,time,subname;
     var i=0;
     var reading = true;
 
     if (component == null)
-        component = Qt.createComponent("Watch.qml");
+        component = Qt.createComponent("Clock.qml");
 
-    removeAllWatches();
+    removeAllClocks();
 
     fileio.resetStream();
 
@@ -130,14 +130,14 @@ function readWatchesFromFile(parentItem)
         if (reading){
             buttonObject = component.createObject(parentItem,{
                                                               "serialNr": i,
-                                                              "watchName": name,
+                                                              "clockName": name,
                                                               "fillColor": fillcolor,
                                                               "labelColor": labelcolor,
                                                               "run": run,
                                                               "seeSeconds": seeSecs,
                                                               "time": time      });
 
-            watchesContainer.push(buttonObject);
+            clocksContainerContainer.push(buttonObject);
         }
 
     }
@@ -175,6 +175,7 @@ function writeSettingsToFile() {
                 +settings.onlyOneRun + " "
                 +settings.loadOnStart + " "
                 +settings.themeNr + " "
+                +settings.theme + " "
                 +settings.defName +"\n";
     fileio.write(settingFile,settingsData);
 
@@ -195,7 +196,9 @@ function loadSettingsFromFile() {
         temp = fileio.read(settingFile);
         if (!isNaN(temp))
             settings.themeNr = +temp;   //from string to integer
-
+        settings.theme = fileio.read(settingFile);
+        Global.changeTheme(settings.theme);
+        mainItem.repaint();
         do{
             subName = fileio.read(settingFile);
             if (subName)
@@ -221,7 +224,7 @@ function loadSettingsFromFile() {
 
 */
 
-function stopAllWatches()
+function stopAllClocks()
 {
-    mainItem.stopWatches();
+    mainItem.stopClocks();
 }

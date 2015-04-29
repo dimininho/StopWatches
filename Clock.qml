@@ -6,11 +6,11 @@ import QtQuick.Controls.Styles 1.3
 import "global.js" as Global
 
 Rectangle {
-    id: watch
+    id: clock
     property int serialNr:0
 
-    //property string watchName: "Project name"
-    property alias watchName: input.text
+    //property string clockName: "Project name"
+    property alias clockName: input.text
     property int min: 0
     property int hour: 0
     property int sec: 0
@@ -20,13 +20,13 @@ Rectangle {
     property bool run: false
 
     //property color fillColor: "#434c53"
-    property color fillColor: Control.currentTheme.watchFillColor;
-    property color labelColor: Control.currentTheme.watchLabelColor
-    property int watchWidth:180
+    property color fillColor: Control.currentTheme.clockFillColor;
+    property color labelColor: Control.currentTheme.clockLabelColor
+    property int clockWidth:180
 
 
     function nextMoment() {
-        if (watch.run==true)
+        if (clock.run==true)
         {
             ++time;
             var temptime = time;
@@ -76,17 +76,17 @@ Rectangle {
         height: 10
         radius: 5
         anchors{
-            top:watch.top
-            right:watch.right
+            top:clock.top
+            right:clock.right
             rightMargin: 15
             topMargin: 15
         }
-        color: watch.run ? "yellow" : "grey"
+        color: clock.run ? "yellow" : "grey"
 
     }
 
     MouseArea {
-        anchors.fill: watch
+        anchors.fill: clock
         acceptedButtons: Qt.LeftButton | Qt.RightButton;
         onClicked: {
             if (mouse.button == Qt.RightButton) {
@@ -95,12 +95,12 @@ Rectangle {
             if (mouse.button == Qt.LeftButton)    {
                 if (Control.settings.onlyOneRun)
                 {
-                    var temprun = watch.run; //for correct work, when clock's state is "RUN"
-                    Control.stopAllWatches();
-                    watch.run = temprun;
+                    var temprun = clock.run; //for correct work, when clock's state is "RUN"
+                    Control.stopAllClocks();
+                    clock.run = temprun;
                 }
 
-                watch.run = !watch.run;
+                clock.run = !clock.run;
 
              }
         }
@@ -111,10 +111,10 @@ Rectangle {
 
     MouseArea {
         anchors{
-            top: watch.top
-            left: watch.left
-            right: watch.right
-            topMargin: 0.55*watch.width
+            top: clock.top
+            left: clock.left
+            right: clock.right
+            topMargin: 0.55*clock.width
         }
         width: input.contentWidth < 100 ? 100 : input.contentWidth
 
@@ -125,10 +125,10 @@ Rectangle {
 
         TextInput {
             id: input
-            //text: watch.watchName
+            //text: clock.clockName
             text: "Project name"
             font.pixelSize: 15
-            color: watch.labelColor
+            color: clock.labelColor
             anchors.fill:  parent
             cursorVisible: false
             wrapMode: TextInput.WordWrap
@@ -164,17 +164,17 @@ Rectangle {
         }
 
         MenuItem{
-            text: "Reset watch"
+            text: "Reset clock"
             onTriggered: {
-                watch.time = -1;
+                clock.time = -1;
                 nextMoment();
-                watch.run = false;
+                clock.run = false;
              }
 
         }
 
         MenuItem{
-            text: "Remove watch"
+            text: "Remove clock"
             onTriggered: {
                 Control.destroyItem(serialNr);
              }
@@ -227,9 +227,9 @@ Rectangle {
 
     Connections{
         target: mainItem
-        onTimerStep: {watch.nextMoment()}
-        onStartWatches: watch.run = true
-        onStopWatches: watch.run = false
+        onTimerStep: {clock.nextMoment()}
+        onStartClocks: clock.run = true
+        onStopClocks: clock.run = false
     }
 
 

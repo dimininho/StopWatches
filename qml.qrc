@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Watch.qml</file>
+        <file>Clock.qml</file>
         <file>MenuButton.qml</file>
         <file>global.js</file>
         <file>control.js</file>
