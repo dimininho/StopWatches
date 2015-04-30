@@ -43,7 +43,10 @@ var dark = new Theme();
     dark.clockLabelColor = "white"
     dark.clockIndicatorColor = "#ffffff"
     dark.mainMenuIcon = "white_menu1.png"
-
+    dark.mainMenuBackColor = "gray"
+    dark.mainMenuRowColor = "#333333"
+    dark.mainMenuOnHoverRowColor = "#999999"
+    dark.mainMenuBorderColor = "black"
 
 
 var white = new Theme();
@@ -59,7 +62,10 @@ var white = new Theme();
     white.clockLabelColor = "black"
     white.clockIndicatorColor = "#ffffff"
     white.mainMenuIcon = "black_menu1.png"
-
+    white.mainMenuBackColor = "white"
+    white.mainMenuRowColor = "white"
+    white.mainMenuOnHoverRowColor = "#CDE1FE"
+    white.mainMenuBorderColor = "transparent"
 
 
 var currentTheme = dark;

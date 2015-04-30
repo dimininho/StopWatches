@@ -181,46 +181,8 @@ Rectangle {
 
         }
 
-       style: menuStyle
+       style: PopupMenuStyle {}
     }
-
-
-    property Component menuStyle: MenuStyle {
-
-        //__backgroundColor : "transparent"
-        itemDelegate.background:  Rectangle {
-            height: 22
-            width: 100
-            color: "gray"
-            antialiasing: true
-            border.color: "gray"
-            //opacity: 0.7
-            Rectangle {
-                  anchors.fill: parent
-                  anchors.margins: 1
-                  color: styleData.selected ? "#999999" : "#333333"
-                  antialiasing: true
-                  visible: true
-                  border.color: "black"
-           }
-        }
-        itemDelegate.label: Text{
-            text:  styleData.text
-            color: "white"
-            font.pointSize: 12
-            font.bold: styleData.pressed ? true : false
-        }
-
-
-        frame: Rectangle{
-            color: "gray"
-            border.color: "transparent"
-            border.width: 0
-
-        }
-
-    }
-
 
 
 

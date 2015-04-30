@@ -11,6 +11,7 @@ Window {
     id: mainItem
 
     property int clockWidth: 180
+    property Component menuStyle: PopupMenuStyle {}
 
     width:500
     height: 500
@@ -38,12 +39,9 @@ Window {
        mainItem.color = Global.currentTheme.mainItemColor
        var children = mainItem.contentItem.children;
         for(var i = 0; i<children.length;++i) {
-           console.log(children[i]);
-
             if (typeof (children[i].repaint) === "function")
                 children[i].repaint();
         }
-
     }
 
     Timer{
@@ -67,16 +65,11 @@ Window {
            mainPanel.color = Global.currentTheme.mainPanelColor
            var children = mainPanel.children;
             for(var i = 0; i<children.length;++i) {
-               console.log("  ++ " + children[i]);
-
                 if (typeof (children[i].repaint) === "function")
                     children[i].repaint();
-
             }
-            //sceneGraphInvalidated();
-            //colorChanged("red");
         }
-        //Only items which specifies QQuickItem::ItemHasContents are allowed to call QQuickItem::update().
+
 
        /* RowLayout{
             id: rowlayout
@@ -87,11 +80,11 @@ Window {
             id: mainMenuButton
             //text:"="
             menu: mainMenu
+
             //width: 60
             style: menuButtonStyle
             iconSource: "./img/" + Control.currentTheme.mainMenuIcon
-            //iconSource: "./img/white_menu1.png"
-           // iconSource: mainItem.width>400 ? "./img/black_menu1.png" : "./img/white_menu1.png"
+            //iconSource: "./img/white_menu1.png"          
             anchors.left:mainPanel.left
             anchors.verticalCenter:  mainPanel.verticalCenter
 
@@ -115,24 +108,18 @@ Window {
 
 
             function repaint() {
-
                var children = this.children;
                 for(var i = 0; i<children.length;++i) {
-                   console.log("  +*+ " + children[i]);
-
                     if (typeof (children[i].repaint) === "function")
                         children[i].repaint();
                 }
-
             }
 
             MenuButton{
                 id: startButton
                 buttonText: "Start all"
                 onButtonClick: {
-                    //  mainTimer.start()
                     mainItem.startClocks()
-
                 }
             }
 
@@ -140,10 +127,8 @@ Window {
                 id: stopButton
                 buttonText: "Stop all"
                 onButtonClick: {
-                    //mainTimer.stop()
                     mainItem.stopClocks()
                 }
-
             }
 
             MenuButton  {
@@ -152,9 +137,7 @@ Window {
                 onButtonClick: {
                     Control.addClock(layout,mainItem);
                 }
-
             }
-
         }
 
         //}
@@ -165,7 +148,7 @@ Window {
 
     Menu{
         id: mainMenu
-        style:  menuStyle
+        style:  PopupMenuStyle {}
 
         MenuItem{
             text: "Save clocks"
@@ -241,52 +224,11 @@ Window {
     onSceneGraphInitialized:  {
        // Control.initializeSettings();
       Control.loadSettingsFromFile();
-       settingPanel.setSettingToPanel();
-        Control.addClock(layout,mainItem);
+       settingPanel.setSettingToPanel(); 
         if (Control.settings.loadOnStart)
             Control.readClocksFromFile(layout);
-    }
-
-
-    //onBeforeRendering:  {       // Control.loadSettingsFromFile();
-       // settingPanel.setSettingToPanel();}
-
-
-
-    property Component menuStyle: MenuStyle {
-
-        //__backgroundColor : "transparent"
-        itemDelegate.background:  Rectangle {
-            height: 22
-            width: 100
-            color: "gray"
-            antialiasing: true
-            border.color: "gray"
-            //opacity: 0.7
-            Rectangle {
-                  anchors.fill: parent
-                  anchors.margins: 1
-                  color: styleData.selected ? "#999999" : "#333333"
-                  antialiasing: true
-                  visible: true
-                  border.color: "black"
-           }
-        }
-        itemDelegate.label: Text{
-            text:  styleData.text
-            color: "white"
-            font.pointSize: 12
-            font.bold: styleData.pressed ? true : false
-        }
-
-
-        frame: Rectangle{
-            color: "gray"
-            border.color: "transparent"
-            border.width: 0
-
-        }
-
+        else
+            Control.addClock(layout,mainItem);
     }
 
 

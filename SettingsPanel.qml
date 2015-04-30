@@ -33,8 +33,6 @@ Rectangle {
        settingPanel.color = Global.currentTheme.settingsPanelColor
        var children = settingPanel.children;
         for(var i = 0; i<children.length;++i) {
-           console.log("   ---- " + children[i]);
-
             if (typeof (children[i].repaint) === "function")
                 children[i].repaint();
         }
@@ -59,8 +57,6 @@ Rectangle {
         function repaint() {
            var children = grid.children;
             for(var i = 0; i<children.length;++i) {
-               console.log("   -+&-- " + children[i]);
-
                 if (typeof (children[i].repaint) === "function")
                     children[i].repaint();
             }

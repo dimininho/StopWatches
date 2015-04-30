@@ -76,7 +76,7 @@ function writeClocksToFile()
 {
 
     var clocksData = "";
-    for(var i=0;i<watchesContainer.length; ++i)
+    for(var i=0;i<clocksContainer.length; ++i)
     {
         if (clocksContainer[i]) {
         clocksData+=clocksContainer[i].serialNr + " "
@@ -137,7 +137,7 @@ function readClocksFromFile(parentItem)
                                                               "seeSeconds": seeSecs,
                                                               "time": time      });
 
-            clocksContainerContainer.push(buttonObject);
+            clocksContainer.push(buttonObject);
         }
 
     }
@@ -161,9 +161,6 @@ function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName
 
     console.log(Global.currentTheme.mainItemColor);
     mainItem.repaint();
-    //mainItem.update();
-   // mainItem.changeColor();
-   // mainItem.color = Global.currentTheme.mainItemColor;
 }
 
 
