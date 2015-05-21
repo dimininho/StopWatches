@@ -25,16 +25,22 @@ Rectangle {
     property int clockWidth:180
 
 
+
+    function calculateTime() {
+        var temptime = time;
+        hour = temptime/3600;
+        temptime -= hour*3600;
+        min = temptime/60;
+        temptime -= min*60;
+        sec = temptime;
+    }
+
+
     function nextMoment() {
         if (clock.run==true)
         {
             ++time;
-            var temptime = time;
-            hour = temptime/3600;
-            temptime -= hour*3600;
-            min = temptime/60;
-            temptime -= min*60;
-            sec = temptime;
+            calculateTime();
             //console.log(time + "    m" + min + "  s" + sec);
         }
     }
@@ -207,7 +213,10 @@ Rectangle {
         onRejected: { console.log("Rejected") }
     }
 
-
+    Component.onCompleted: {
+        //for updating label after loading from file
+        calculateTime();
+    }
 
 
 }

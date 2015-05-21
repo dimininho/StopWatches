@@ -12,5 +12,6 @@
         <file>img/white_menu2.png</file>
         <file>SettingsPanel.qml</file>
         <file>PopupMenuStyle.qml</file>
+        <file>Statistics.qml</file>
     </qresource>
 </RCC>

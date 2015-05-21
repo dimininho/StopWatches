@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 import "control.js" as Control
 import "global.js" as Global
+//import "Statistics.qml" as Statistics
+//import "../" as Root
 
 import QtQuick.Controls.Styles 1.3
 
@@ -169,6 +171,12 @@ Window {
              }
         }
         MenuItem{
+            text: "Statistics"
+            onTriggered: {
+                statisticsWnd.show();
+             }
+        }
+        MenuItem{
             text: "Exit"
             onTriggered: {
                 Qt.quit();
@@ -201,6 +209,10 @@ Window {
         anchors.left: mainItem.left
         anchors.right: mainItem.right
         //state:"SETTINGS_CLOSE"
+    }
+
+    Statistics {
+        id: statisticsWnd
     }
 
     GridLayout {
