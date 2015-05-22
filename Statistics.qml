@@ -2,8 +2,7 @@ import QtQuick 2.2
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
-import "control.js" as Control
-
+import "global.js" as Global
 
 
 
@@ -14,21 +13,38 @@ Window {
 
     width: 500;
     height: 350;
-    color: Control.currentTheme.mainItemColor
+    color: Global.currentTheme.mainItemColor
+
+    Row{
+        anchors.top: parent.top
+        anchors.leftMargin: 50
+        spacing: 20
+
+        Button {
+            id: backButton
+            text:"<"
+        }
+
+        TextInput {
+            id: dateField
+            //text: clock.clockName
+            text:  Qt.formatDateTime(new Date(), "yyyy-MM-dd")
+            font.pixelSize: 15
+            color: "white"
+            //anchors.fill:  parent
+            cursorVisible: false
+            horizontalAlignment:  TextInput.AlignHCenter
 
 
-
-    TextInput {
-        id: dateField
-        //text: clock.clockName
-        text:  Qt.formatDateTime(new Date(), "yyyy-MM-dd")
-        font.pixelSize: 15
-        //color: clock.labelColor
-        anchors.fill:  parent
-        cursorVisible: false
-        horizontalAlignment:  TextInput.AlignHCenter
+        }
+        Button {
+            id: nextButton
+            text:">"
+        }
 
     }
+
+
 /*
     Calendar {
         id: calendar
