@@ -3,6 +3,7 @@ import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
 import "control.js" as Control
 import QtQuick.Controls.Styles 1.3
+import QtQuick.LocalStorage 2.0
 import "global.js" as Global
 
 Rectangle {
@@ -25,6 +26,18 @@ Rectangle {
     property int clockWidth:180
 
 
+    function writeTime(date,name,time) {
+        var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
+
+        db.transaction(
+            function(tx) {
+                // Create the database if it doesn't already exist
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Data(date DATE, name CHAR,times TEXT)');
+                tx.executeSql('INSERT INTO Data VALUES(?, ?, ?)', [date ,name,time]);
+
+            }
+         )
+    }
 
     function calculateTime() {
         var temptime = time;
@@ -107,7 +120,7 @@ Rectangle {
                 }
 
                 clock.run = !clock.run;
-
+                writeTime('2015-05-23' , clock.clockName,time);
              }
         }
 

@@ -1,6 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Window 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.2
 import "global.js" as Global
 
@@ -9,11 +9,16 @@ import "global.js" as Global
 Window {
     id: statisticsWindow
 
-    //property date day: Date.now();
+    property var locale: Qt.locale()
+    property var day: new Date();
 
     width: 500;
     height: 350;
     color: Global.currentTheme.mainItemColor
+
+    function repaint() {
+        statisticsWindow.color = Global.currentTheme.mainItemColor
+    }
 
     Row{
         anchors.top: parent.top
@@ -22,24 +27,34 @@ Window {
 
         Button {
             id: backButton
+            width: 25
+            height:25
             text:"<"
+            onClicked: {
+                day.setDate(day.getDate()-1)
+                dateField.text =  day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
+            }
         }
 
-        TextInput {
-            id: dateField
-            //text: clock.clockName
-            text:  Qt.formatDateTime(new Date(), "yyyy-MM-dd")
+
+
+        TextField {
+            id: dateField;
+            text: day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
+
             font.pixelSize: 15
-            color: "white"
-            //anchors.fill:  parent
-            cursorVisible: false
-            horizontalAlignment:  TextInput.AlignHCenter
-
-
+            horizontalAlignment: TextInput.AlignHCenter
         }
+
         Button {
             id: nextButton
+            width: 25
+            height:25
             text:">"
+            onClicked: {
+                day.setDate(day.getDate()+1)
+                dateField.text =  day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
+            }
         }
 
     }

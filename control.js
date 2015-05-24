@@ -1,6 +1,6 @@
 //.pragma library
 .import "global.js" as Global
-
+.import QtQuick.LocalStorage 2.0 as Sql
 
 var component;
 var buttonObject;

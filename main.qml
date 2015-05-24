@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
+import QtQuick.LocalStorage 2.0
 import "control.js" as Control
 import "global.js" as Global
 //import "Statistics.qml" as Statistics
@@ -180,6 +181,65 @@ Window {
             text: "Exit"
             onTriggered: {
                 Qt.quit();
+             }
+        }
+        MenuItem{
+            text: "Write SQL"
+            onTriggered: {
+                var db = LocalStorage.openDatabaseSync("SQLQML", "1.0", "The Example QML SQL!", 1000000);
+
+                db.transaction(
+                    function(tx) {
+                        // Create the database if it doesn't already exist
+                        tx.executeSql('CREATE TABLE IF NOT EXISTS TestDB2(name TEXT, time INT,date DATE)');
+
+                        // Add (another) greeting row
+                        tx.executeSql('INSERT INTO TestDB2 VALUES(?, ?, ?)', [ 'task2', 12,'2000-04-20']);
+
+
+                    }
+                )
+            }
+        }
+        MenuItem{
+            text: "REad SQL"
+            onTriggered: {
+                var db = LocalStorage.openDatabaseSync("SQLQML", "1.0", "The Example QML SQL!", 1000000);
+
+                db.transaction(
+                    function(tx) {
+
+                        // Show all added greetings
+                        var rs = tx.executeSql('SELECT * FROM TestDB2');
+
+                        var r = ""
+                        for(var i = 0; i < rs.rows.length; i++) {
+                            r += rs.rows.item(i).name + " : " + rs.rows.item(i).time + "  "+rs.rows.item(i).date + "\n"
+                        }
+                        console.log(r);
+                    }
+                )
+             }
+        }
+
+        MenuItem{
+            text: "REad DATA"
+            onTriggered: {
+                 var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
+
+                db.transaction(
+                    function(tx) {
+
+                        // Show all added greetings
+                        var rs = tx.executeSql('SELECT * FROM Data');
+
+                        var r = ""
+                        for(var i = 0; i < rs.rows.length; i++) {
+                            r += rs.rows.item(i).date + " : " + rs.rows.item(i).name + "  "+rs.rows.item(i).times + "\n"
+                        }
+                        console.log(r);
+                    }
+                )
              }
         }
     }
