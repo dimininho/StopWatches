@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("fileio",&fileIO);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     engine.setOfflineStoragePath(QDir::currentPath());
-    QString str = engine.offlineStoragePath();
-    qDebug()<<str;
+    //QString str = engine.offlineStoragePath();
+    //qDebug()<<str;
     //qDebug()<<QDir::currentPath();
     return app.exec();
 }

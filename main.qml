@@ -229,13 +229,27 @@ Window {
 
                 db.transaction(
                     function(tx) {
+                        var curDate = " '2015-05-25' " ;
+                        var query = "SELECT serialNr,name
+                                     FROM Data WHERE date= " +curDate +
+                                    " GROUP BY serialNr,name";
+                        //console.log(query);
 
-                        // Show all added greetings
-                        var rs = tx.executeSql('SELECT * FROM Data');
+                        var rs = tx.executeSql(query);
+                        var rs2;
 
                         var r = ""
                         for(var i = 0; i < rs.rows.length; i++) {
-                            r += rs.rows.item(i).date + " : " + rs.rows.item(i).name + "  "+rs.rows.item(i).times + "\n"
+                            r += rs.rows.item(i).serialNr + " : " + rs.rows.item(i).name + "\n"
+                            query = "SELECT startTime,endTime
+                                     FROM Data WHERE date= " +curDate +
+                                            "AND name= '" +rs.rows.item(i).name +"' "+
+                                            "AND serialNr = '" + rs.rows.item(i).serialNr + "'";
+                            rs2 = tx.executeSql(query);
+                            for (var j = 0; j<rs2.rows.length; j++) {
+                                r+=rs2.rows.item(j).startTime + " - " + rs2.rows.item(j).endTime+ "\n";
+                            }
+                            r+="---------\n";
                         }
                         console.log(r);
                     }
