@@ -17,7 +17,8 @@ Rectangle {
     property int sec: 0
     property int time: 0
     property bool seeSeconds: false
-
+    property string startTime: ""
+    property string endTime: ""
     property bool run: false
 
     //property color fillColor: "#434c53"
@@ -26,14 +27,15 @@ Rectangle {
     property int clockWidth:180
 
 
-    function writeTime(date,name,time) {
+
+    function writeTime(date,name,serialNr,startTime,endTime) {
         var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
 
         db.transaction(
             function(tx) {
                 // Create the database if it doesn't already exist
-                tx.executeSql('CREATE TABLE IF NOT EXISTS Data(date DATE, name CHAR,times TEXT)');
-                tx.executeSql('INSERT INTO Data VALUES(?, ?, ?)', [date ,name,time]);
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Data(date DATE, name CHAR,serialNr SMALLINT,startTime TIME, endTime TIME)');
+                tx.executeSql('INSERT INTO Data VALUES(?, ?, ?, ? ,?)', [date ,name,serialNr,startTime,endTime]);
 
             }
          )
@@ -55,6 +57,19 @@ Rectangle {
             ++time;
             calculateTime();
             //console.log(time + "    m" + min + "  s" + sec);
+        }
+    }
+
+    onRunChanged: {
+        var moment = new Date();
+        if(clock.run) {
+            startTime = moment.getHours() + ":" + moment.getMinutes() +":" + moment.getSeconds();
+           // console.log(startTime);
+        } else {
+            endTime = moment.getHours() + ":" + moment.getMinutes() +":" + moment.getSeconds();
+           // console.log(endTime);
+            writeTime(moment.toLocaleDateString(Qt.locale(),"yyyy-MM-dd") ,
+                      clock.clockName,clock.serialNr,startTime,endTime);
         }
     }
 
@@ -117,10 +132,9 @@ Rectangle {
                     var temprun = clock.run; //for correct work, when clock's state is "RUN"
                     Control.stopAllClocks();
                     clock.run = temprun;
-                }
-
+                }              
                 clock.run = !clock.run;
-                writeTime('2015-05-23' , clock.clockName,time);
+
              }
         }
 
@@ -210,7 +224,7 @@ Rectangle {
         target: mainItem
         onTimerStep: {clock.nextMoment()}
         onStartClocks: clock.run = true
-        onStopClocks: clock.run = false
+        onStopClocks: clock.run = false       
     }
 
 
