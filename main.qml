@@ -37,6 +37,7 @@ Window {
     onStartClocks: {}
     signal stopClocks
     onStopClocks: {}
+    signal showStatistics
 
     function repaint() {
        mainItem.color = Global.currentTheme.mainItemColor
@@ -175,6 +176,7 @@ Window {
             text: "Statistics"
             onTriggered: {
                 statisticsWnd.show();
+                mainItem.showStatistics();
              }
         }
         MenuItem{
