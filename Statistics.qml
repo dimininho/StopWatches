@@ -4,7 +4,7 @@ import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.2
 import "global.js" as Global
 import QtQuick.LocalStorage 2.0
-
+import QtQuick 2.2 as QQQ
 
 /*
 
@@ -23,6 +23,8 @@ save calculated coordinates of rects into attributes
 
 */
 
+884 323 319
+5x6x9a
 Window {
     id: statisticsWindow
 
@@ -37,9 +39,43 @@ Window {
         statisticsWindow.color = Global.currentTheme.mainItemColor
     }
 
+    property var re : Rectangle{
+        width:70;
+        height:10;
+        color:"red";
+    }
+
+
+
     function getDataFromDB() {
        var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
        clocks.clear();
+
+        function RectRange(start,end) {
+            this.start = start
+            this.end = end
+            //return this;
+        }
+
+
+        var a = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "magenta"; width: 20; height: 20;y:200}',
+            clocks, "dynamicSnippet1");
+
+
+        //a.width=23;
+        //a.height = 44;
+        //a.y=100;
+        //a.color = "magenta";
+        //
+        //statisticsWindow.re = a;
+
+       // clocks.append({"Name": "TEST",
+        //              "Intervals":[{"start":" 12:12:12","end":" 13:12:12"},
+         //                           {"start":" 15:152:12","end":" 17:12:12"}]});
+
+
+        //console.log(clocks.get(0).Name  + ":  " +clocks.Rect.color + "  start " + clocks.get(0).Intervals.get(0).start);
+
        db.transaction(
            function(tx) {
                var curDate = "'" + day.toLocaleDateString(Qt.locale(),"yyyy-MM-dd")+"'" ;//" '2015-05-25' " ;
@@ -53,20 +89,34 @@ Window {
 
                var r = ""
                var intervals;
+               var rectPositions = [];
+
                for(var i = 0; i < rs.rows.length; i++) {
-                   intervals = "";
+                   rectPositions.length = 0;
                    query = "SELECT startTime,endTime
                             FROM Data WHERE date= " +curDate +
                                    "AND name= '" +rs.rows.item(i).name +"' "+
                                    "AND serialNr = '" + rs.rows.item(i).serialNr + "'";
                    rs2 = tx.executeSql(query);
+                   //intervals = "[";
                    for (var j = 0; j<rs2.rows.length; j++) {
-                       intervals+=rs2.rows.item(j).startTime + " - " + rs2.rows.item(j).endTime+ "; ";
-
+                       rectPositions[j] =new RectRange(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
+                       //intervals+=rs2.rows.item(j).startTime + " - " + rs2.rows.item(j).endTime+ "; ";
+                      // intervals+="{" + "\"start\":\"" + rs2.rows.item(j).startTime +
+                      //         "\",\"end\":\"" + rs2.rows.item(j).endTime + "\"}";
                    }
-                   clocks.append({"Name": rs.rows.item(i).name,
-                                  "Intervals": intervals});
-                   console.log(clocks.get(i).Name  + ":  " +clocks.get(i).Intervals);
+
+                  // intervals += "]";
+                   //console.log(intervals);
+
+                    clocks.append({"Name": rs.rows.item(i).name,
+                                   "Intervals": rectPositions});
+                   console.log("A   " + clocks.get(i).Intervals.get(0).start);
+
+                  // clocks.append({"Name": rs.rows.item(i).name,
+                   //               "Intervals": intervals});
+                  // console.log(clocks.get(i).Name  + ":  " +clocks.get(i).Intervals.count+ "  start " + clocks.get(i).Intervals.get(0).start);
+
 
                }
 
@@ -140,10 +190,23 @@ Window {
             anchors.fill:parent
             width: parent.width
             model: clocks
+
             delegate: Rectangle{
+                property Rectangle rrr: Rectangle{color:"blue"; width:20;height:20;}
                 width: parent.width
                 height: 40
                 color:"#a2eef5"
+
+                function getRectagles(rectPositions) {
+                    var text = "";
+                    for(var i=0;i<rectPositions.length;++i) {
+                        text+= rectPositions[i].start + "$" + rectPositions[i].end;
+                    }
+                    console.log(text);
+                    return text;
+
+                }
+
                 Text{
                     id:nam
                     anchors.left: parent.left
@@ -157,8 +220,14 @@ Window {
                     anchors.leftMargin: 40
                     font.pointSize: 14
                     font.weight: Font.Bold
-                    text: Intervals
+                    text: getRectagles(Intervals);
                 }
+//               Item{
+//                   data: Rect
+
+ //              }
+
+              // Component.onCompleted: console.log(Rect.width);
             }
         }
 
