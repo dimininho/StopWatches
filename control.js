@@ -1,7 +1,7 @@
 //.pragma library
 .import "global.js" as Global
 .import QtQuick.LocalStorage 2.0 as Sql
-
+.import QtQuick 2.0 as QQQ
 var component;
 var buttonObject;
 //var parentItem = "layout"
@@ -17,6 +17,7 @@ var settings = Global.settings;
 var clocksContainer = Global.clocksContainer;
 var darkThemeName = "Dark";
 var whiteThemeName = "White";
+var labelContainer = [];
 
 function ClockType(object){
     this.number = object.serialNr;
@@ -30,6 +31,8 @@ function addClock(parentItem,main) {
 
     if (component === undefined)
         component = Qt.createComponent("Clock.qml");
+
+
     buttonObject = component.createObject(parentItem,{
                                                       "serialNr": serialNr,
                                                       "width":main.clockWidth,
@@ -46,6 +49,38 @@ function addClock(parentItem,main) {
     }
 
 }
+
+
+function removeCoordinateLabels()
+{
+    for(var i=0; i< labelContainer.length;++i)
+    {
+        labelContainer[i].destroy();
+    }
+    labelContainer.length = 0;
+}
+
+
+function drawCoordinates(parentItem,from,to) {
+    var label;
+    var xStart = parentItem.xPos;
+    var xEnd = parentItem.width-40;
+    var step = (xEnd - xStart)/(to-from);
+    //console.log(from + " @ " +to);
+//console.log(parentItem.id + "   " + xStart +"-"+xEnd + "  step" + step);
+    var j = 0;
+    removeCoordinateLabels();
+    for(var i=from;i<=to;++i,++j) {
+        label = Qt.createQmlObject('import QtQuick 2.0; Text {font.pointSize: 13; y:13}',
+            parentItem, "label");
+        label.text = i;
+        label.x = xStart + j*step;
+        labelContainer.push(label);
+
+       // console.log(label.text + " :" + label.x);
+    }
+}
+
 
 /*
 function changeColumnsNumber(){

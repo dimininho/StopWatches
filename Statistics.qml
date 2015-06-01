@@ -3,33 +3,18 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.2
 import "global.js" as Global
+import "control.js" as Control
 import QtQuick.LocalStorage 2.0
 import QtQuick 2.2 as QQQ
 
-/*
 
-ListModel {
-    id: fruitModel
-
-    ListElement {
-        name: "Apple"
-        cost: 2.45
-        attributes: [
-            ListElement { description: "Core" },
-            ListElement { description: "Deciduous" }
-        ]
-    }
-save calculated coordinates of rects into attributes
-
-*/
-
-884 323 319
-5x6x9a
 Window {
     id: statisticsWindow
 
     property var locale: Qt.locale()
     property var day: new Date();
+    property int minHour:0
+    property int maxHour:24
 
     width: 700;
     height: 500;
@@ -39,13 +24,53 @@ Window {
         statisticsWindow.color = Global.currentTheme.mainItemColor
     }
 
-    property var re : Rectangle{
-        width:70;
-        height:10;
-        color:"red";
+    function timeToCoorinate(time){
+        var arr = time.split(':');
+        var seconds = +arr[0]*3600 + arr[1]*60 + arr[2]*1;
+        var endPos = statData.width-40- statData.xPos;
+        var startPos = 0;
+        var minTime = minHour*3600;
+        var maxTime = maxHour*3600;
+        var normCoef = (maxTime-minTime)/(endPos-startPos);
+
+        return startPos + (seconds - minTime)/normCoef;
+
     }
 
+    function parseHour(time){
+        if (time) {
+            if (time[2]===':') return time.substr(0,2);
+            if (time[1]===':') return time[0];
+        }
+        return 0;
+    }
 
+    function getMinHour(db,curDate) {
+        var hour=0
+        db.transaction(
+            function(tx) {
+                var query = "SELECT MIN(startTime) as min
+                             FROM Data WHERE date= " +curDate;
+                var time = (tx.executeSql(query)).rows.item(0).min;
+                hour =  parseHour(time);
+            }
+        )
+        return hour;
+    }
+    function getMaxHour(db,curDate) {
+        var hour
+        db.transaction(
+            function(tx) {
+                var query = "SELECT MAX(startTime) as max
+                             FROM Data WHERE date= " +curDate;
+                var time = (tx.executeSql(query)).rows.item(0).max;
+                hour =  parseHour(time);
+                if (hour===0) hour=23;
+            }
+        )
+        return  hour;
+
+    }
 
     function getDataFromDB() {
        var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
@@ -57,40 +82,28 @@ Window {
             //return this;
         }
 
-
-        var a = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "magenta"; width: 20; height: 20;y:200}',
-            clocks, "dynamicSnippet1");
-
-
-        //a.width=23;
-        //a.height = 44;
-        //a.y=100;
-        //a.color = "magenta";
-        //
-        //statisticsWindow.re = a;
-
-       // clocks.append({"Name": "TEST",
-        //              "Intervals":[{"start":" 12:12:12","end":" 13:12:12"},
-         //                           {"start":" 15:152:12","end":" 17:12:12"}]});
+        var curDate = "'" + day.toLocaleDateString(Qt.locale(),"yyyy-MM-dd")+"'" ;//" '2015-05-25' " ;
+        minHour = +getMinHour(db,curDate);
+        maxHour = +getMaxHour(db,curDate)+1;
+        Control.drawCoordinates(labels,minHour,maxHour);
+       // console.log(minHour  +  " ^  " + maxHour);
 
 
-        //console.log(clocks.get(0).Name  + ":  " +clocks.Rect.color + "  start " + clocks.get(0).Intervals.get(0).start);
 
        db.transaction(
            function(tx) {
-               var curDate = "'" + day.toLocaleDateString(Qt.locale(),"yyyy-MM-dd")+"'" ;//" '2015-05-25' " ;
+
                var query = "SELECT serialNr,name
                             FROM Data WHERE date= " +curDate +
                            " GROUP BY serialNr,name";
-
 
                var rs = tx.executeSql(query);
                var rs2;
 
                var r = ""
-               var intervals;
-               var rectPositions = [];
 
+               var rectPositions = [];
+               var from,to;
                for(var i = 0; i < rs.rows.length; i++) {
                    rectPositions.length = 0;
                    query = "SELECT startTime,endTime
@@ -100,10 +113,12 @@ Window {
                    rs2 = tx.executeSql(query);
                    //intervals = "[";
                    for (var j = 0; j<rs2.rows.length; j++) {
-                       rectPositions[j] =new RectRange(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
-                       //intervals+=rs2.rows.item(j).startTime + " - " + rs2.rows.item(j).endTime+ "; ";
-                      // intervals+="{" + "\"start\":\"" + rs2.rows.item(j).startTime +
-                      //         "\",\"end\":\"" + rs2.rows.item(j).endTime + "\"}";
+                      // rectPositions[j] =new RectRange(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
+                       from =timeToCoorinate(rs2.rows.item(j).startTime);
+                       to = timeToCoorinate(rs2.rows.item(j).endTime);
+                       console.log(from +"  -  " + to);
+                       rectPositions[j] =new RectRange(from,to);
+
                    }
 
                   // intervals += "]";
@@ -111,7 +126,7 @@ Window {
 
                     clocks.append({"Name": rs.rows.item(i).name,
                                    "Intervals": rectPositions});
-                   console.log("A   " + clocks.get(i).Intervals.get(0).start);
+                   //console.log("A   " + clocks.get(i).Intervals.get(0).start);
 
                   // clocks.append({"Name": rs.rows.item(i).name,
                    //               "Intervals": intervals});
@@ -124,15 +139,7 @@ Window {
        )
     }
 
-    function fillListModel(clocks) {
-        for(i=0;clocks.rows.length;++i) {
-            var query = "";
-            query = "SELECT startTime,endTime
-                     FROM Data WHERE date= " +curDate +
-                            "AND name= '" +rs.rows.item(i).name +"' "+
-                            "AND serialNr = '" + rs.rows.item(i).serialNr + "'";
-        }
-    }
+
 
     Row{
         id: dates
@@ -183,7 +190,9 @@ Window {
         anchors.top:  dates.bottom
         anchors.bottom: statisticsWindow.contentItem.bottom
         color: "cyan"
-        width: statisticsWindow.contentItem.width
+        width: statisticsWindow.width
+
+        property int xPos: 200
 
         ListView {
             id:view
@@ -192,20 +201,30 @@ Window {
             model: clocks
 
             delegate: Rectangle{
+                id: parentRec
                 property Rectangle rrr: Rectangle{color:"blue"; width:20;height:20;}
                 width: parent.width
                 height: 40
                 color:"#a2eef5"
 
-                function getRectagles(rectPositions) {
+                function getRectangles(rectPositions) {
                     var text = "";
-                    for(var i=0;i<rectPositions.length;++i) {
-                        text+= rectPositions[i].start + "$" + rectPositions[i].end;
+                    for(var i=0;i<rectPositions.count;++i) {
+                        text+= rectPositions.get(i).start + "$" + rectPositions.get(i).end;
                     }
-                    console.log(text);
+                    //console.log(text);
                     return text;
 
                 }
+                function getRectangles2(object) {
+                    var text = "";
+                    text = object.start + " & " + object.end;
+                    //console.log(text);
+                    return text;
+
+                }
+
+
 
                 Text{
                     id:nam
@@ -215,13 +234,30 @@ Window {
                     font.weight: Font.Bold
                     text: Name
                 }
+                function makeRec(){
+                    var  w = 150;
+                    var newObject = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "red"; height: 20;}',
+                        parentRec, "dynamicSnippet1");
+                    newObject.width = w;
+                    newObject.x = 300;
+                }
+
+                /*
                 Text{
                     anchors.left: nam.right
                     anchors.leftMargin: 40
                     font.pointSize: 14
                     font.weight: Font.Bold
-                    text: getRectagles(Intervals);
-                }
+                    text: getRectangles(Intervals)
+                    //text: getRectangles2(Intervals.get(0));
+                    //text: Intervals.get(0).start
+                }*/
+
+                Component.onCompleted: makeRec();
+
+
+
+
 //               Item{
 //                   data: Rect
 
@@ -229,8 +265,32 @@ Window {
 
               // Component.onCompleted: console.log(Rect.width);
             }
-        }
 
+        }
+        Rectangle {
+            id: labels
+
+            property int xPos: statData.xPos
+
+            height:40
+            width:statData.width
+            anchors.bottom: statData.bottom
+            anchors.left: statData.left
+            anchors.right: statData.right
+
+            Rectangle{
+                id: abscissa
+                height: 7
+                width:parent.width - statData.xPos
+                x: statData.xPos
+                color:"black"
+                anchors{
+                    top: parent.top
+                    right:parent.right
+                }
+            }
+            //Component.onCompleted: Control.drawCoordinates(labels,statisticsWindow.minHour,statisticsWindow.maxHour);
+        }
 
 
     }
