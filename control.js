@@ -107,6 +107,21 @@ function removeAllClocks()
 }
 
 
+function clockDoubleClick()
+{
+    for(var i=0; i< Global.clocksContainer.length;++i)
+    {
+        if (clocksContainer[i].run) {
+            clocksContainer[i].run = false;
+            clocksContainer[i].whenRunChanged();
+            clocksContainer[i].run = true;
+        }
+
+    }
+
+}
+
+
 function writeClocksToFile()
 {
 

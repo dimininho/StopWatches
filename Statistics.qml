@@ -5,7 +5,7 @@ import QtQuick.Controls.Styles 1.2
 import "global.js" as Global
 import "control.js" as Control
 import QtQuick.LocalStorage 2.0
-import QtQuick 2.2 as QQQ
+
 
 
 Window {
@@ -88,8 +88,6 @@ Window {
         Control.drawCoordinates(labels,minHour,maxHour);
        // console.log(minHour  +  " ^  " + maxHour);
 
-
-
        db.transaction(
            function(tx) {
 
@@ -99,9 +97,6 @@ Window {
 
                var rs = tx.executeSql(query);
                var rs2;
-
-               var r = ""
-
                var rectPositions = [];
                var from,to;
                for(var i = 0; i < rs.rows.length; i++) {
@@ -111,28 +106,15 @@ Window {
                                    "AND name= '" +rs.rows.item(i).name +"' "+
                                    "AND serialNr = '" + rs.rows.item(i).serialNr + "'";
                    rs2 = tx.executeSql(query);
-                   //intervals = "[";
                    for (var j = 0; j<rs2.rows.length; j++) {
-                      // rectPositions[j] =new RectRange(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
                        from =timeToCoorinate(rs2.rows.item(j).startTime);
                        to = timeToCoorinate(rs2.rows.item(j).endTime);
                        console.log(from +"  -  " + to);
                        rectPositions[j] =new RectRange(from,to);
 
                    }
-
-                  // intervals += "]";
-                   //console.log(intervals);
-
                     clocks.append({"Name": rs.rows.item(i).name,
                                    "Intervals": rectPositions});
-                   //console.log("A   " + clocks.get(i).Intervals.get(0).start);
-
-                  // clocks.append({"Name": rs.rows.item(i).name,
-                   //               "Intervals": intervals});
-                  // console.log(clocks.get(i).Name  + ":  " +clocks.get(i).Intervals.count+ "  start " + clocks.get(i).Intervals.get(0).start);
-
-
                }
 
            }
@@ -207,24 +189,14 @@ Window {
                 height: 40
                 color:"#a2eef5"
 
-                function getRectangles(rectPositions) {
-                    var text = "";
+                function createTimingDiagram(rectPositions) {
                     for(var i=0;i<rectPositions.count;++i) {
-                        text+= rectPositions.get(i).start + "$" + rectPositions.get(i).end;
+                        var newRect = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "lightsteelblue"; height: 34; radius:5;}',
+                            diagram, "simpleRect");
+                        newRect.x = rectPositions.get(i).start;
+                        newRect.width  = rectPositions.get(i).end - rectPositions.get(i).start;
                     }
-                    //console.log(text);
-                    return text;
-
                 }
-                function getRectangles2(object) {
-                    var text = "";
-                    text = object.start + " & " + object.end;
-                    //console.log(text);
-                    return text;
-
-                }
-
-
 
                 Text{
                     id:nam
@@ -234,36 +206,24 @@ Window {
                     font.weight: Font.Bold
                     text: Name
                 }
+
+                Rectangle {
+                    id: diagram
+                    x: statData.xPos
+                    height:40;
+                    width: statData.width - statData.xPos - 40;
+                    color:"lightblue"
+                }
+
                 function makeRec(){
                     var  w = 150;
-                    var newObject = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "red"; height: 20;}',
+                    var newObject = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "red"; height: 20; radius: 5;}',
                         parentRec, "dynamicSnippet1");
                     newObject.width = w;
                     newObject.x = 300;
                 }
+                Component.onCompleted: createTimingDiagram(Intervals);
 
-                /*
-                Text{
-                    anchors.left: nam.right
-                    anchors.leftMargin: 40
-                    font.pointSize: 14
-                    font.weight: Font.Bold
-                    text: getRectangles(Intervals)
-                    //text: getRectangles2(Intervals.get(0));
-                    //text: Intervals.get(0).start
-                }*/
-
-                Component.onCompleted: makeRec();
-
-
-
-
-//               Item{
-//                   data: Rect
-
- //              }
-
-              // Component.onCompleted: console.log(Rect.width);
             }
 
         }
@@ -295,13 +255,6 @@ Window {
 
     }
 
-    ListModel {
-        id: stocks
-        // Data from : http://en.wikipedia.org/wiki/NASDAQ-100
-        ListElement {name: "Apple Inc."; stockId: "AAPL"; value: "0.0"; change: "0.0"; changePercentage: "0.0"}
-    }
-
-
 
     ListModel {
         id: clocks
@@ -312,7 +265,12 @@ Window {
 
     Connections{
         target: mainItem
-        onShowStatistics: getDataFromDB();
+        onShowStatistics: {
+            Control.clockDoubleClick();
+            getDataFromDB();
+        }
+
+
     }
 
 /*

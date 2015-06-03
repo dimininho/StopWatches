@@ -60,7 +60,7 @@ Rectangle {
         }
     }
 
-    onRunChanged: {
+    function whenRunChanged() {
         var moment = new Date();
         if(clock.run) {
             startTime = moment.getHours() + ":" + moment.getMinutes() +":" + moment.getSeconds();
@@ -71,6 +71,11 @@ Rectangle {
             writeTime(moment.toLocaleDateString(Qt.locale(),"yyyy-MM-dd") ,
                       clock.clockName,clock.serialNr,startTime,endTime);
         }
+        console.log("ReRun");
+    }
+
+    onRunChanged: {
+        whenRunChanged();
     }
 
 
