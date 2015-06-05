@@ -22,6 +22,7 @@ Window {
 
     function repaint() {
         statisticsWindow.color = Global.currentTheme.mainItemColor
+        statData.color = Global.currentTheme.mainItemColor
     }
 
     function timeToCoorinate(time){
@@ -32,7 +33,7 @@ Window {
         var minTime = minHour*3600;
         var maxTime = maxHour*3600;
         var normCoef = (maxTime-minTime)/(endPos-startPos);
-
+//console.log("norma " + normCoef + "  endPos " + endPos);
         return startPos + (seconds - minTime)/normCoef;
 
     }
@@ -79,7 +80,6 @@ Window {
         function RectRange(start,end) {
             this.start = start
             this.end = end
-            //return this;
         }
 
         var curDate = "'" + day.toLocaleDateString(Qt.locale(),"yyyy-MM-dd")+"'" ;//" '2015-05-25' " ;
@@ -109,7 +109,7 @@ Window {
                    for (var j = 0; j<rs2.rows.length; j++) {
                        from =timeToCoorinate(rs2.rows.item(j).startTime);
                        to = timeToCoorinate(rs2.rows.item(j).endTime);
-                       console.log(from +"  -  " + to);
+                      // console.log(from +"  -  " + to);
                        rectPositions[j] =new RectRange(from,to);
 
                    }
@@ -170,8 +170,9 @@ Window {
 
         id: statData
         anchors.top:  dates.bottom
+        anchors.topMargin: 20
         anchors.bottom: statisticsWindow.contentItem.bottom
-        color: "cyan"
+        color: Global.currentTheme.mainItemColor
         width: statisticsWindow.width
 
         property int xPos: 200
@@ -187,11 +188,11 @@ Window {
                 property Rectangle rrr: Rectangle{color:"blue"; width:20;height:20;}
                 width: parent.width
                 height: 40
-                color:"#a2eef5"
+                color: Global.currentTheme.mainItemColor
 
                 function createTimingDiagram(rectPositions) {
                     for(var i=0;i<rectPositions.count;++i) {
-                        var newRect = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "lightsteelblue"; height: 34; radius:5;}',
+                        var newRect = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "#266CE8"; height: 34; radius:5;}',
                             diagram, "simpleRect");
                         newRect.x = rectPositions.get(i).start;
                         newRect.width  = rectPositions.get(i).end - rectPositions.get(i).start;
@@ -212,7 +213,7 @@ Window {
                     x: statData.xPos
                     height:40;
                     width: statData.width - statData.xPos - 40;
-                    color:"lightblue"
+                    color: Global.currentTheme.mainPanelColor
                 }
 
                 function makeRec(){
@@ -227,6 +228,7 @@ Window {
             }
 
         }
+
         Rectangle {
             id: labels
 
@@ -249,10 +251,20 @@ Window {
                     right:parent.right
                 }
             }
-            //Component.onCompleted: Control.drawCoordinates(labels,statisticsWindow.minHour,statisticsWindow.maxHour);
+
+        }
+/*
+        Rectangle {
+            id: divider
+            x: parent.xPos - 1
+            width: 1
+            height: parent.height
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            color: "black"
         }
 
-
+*/
     }
 
 
@@ -266,7 +278,8 @@ Window {
     Connections{
         target: mainItem
         onShowStatistics: {
-            Control.clockDoubleClick();
+            repaint();
+            Control.clockDoubleClick();//for correct running clocks display
             getDataFromDB();
         }
 

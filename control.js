@@ -107,18 +107,20 @@ function removeAllClocks()
 }
 
 
+//this function needs for correct display running clocks
+// (we write current time to database and run clock again)
 function clockDoubleClick()
 {
     for(var i=0; i< Global.clocksContainer.length;++i)
     {
-        if (clocksContainer[i].run) {
-            clocksContainer[i].run = false;
-            clocksContainer[i].whenRunChanged();
-            clocksContainer[i].run = true;
+        if (clocksContainer[i]){
+            if (clocksContainer[i].run) {
+                clocksContainer[i].run = false;
+               // clocksContainer[i].whenRunChanged(); //check if correct in Linux
+                clocksContainer[i].run = true;
+            }
         }
-
     }
-
 }
 
 
