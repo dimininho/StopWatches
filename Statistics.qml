@@ -25,6 +25,7 @@ Window {
         statData.color = Global.currentTheme.mainItemColor
     }
 
+
     function timeToCoorinate(time){
         var arr = time.split(':');
         var seconds = +arr[0]*3600 + arr[1]*60 + arr[2]*1;
@@ -36,6 +37,29 @@ Window {
 //console.log("norma " + normCoef + "  endPos " + endPos);
         return startPos + (seconds - minTime)/normCoef;
 
+    }
+
+    function secondsToTime(seconds) {
+        Number.prototype.div = function(by) {
+            return (this - this % by)/by
+        }
+
+        var hour = seconds.div(3600);
+        seconds -= hour*3600;
+        var min = seconds.div(60);
+        seconds -= min*60;
+        var sec = seconds;
+        return hour+":"+min+":"+sec;
+    }
+
+
+
+    function timeDifference(time1,time2) {
+        var arr = time1.split(':');
+        var arr2 = time2.split(':');
+        var seconds = +arr[0]*3600 + arr[1]*60 + arr[2]*1;
+        var seconds2 = +arr2[0]*3600 + arr2[1]*60 + arr2[2]*1;
+        return seconds2-seconds;
     }
 
     function parseHour(time){
@@ -77,9 +101,10 @@ Window {
        var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
        clocks.clear();
 
-        function RectRange(start,end) {
+        function RectRange(start,end,diff) {
             this.start = start
             this.end = end
+            this.timeDifference = diff
         }
 
         var curDate = "'" + day.toLocaleDateString(Qt.locale(),"yyyy-MM-dd")+"'" ;//" '2015-05-25' " ;
@@ -98,7 +123,7 @@ Window {
                var rs = tx.executeSql(query);
                var rs2;
                var rectPositions = [];
-               var from,to;
+               var from,to,timeDiff;
                for(var i = 0; i < rs.rows.length; i++) {
                    rectPositions.length = 0;
                    query = "SELECT startTime,endTime
@@ -109,8 +134,9 @@ Window {
                    for (var j = 0; j<rs2.rows.length; j++) {
                        from =timeToCoorinate(rs2.rows.item(j).startTime);
                        to = timeToCoorinate(rs2.rows.item(j).endTime);
+                       timeDiff = timeDifference(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
                       // console.log(from +"  -  " + to);
-                       rectPositions[j] =new RectRange(from,to);
+                       rectPositions[j] =new RectRange(from,to,timeDiff);
 
                    }
                     clocks.append({"Name": rs.rows.item(i).name,
@@ -191,12 +217,16 @@ Window {
                 color: Global.currentTheme.mainItemColor
 
                 function createTimingDiagram(rectPositions) {
+                    var sumSeconds = 0;
                     for(var i=0;i<rectPositions.count;++i) {
                         var newRect = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "#266CE8"; height: 34; radius:5;}',
                             diagram, "simpleRect");
                         newRect.x = rectPositions.get(i).start;
                         newRect.width  = rectPositions.get(i).end - rectPositions.get(i).start;
+                        sumSeconds += rectPositions.get(i).timeDifference;
                     }
+                   // console.log(sumSeconds);
+                    sumTime.text = secondsToTime(sumSeconds);
                 }
 
                 Text{
@@ -206,6 +236,16 @@ Window {
                     font.pointSize: 20
                     font.weight: Font.Bold
                     text: Name
+                }
+
+                Text {
+                    id: sumTime
+                    anchors.bottom: parent.bottom
+                    x: 100
+                    font.pointSize: 12
+                    color: "red"
+                    text:""
+
                 }
 
                 Rectangle {
