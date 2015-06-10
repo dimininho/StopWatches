@@ -38,6 +38,7 @@ Window {
     signal stopClocks
     onStopClocks: {}
     signal showStatistics
+    signal newDay
 
     function repaint() {
        mainItem.color = Global.currentTheme.mainItemColor
@@ -53,7 +54,12 @@ Window {
         interval: 1000
         running: true
         repeat:true
-        onTriggered: mainItem.timerStep();
+        onTriggered: {
+            mainItem.timerStep();
+            var time = new Date();
+            var timestr = "" + time.getHours() + time.getMinutes() + time.getSeconds();
+            if (timestr === "235959") mainItem.newDay();
+        }
     }
 
 
@@ -185,79 +191,6 @@ Window {
                 Qt.quit();
              }
         }
-        MenuItem{
-            text: "Write SQL"
-            onTriggered: {
-                var db = LocalStorage.openDatabaseSync("SQLQML", "1.0", "The Example QML SQL!", 1000000);
-
-                db.transaction(
-                    function(tx) {
-                        // Create the database if it doesn't already exist
-                        tx.executeSql('CREATE TABLE IF NOT EXISTS TestDB2(name TEXT, time INT,date DATE)');
-
-                        // Add (another) greeting row
-                        tx.executeSql('INSERT INTO TestDB2 VALUES(?, ?, ?)', [ 'task2', 12,'2000-04-20']);
-
-
-                    }
-                )
-            }
-        }
-        MenuItem{
-            text: "REad SQL"
-            onTriggered: {
-                var db = LocalStorage.openDatabaseSync("SQLQML", "1.0", "The Example QML SQL!", 1000000);
-
-                db.transaction(
-                    function(tx) {
-
-                        // Show all added greetings
-                        var rs = tx.executeSql('SELECT * FROM TestDB2');
-
-                        var r = ""
-                        for(var i = 0; i < rs.rows.length; i++) {
-                            r += rs.rows.item(i).name + " : " + rs.rows.item(i).time + "  "+rs.rows.item(i).date + "\n"
-                        }
-                        console.log(r);
-                    }
-                )
-             }
-        }
-
-        MenuItem{
-            text: "REad DATA"
-            onTriggered: {
-                 var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
-
-                db.transaction(
-                    function(tx) {
-                        var curDate = " '2015-05-25' " ;
-                        var query = "SELECT serialNr,name
-                                     FROM Data WHERE date= " +curDate +
-                                    " GROUP BY serialNr,name";
-                        //console.log(query);
-
-                        var rs = tx.executeSql(query);
-                        var rs2;
-
-                        var r = ""
-                        for(var i = 0; i < rs.rows.length; i++) {
-                            r += rs.rows.item(i).serialNr + " : " + rs.rows.item(i).name + "\n"
-                            query = "SELECT startTime,endTime
-                                     FROM Data WHERE date= " +curDate +
-                                            "AND name= '" +rs.rows.item(i).name +"' "+
-                                            "AND serialNr = '" + rs.rows.item(i).serialNr + "'";
-                            rs2 = tx.executeSql(query);
-                            for (var j = 0; j<rs2.rows.length; j++) {
-                                r+=rs2.rows.item(j).startTime + " - " + rs2.rows.item(j).endTime+ "\n";
-                            }
-                            r+="---------\n";
-                        }
-                        console.log(r);
-                    }
-                )
-             }
-        }
     }
 
     property Component menuButtonStyle: ButtonStyle {
@@ -291,16 +224,25 @@ Window {
         id: statisticsWnd
     }
 
-    GridLayout {
-        id:layout
-        property int colNumber: 2
+    ScrollView{
+        width: mainItem.width
+        height:mainItem.height
         anchors.top: settingPanel.bottom
         //anchors.top :mainPanel.bottom
         anchors.left: mainItem.left
         anchors.right: mainItem.right
+
+    GridLayout {
+        id:layout
+        property int colNumber: 2
+       // anchors.top: settingPanel.bottom
+        //anchors.top :mainPanel.bottom
+       // anchors.left: mainItem.left
+       // anchors.right: mainItem.right
         columns: colNumber
 
 
+    }
     }
 
 
@@ -319,8 +261,5 @@ Window {
             Control.addClock(layout,mainItem);
     }
 
-
-
-
-
+    onNewDay: Control.clockDoubleClick();
 }

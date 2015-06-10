@@ -49,7 +49,11 @@ Window {
         var min = seconds.div(60);
         seconds -= min*60;
         var sec = seconds;
-        return hour+":"+min+":"+sec;
+        var timeStr;
+        timeStr = (hour>9) ? hour : "0"+hour;
+        timeStr = (min>9) ? timeStr + ":" + min : timeStr + ":0" + min
+        timeStr = (sec>9) ? timeStr + ":" + sec : timeStr + ":0" + sec
+        return timeStr;
     }
 
 
@@ -213,7 +217,7 @@ Window {
                 id: parentRec
                 property Rectangle rrr: Rectangle{color:"blue"; width:20;height:20;}
                 width: parent.width
-                height: 40
+                height: 42
                 color: Global.currentTheme.mainItemColor
 
                 function createTimingDiagram(rectPositions) {
@@ -231,18 +235,20 @@ Window {
 
                 Text{
                     id:nam
+                    anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.leftMargin: 20
-                    font.pointSize: 20
+                    font.pointSize: 19
                     font.weight: Font.Bold
+                    color: Global.currentTheme.buttonLabelColor
                     text: Name
                 }
 
                 Text {
                     id: sumTime
                     anchors.bottom: parent.bottom
-                    x: 100
-                    font.pointSize: 12
+                    x: 120
+                    font.pointSize: 10
                     color: "red"
                     text:""
 
@@ -251,7 +257,7 @@ Window {
                 Rectangle {
                     id: diagram
                     x: statData.xPos
-                    height:40;
+                    height:42;
                     width: statData.width - statData.xPos - 40;
                     color: Global.currentTheme.mainPanelColor
                 }
