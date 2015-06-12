@@ -71,7 +71,6 @@ Rectangle {
             writeTime(moment.toLocaleDateString(Qt.locale(),"yyyy-MM-dd") ,
                       clock.clockName,clock.serialNr,startTime,endTime);
         }
-        console.log("ReRun");
     }
 
     onRunChanged: {

@@ -39,7 +39,7 @@ function addClock(parentItem,main) {
                                                       "height":main.clockWidth,
                                                       "clockName":settings.defName,
                                                       "seeSeconds": settings.enableSeconds});
-
+console.log("clock  " + serialNr);
    // Global.clocksContainer[serialNr] = buttonObject;
     clocksContainer.push(buttonObject);
     ++serialNr;
@@ -60,20 +60,29 @@ function removeCoordinateLabels()
     labelContainer.length = 0;
 }
 
+function getMinDivider(number) {
+    var divider = 1;
+    if (number>10) {
+        if (number % 2 === 0) divider = 2;
+        if (number % 3 === 0) divider = 3;
+    }
+    return divider
+}
 
 function drawCoordinates(parentItem,from,to) {
     var label;
     var xStart = parentItem.xPos;
     var xEnd = parentItem.width-40;
-    var step = (xEnd - xStart)/(to-from);
+    var divCoef = getMinDivider(to-from);
+    var step = divCoef*(xEnd - xStart)/(to-from);
     //console.log(from + " @ " +to);
 //console.log(parentItem.id + "   " + xStart +"-"+xEnd + "  step" + step);
     var j = 0;
     removeCoordinateLabels();
-    for(var i=from;i<=to;++i,++j) {
+    for(var i=from;i<=to;++i*divCoef,++j) {
         label = Qt.createQmlObject('import QtQuick 2.0; Text {font.pointSize: 13; y:13}',
             parentItem, "label");
-        label.text = i;
+        label.text = i*divCoef;
         label.x = xStart + j*step;
         labelContainer.push(label);
 
@@ -91,10 +100,20 @@ function changeColumnsNumber(){
 
 function destroyItem(number)
 {
+    for(var i=0; i< clocksContainer.length;++i)
+    { if (clocksContainer[i])
+        console.log(clocksContainer[i].clockName +"  i " +i + "   ser " + clocksContainer[i].serialNr);
+    }
+
    clocksContainer[number].destroy();
    //clocksContainer[number] = null;
    delete clocksContainer[number];
-
+    console.log("----------")
+    for(var i=0; i< clocksContainer.length;++i)
+    {
+        if (clocksContainer[i])
+         console.log(clocksContainer[i].clockName +"   " +i);
+    }
 }
 
 function removeAllClocks()
@@ -109,13 +128,14 @@ function removeAllClocks()
 
 //this function needs for correct display running clocks
 // (we write current time to database and run clock again)
-function clockDoubleClick()
+function clockDoubleClick(pause)
 {
     for(var i=0; i< Global.clocksContainer.length;++i)
     {
         if (clocksContainer[i]){
             if (clocksContainer[i].run) {
                 clocksContainer[i].run = false;
+                if (pause) sleep(1000); //need when date changes
                // clocksContainer[i].whenRunChanged(); //check if correct in Linux
                 clocksContainer[i].run = true;
             }
@@ -147,7 +167,7 @@ function writeClocksToFile()
 function readClocksFromFile(parentItem)
 {
     var number,name,fillcolor,labelcolor,run,seeSecs,time,subname;
-    var i=0;
+    var i,lastSerNr=0;
     var reading = true;
 
     if (component == null)
@@ -181,7 +201,7 @@ function readClocksFromFile(parentItem)
 
         if (reading){
             buttonObject = component.createObject(parentItem,{
-                                                              "serialNr": i,
+                                                              "serialNr": number,
                                                               "clockName": name,
                                                               "fillColor": fillcolor,
                                                               "labelColor": labelcolor,
@@ -189,10 +209,13 @@ function readClocksFromFile(parentItem)
                                                               "seeSeconds": seeSecs,
                                                               "time": time      });
 
-            clocksContainer.push(buttonObject);
+            //clocksContainer.push(buttonObject);
+            lastSerNr = +number;
+            clocksContainer[lastSerNr] =buttonObject;
         }
 
     }
+    serialNr = ++lastSerNr;
 }
 
 

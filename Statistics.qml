@@ -262,13 +262,6 @@ Window {
                     color: Global.currentTheme.mainPanelColor
                 }
 
-                function makeRec(){
-                    var  w = 150;
-                    var newObject = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "red"; height: 20; radius: 5;}',
-                        parentRec, "dynamicSnippet1");
-                    newObject.width = w;
-                    newObject.x = 300;
-                }
                 Component.onCompleted: createTimingDiagram(Intervals);
 
             }
@@ -325,7 +318,7 @@ Window {
         target: mainItem
         onShowStatistics: {
             repaint();
-            Control.clockDoubleClick();//for correct running clocks display
+            Control.clockDoubleClick(false);//for correct running clocks display
             getDataFromDB();
         }
 

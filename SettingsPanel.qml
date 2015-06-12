@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 import QtQuick.Layouts 1.1
 import "global.js" as Global
 import "control.js" as Control
@@ -64,11 +65,25 @@ Rectangle {
 
         ColumnLayout{
             anchors.margins: 50
+            id: colLayout
+
+            function repaint() {
+               var children = colLayout.children;
+                for(var i = 0; i<children.length;++i) {
+                    if (typeof (children[i].repaint) === "function")
+                        children[i].repaint();
+                }
+            }
 
             CheckBox{
                 id: countingRegime
                 text: "Only one clock can go"
                 checked: false;
+                style:  checkBoxMenuStyle
+                function repaint() {
+                    style = null
+                    style = checkBoxMenuStyle
+                }
 
             }
 
@@ -76,26 +91,44 @@ Rectangle {
                 id: enableSecs
                 text: "Enable seconds"
                 checked: false;
+                style:  checkBoxMenuStyle
+                function repaint() {
+                    style = null
+                    style = checkBoxMenuStyle
+                }
 
             }
             CheckBox{
                 id: loadSavedClocks
                 text: "Load saved clocks on start"
                 checked: false;
+                style:  checkBoxMenuStyle
+                function repaint() {
+                    style = null
+                    style = checkBoxMenuStyle
+                }
 
             }
+
+
         }
 
         Column {
             ComboBox {
                 id: themeChoice
                 model: [Control.whiteThemeName,Control.darkThemeName]
+                style: comboBoxMenuStyle
+                function repaint() {
+                    style = null
+                    style = comboBoxMenuStyle
+                }
 
             }
 
             TextField {
                 id: defaultNameField
                 text:"Project name"
+                font.pointSize: 11
 
             }
         }
@@ -112,6 +145,58 @@ Rectangle {
                 settingPanel.state = "SETTINGS_CLOSE";
             }
         }
+    }
+
+
+    property Component checkBoxMenuStyle:CheckBoxStyle {
+        id : checkBoxMenuStyleID
+        indicator: Rectangle {
+                implicitWidth: 16
+                implicitHeight: 16
+                radius: 3
+                border.color: "gray"
+                border.width: 1
+                Rectangle {
+                    visible: control.checked
+                    color: "#555"
+                    border.color: "#333"
+                    radius: 2
+                    anchors.margins: 4
+                    anchors.fill: parent
+                }
+        }
+        label: Text {
+            text: control.text
+            font.pointSize: 11
+            color: Global.currentTheme.buttonLabelColor
+        }
+    }
+
+//http://stackoverflow.com/questions/27089779/qml-combobox-item-dropdownmenu-style
+     property Component comboBoxMenuStyle: ComboBoxStyle {
+        id: comboBoxMenuStyle
+        //textColor: Global.currentTheme.buttonLabelColor
+        panel: Rectangle {
+            color: "magenta"
+            width: 150
+            height: 50
+        }
+        label: Rectangle {
+           // text: control.text
+
+            color: "#38d8e6"
+            Text {
+                text: control.currentText
+                color: "green"
+            }
+        }
+        /*
+        background: Rectangle {
+            color: "magenta"
+            width: 150
+            height: 50
+        }*/
+
     }
 
 

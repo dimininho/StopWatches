@@ -7,7 +7,8 @@ import "control.js" as Control
 import "global.js" as Global
 //import "Statistics.qml" as Statistics
 //import "../" as Root
-
+//884 323 319
+//5xcq75
 import QtQuick.Controls.Styles 1.3
 
 Window {
@@ -261,5 +262,5 @@ Window {
             Control.addClock(layout,mainItem);
     }
 
-    onNewDay: Control.clockDoubleClick();
+    onNewDay: Control.clockDoubleClick(true);
 }
