@@ -22,7 +22,11 @@ Window {
 
     function repaint() {
         statisticsWindow.color = Global.currentTheme.mainItemColor
-        statData.color = Global.currentTheme.mainItemColor
+        var children = statisticsWindow.contentItem.children;
+        for(var i = 0; i<children.length;++i) {
+            if (typeof (children[i].repaint) === "function")
+                children[i].repaint();
+        }
     }
 
 
@@ -151,20 +155,47 @@ Window {
        )
     }
 
+    Rectangle{
+        id: topPanel
+        anchors.top: parent.top
+        anchors.left: parent.left
+        height:40
+        width: parent.width
+        color: Control.currentTheme.mainPanelColor
+        function repaint() {
+            topPanel.color = Global.currentTheme.mainPanelColor
+            var children = topPanel.children;
+            for(var i = 0; i<children.length;++i) {
+                if (typeof (children[i].repaint) === "function")
+                    children[i].repaint();
+            }
+        }
+
 
 
     Row{
         id: dates
-        anchors.top: parent.top
-        anchors.leftMargin: 50
+        //anchors.fill: parent
+        //anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.verticalCenter:  parent.verticalCenter
+        //anchors.leftMargin: 50
         spacing: 20
 
-        Button {
+        function repaint() {
+            var children = dates.children;
+            for(var i = 0; i<children.length;++i) {
+                if (typeof (children[i].repaint) === "function")
+                    children[i].repaint();
+            }
+        }
+
+        MenuButton {
             id: backButton
-            width: 25
-            height:25
-            text:"<"
-            onClicked: {
+            buttonWidth: 25
+            buttonHeigth: 25
+            buttonText: "<"
+            onButtonClick: {
                 day.setDate(day.getDate()-1)
                 dateField.text =  day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
                 getDataFromDB();
@@ -181,12 +212,12 @@ Window {
             horizontalAlignment: TextInput.AlignHCenter
         }
 
-        Button {
+        MenuButton {
             id: nextButton
-            width: 25
-            height:25
-            text:">"
-            onClicked: {
+            buttonWidth: 25
+            buttonHeigth: 25
+            buttonText: ">"
+            onButtonClick: {
                 day.setDate(day.getDate()+1)
                 dateField.text =  day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
                 getDataFromDB();
@@ -195,17 +226,27 @@ Window {
 
     }
 
+    }
 
     Rectangle {
 
         id: statData
-        anchors.top:  dates.bottom
+        anchors.top:  topPanel.bottom
         anchors.topMargin: 20
         anchors.bottom: statisticsWindow.contentItem.bottom
         color: Global.currentTheme.mainItemColor
         width: statisticsWindow.width
 
         property int xPos: 200
+
+        function repaint() {
+        statData.color = Global.currentTheme.mainItemColor
+            var children = statData.children;
+            for(var i = 0; i<children.length;++i) {
+                if (typeof (children[i].repaint) === "function")
+                    children[i].repaint();
+            }
+        }
 
         ListView {
             id:view
@@ -223,10 +264,12 @@ Window {
                 function createTimingDiagram(rectPositions) {
                     var sumSeconds = 0;
                     for(var i=0;i<rectPositions.count;++i) {
-                        var newRect = Qt.createQmlObject('import QtQuick 2.0; Rectangle {color: "#266CE8"; height: 34; radius:5;}',
+                        var newRect = Qt.createQmlObject('import QtQuick 2.0; Rectangle { height: 34; radius:3;}',
                             diagram, "simpleRect");
                         newRect.x = rectPositions.get(i).start;
+                        newRect.color = Global.currentTheme.statisticsBarColor;
                         newRect.width  = rectPositions.get(i).end - rectPositions.get(i).start;
+                        newRect.anchors.verticalCenter =  diagram.verticalCenter
                         sumSeconds += rectPositions.get(i).timeDifference;
                     }
                    // console.log(sumSeconds);
@@ -249,7 +292,7 @@ Window {
                     anchors.bottom: parent.bottom
                     x: 120
                     font.pointSize: 10
-                    color: "red"
+                    color: Global.currentTheme.statisticsSumTimeColor
                     text:""
 
                 }
@@ -278,13 +321,25 @@ Window {
             anchors.bottom: statData.bottom
             anchors.left: statData.left
             anchors.right: statData.right
+            color:Global.currentTheme.mainItemColor
+            function repaint() {
+                labels.color = Global.currentTheme.mainItemColor
+                var children = labels.children;
+                for(var i = 0; i<children.length;++i) {
+                    if (typeof (children[i].repaint) === "function")
+                        children[i].repaint();
+                }
+            }
 
             Rectangle{
                 id: abscissa
                 height: 7
                 width:parent.width - statData.xPos
                 x: statData.xPos
-                color:"black"
+                color:Global.currentTheme.statisticsLabelColor
+                function repaint() {
+                    abscissa.color = Global.currentTheme.statisticsLabelColor
+                }
                 anchors{
                     top: parent.top
                     right:parent.right

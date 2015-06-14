@@ -80,9 +80,10 @@ function drawCoordinates(parentItem,from,to) {
     var j = 0;
     removeCoordinateLabels();
     for(var i=from;i<=to;++i*divCoef,++j) {
-        label = Qt.createQmlObject('import QtQuick 2.0; Text {font.pointSize: 13; y:13}',
+        label = Qt.createQmlObject('import QtQuick 2.0; Text {font.pointSize: 13; y:13;}',
             parentItem, "label");
         label.text = i*divCoef;
+        label.color = Global.currentTheme.statisticsLabelColor
         label.x = xStart + j*step;
         labelContainer.push(label);
 
@@ -216,6 +217,7 @@ function readClocksFromFile(parentItem)
 
     }
     serialNr = ++lastSerNr;
+    clockDoubleClick(false);
 }
 
 

@@ -1,9 +1,10 @@
-import QtQuick 2.0
+import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
 import QtQuick.Layouts 1.1
 import "global.js" as Global
 import "control.js" as Control
+import QtQuick.Controls.Private 1.0
 
 Rectangle {
     id: settingPanel
@@ -19,7 +20,7 @@ Rectangle {
     color: Global.currentTheme.settingsPanelColor
     width:400
     state: "SETTINGS_CLOSE"
-    height: 150
+    height: 200
     clip: true
 
     function setSettingToPanel() {
@@ -52,8 +53,10 @@ Rectangle {
         rowSpacing: 12
         columnSpacing: 30
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.left
+       // anchors.horizontalCenter: parent.horizontalCenter
         anchors.margins: 30
+        Layout.alignment: Qt.AlignLeft
 
         function repaint() {
            var children = grid.children;
@@ -109,34 +112,71 @@ Rectangle {
                 }
 
             }
-
-
-        }
-
-        Column {
-            ComboBox {
-                id: themeChoice
-                model: [Control.whiteThemeName,Control.darkThemeName]
-                style: comboBoxMenuStyle
+            Row {
+                id : row1
                 function repaint() {
-                    style = null
-                    style = comboBoxMenuStyle
+                   var children = row1.children;
+                    for(var i = 0; i<children.length;++i) {
+                        if (typeof (children[i].repaint) === "function")
+                            children[i].repaint();
+                    }
                 }
+                spacing: 40
+                ComboBox {
+                    id: themeChoice
+                    model: [Control.whiteThemeName,Control.darkThemeName]
+                    style: comboBoxMenuStyle
+                    function repaint() {
+                        //style = null
+                        style = comboBoxMenuStyle
+                    }
 
+                }
+                Text{
+                    text: "Application theme "
+                    font.pointSize: 11
+                    color: Global.currentTheme.buttonLabelColor
+                    function repaint() {
+                        color = Global.currentTheme.buttonLabelColor
+                    }
+
+                }
+            }
+            Row{
+                id : row2
+                function repaint() {
+                   var children = row2.children;
+                    for(var i = 0; i<children.length;++i) {
+                        if (typeof (children[i].repaint) === "function")
+                            children[i].repaint();
+                    }
+                }
+                spacing: 40
+                TextField {
+                    id: defaultNameField
+                    text:"Project name"
+                    font.pointSize: 11
+
+                }
+                Text{
+                    text: "Default clock's name "
+                    font.pointSize: 11
+                    color: Global.currentTheme.buttonLabelColor
+                    function repaint() {
+                        color = Global.currentTheme.buttonLabelColor
+                    }
+                }
             }
 
-            TextField {
-                id: defaultNameField
-                text:"Project name"
-                font.pointSize: 11
-
-            }
         }
+
 
         MenuButton{
             id: saveButton
             buttonText: "Save"
             Layout.row : 1
+            Layout.alignment: Qt.AlignRight
+            anchors.leftMargin: 50
             onButtonClick: {
                 Control.saveSettings(enableSecs.checked,countingRegime.checked,loadSavedClocks.checked,
                                     themeChoice.currentText,themeChoice.currentIndex,defaultNameField.text);
@@ -168,36 +208,57 @@ Rectangle {
         label: Text {
             text: control.text
             font.pointSize: 11
+            //font.capitalization: Font.SmallCaps
             color: Global.currentTheme.buttonLabelColor
         }
     }
 
-//http://stackoverflow.com/questions/27089779/qml-combobox-item-dropdownmenu-style
-     property Component comboBoxMenuStyle: ComboBoxStyle {
-        id: comboBoxMenuStyle
-        //textColor: Global.currentTheme.buttonLabelColor
-        panel: Rectangle {
-            color: "magenta"
-            width: 150
-            height: 50
-        }
-        label: Rectangle {
-           // text: control.text
 
-            color: "#38d8e6"
-            Text {
-                text: control.currentText
-                color: "green"
-            }
-        }
-        /*
-        background: Rectangle {
-            color: "magenta"
-            width: 150
-            height: 50
+     property Component comboBoxMenuStyle: ComboBoxStyle {
+        id: comboBox
+   /*     background: Rectangle {
+            id: rect
+            radius: 2
+            border.width: 2
+            color: "#fff"
         }*/
+        label: Text {
+            horizontalAlignment: Text.AlignLeft
+            font.pointSize: 11
+           // font.capitalization: Font.SmallCaps
+            color: "black"
+            text: control.currentText
+        }
+
+        property Component __dropDownStyle: MenuStyle {
+            __maxPopupHeight: 600
+            __menuItemType: "comboboxitem"
+
+            frame: Rectangle {              // background
+                color: Global.currentTheme.mainMenuBackColor
+                border.width: 0
+            }
+
+            itemDelegate.label: Text {
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: 11
+              //  font.capitalization: Font.SmallCaps
+                //color: styleData.selected ? "white" : "black"
+                color: Global.currentTheme.buttonLabelColor
+                text: styleData.text
+            }
+
+            itemDelegate.background: Rectangle {  // selection of an item
+                radius: 2
+                color: styleData.selected ? Global.currentTheme.mainMenuOnHoverRowColor : Global.currentTheme.mainMenuRowColor
+            }
+
+            __scrollerStyle: ScrollViewStyle { }
+        }
 
     }
+
 
 
     states: [

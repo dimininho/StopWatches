@@ -56,6 +56,7 @@ Rectangle {
         text: buttonText
         color: labelColor
         font.pointSize:  fontSize
+        //font.capitalization: Font.SmallCaps
     }
 
     MouseArea {

@@ -69,6 +69,7 @@ Window {
         width: mainItem.width
         height: 50
         color: Control.currentTheme.mainPanelColor
+        //color: "white"
         anchors.top: parent.top
         z:2
 
@@ -152,6 +153,16 @@ Window {
         }
 
         //}
+        Rectangle {
+            width: mainPanel.width
+            height:3
+            anchors.bottom: mainPanel.bottom
+            color: "blue"
+            visible: (Global.settings.theme==="White") ? true : false
+            function repaint() {
+                visible = (Global.settings.theme==="White") ? true : false
+            }
+        }
 
     }
 

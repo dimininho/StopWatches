@@ -47,6 +47,9 @@ var dark = new Theme();
     dark.mainMenuRowColor = "#333333"
     dark.mainMenuOnHoverRowColor = "#999999"
     dark.mainMenuBorderColor = "black"
+    dark.statisticsSumTimeColor = "#F6EFE4"
+    dark.statisticsLabelColor = "white"
+    dark.statisticsBarColor = "white"
 
 
 var white = new Theme();
@@ -55,8 +58,9 @@ var white = new Theme();
     white.buttonBorderColor = "transparent"
     white.buttonOnHoverFillColor = "#64BCED"
     white.buttonOnPressBorderColor = "white"
+    white.mainPanelColor = "white"
     white.mainPanelColor = "#D8EDFD"
-    white.mainItemColor = "white"
+ //   white.mainItemColor = "white"
     white.settingsPanelColor = "#EAF8FA"
     white.clockFillColor = "#D1E8FA"
     white.clockLabelColor = "black"
@@ -66,6 +70,9 @@ var white = new Theme();
     white.mainMenuRowColor = "white"
     white.mainMenuOnHoverRowColor = "#CDE1FE"
     white.mainMenuBorderColor = "transparent"
+    white.statisticsSumTimeColor = "red"
+    white.statisticsLabelColor = "black"
+    white.statisticsBarColor = "#266CE8"
 
 
 var currentTheme = dark;
