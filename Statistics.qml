@@ -210,6 +210,11 @@ Window {
 
             font.pixelSize: 15
             horizontalAlignment: TextInput.AlignHCenter
+
+            onActiveFocusChanged: {
+                calendar.visible = true;
+                calendar.focus = true;
+              }
         }
 
         MenuButton {
@@ -347,6 +352,11 @@ Window {
             }
 
         }
+       // MouseArea {
+       //     anchors.fill: statData
+      //      onClicked: statData.focus = true;
+       // }
+
 /*
         Rectangle {
             id: divider
@@ -364,7 +374,6 @@ Window {
 
     ListModel {
         id: clocks
-
     }
 
 
@@ -380,10 +389,15 @@ Window {
 
     }
 
-/*
+
     Calendar {
         id: calendar
-        selectedDate: new Date(2015, 0, 1)
+        z:2
+        x: dateField.x
+        y: dateField.y+dateField.height
+
+        selectedDate: new Date()
+        visible: false
         frameVisible: true
         weekNumbersVisible: true
         focus: true
@@ -421,7 +435,11 @@ Window {
                 }
             }
         }
+
+
+        onFocusChanged:  if (calendar.focus===false && visible==true) visible = false;
+
     }
 
-*/
+
 }
