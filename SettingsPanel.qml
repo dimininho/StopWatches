@@ -135,6 +135,7 @@ Rectangle {
                 Text{
                     text: "Application theme "
                     font.pointSize: 11
+
                     color: Global.currentTheme.buttonLabelColor
                     function repaint() {
                         color = Global.currentTheme.buttonLabelColor
@@ -161,6 +162,7 @@ Rectangle {
                 Text{
                     text: "Default clock's name "
                     font.pointSize: 11
+                    //font.capitalization: Font.SmallCaps
                     color: Global.currentTheme.buttonLabelColor
                     function repaint() {
                         color = Global.currentTheme.buttonLabelColor

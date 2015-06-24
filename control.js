@@ -1,7 +1,7 @@
 //.pragma library
 .import "global.js" as Global
 .import QtQuick.LocalStorage 2.0 as Sql
-.import QtQuick 2.0 as QQQ
+
 var component;
 var buttonObject;
 //var parentItem = "layout"
@@ -39,7 +39,7 @@ function addClock(parentItem,main) {
                                                       "height":main.clockWidth,
                                                       "clockName":settings.defName,
                                                       "seeSeconds": settings.enableSeconds});
-console.log("clock  " + serialNr);
+//console.log("clock  " + serialNr);
    // Global.clocksContainer[serialNr] = buttonObject;
     clocksContainer.push(buttonObject);
     ++serialNr;
@@ -79,14 +79,14 @@ function drawCoordinates(parentItem,from,to) {
 //console.log(parentItem.id + "   " + xStart +"-"+xEnd + "  step" + step);
     var j = 0;
     removeCoordinateLabels();
-    for(var i=from;i<=to;++i*divCoef,++j) {
+    for(var i=from;i<=to;i+=divCoef,++j) {
         label = Qt.createQmlObject('import QtQuick 2.0; Text {font.pointSize: 13; y:13;}',
             parentItem, "label");
-        label.text = i*divCoef;
+        label.text = i;
         label.color = Global.currentTheme.statisticsLabelColor
         label.x = xStart + j*step;
         labelContainer.push(label);
-
+//console.log(i);
        // console.log(label.text + " :" + label.x);
     }
 }
@@ -127,21 +127,47 @@ function removeAllClocks()
 }
 
 
+function Timer() {
+    return Qt.createQmlObject("import QtQuick 2.2; Timer {}", mainItem);
+}
+
+function delay(delayTime, cb) {
+    var timer = new Timer();
+    timer.interval = delayTime;
+    timer.repeat = false;
+    timer.triggered.connect(cb);
+    timer.start();
+}
+
 //this function needs for correct display running clocks
 // (we write current time to database and run clock again)
+
+
 function clockDoubleClick(pause)
 {
+    var runnedClocks = [];
+    function innerClockDoubleClick() {
+         for(var j=0; j< runnedClocks.length;++j) {
+             clocksContainer[runnedClocks[j]].run = true;
+         }
+    }
+
     for(var i=0; i< Global.clocksContainer.length;++i)
     {
         if (clocksContainer[i]){
             if (clocksContainer[i].run) {
                 clocksContainer[i].run = false;
-                if (pause) sleep(1000); //need when date changes
+                runnedClocks.push(i);
                // clocksContainer[i].whenRunChanged(); //check if correct in Linux
-                clocksContainer[i].run = true;
             }
         }
     }
+
+    if (pause)
+        delay(3000,innerClockDoubleClick);
+    else
+        innerClockDoubleClick();
+    console.log("double click");
 }
 
 
@@ -220,11 +246,11 @@ function readClocksFromFile(parentItem)
     clockDoubleClick(false);
 }
 
-
+/*
 function initializeSettings() {
     settings = new Global.Settings(false,false,false,"Dark",1,"Task");
 }
-
+*/
 
 function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName){
     settings.enableSeconds = enableSeconds;

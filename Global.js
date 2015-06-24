@@ -54,13 +54,15 @@ var dark = new Theme();
 
 var white = new Theme();
     white.buttonFillColor = "#D8EDFD";
+//white.buttonFillColor = "white";
     white.buttonLabelColor = "black"
     white.buttonBorderColor = "transparent"
     white.buttonOnHoverFillColor = "#64BCED"
+
     white.buttonOnPressBorderColor = "white"
-    white.mainPanelColor = "white"
+   // white.mainPanelColor = "white"
     white.mainPanelColor = "#D8EDFD"
- //   white.mainItemColor = "white"
+    white.mainItemColor = "white"
     white.settingsPanelColor = "#EAF8FA"
     white.clockFillColor = "#D1E8FA"
     white.clockLabelColor = "black"

@@ -70,6 +70,7 @@ Rectangle {
            // console.log(endTime);
             writeTime(moment.toLocaleDateString(Qt.locale(),"yyyy-MM-dd") ,
                       clock.clockName,clock.serialNr,startTime,endTime);
+            console.log(endTime);
         }
     }
 

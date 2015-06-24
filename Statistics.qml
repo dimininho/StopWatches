@@ -119,7 +119,7 @@ Window {
         minHour = +getMinHour(db,curDate);
         maxHour = +getMaxHour(db,curDate)+1;
         Control.drawCoordinates(labels,minHour,maxHour);
-       // console.log(minHour  +  " ^  " + maxHour);
+        console.log(minHour  +  " ^  " + maxHour);
 
        db.transaction(
            function(tx) {
@@ -212,8 +212,8 @@ Window {
             horizontalAlignment: TextInput.AlignHCenter
 
             onActiveFocusChanged: {
-                calendar.visible = true;
-                calendar.focus = true;
+               // calendar.visible = true;
+               // calendar.focus = true;
               }
         }
 
@@ -352,10 +352,11 @@ Window {
             }
 
         }
-       // MouseArea {
-       //     anchors.fill: statData
-      //      onClicked: statData.focus = true;
-       // }
+       //MouseArea {
+       //    anchors.fill: statData
+       //    onClicked: statData.visible = false;
+       //    propagateComposedEvents: true
+       //}
 
 /*
         Rectangle {
@@ -383,7 +384,8 @@ Window {
         onShowStatistics: {
             repaint();
             Control.clockDoubleClick(false);//for correct running clocks display
-            getDataFromDB();
+            console.log("get data");
+            getDataFromDB();//try with Control.delay
         }
 
 
@@ -437,7 +439,7 @@ Window {
         }
 
 
-        onFocusChanged:  if (calendar.focus===false && visible==true) visible = false;
+       // onFocusChanged:  if (calendar.focus===false && visible==true) visible = false;
 
     }
 

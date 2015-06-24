@@ -153,6 +153,7 @@ Window {
         }
 
         //}
+        /*
         Rectangle {
             width: mainPanel.width
             height:3
@@ -162,7 +163,7 @@ Window {
             function repaint() {
                 visible = (Global.settings.theme==="White") ? true : false
             }
-        }
+        }*/
 
     }
 
@@ -273,5 +274,13 @@ Window {
             Control.addClock(layout,mainItem);
     }
 
+
+
     onNewDay: Control.clockDoubleClick(true);
+
+
+    function tt() {console.log("CLOSE")}
+
+    Component.onDestruction: Control.clockDoubleClick(false);
+
 }
