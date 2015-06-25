@@ -18,7 +18,8 @@ Window {
 
     width: 700;
     height: 500;
-    color: Global.currentTheme.mainItemColor
+    color: Global.currentTheme.mainItemColor;
+    contentItem.state: "CALENDAR_HIDE"
 
     function repaint() {
         statisticsWindow.color = Global.currentTheme.mainItemColor
@@ -210,10 +211,11 @@ Window {
 
             font.pixelSize: 15
             horizontalAlignment: TextInput.AlignHCenter
-
+            //show calendar onClick
             onActiveFocusChanged: {
-               // calendar.visible = true;
-               // calendar.focus = true;
+                underCalendar.enabled = true;
+                calendar.visible = true;
+                calendar.focus = true;
               }
         }
 
@@ -394,7 +396,7 @@ Window {
 
     Calendar {
         id: calendar
-        z:2
+        z:5
         x: dateField.x
         y: dateField.y+dateField.height
 
@@ -439,9 +441,35 @@ Window {
         }
 
 
-       // onFocusChanged:  if (calendar.focus===false && visible==true) visible = false;
-
     }
 
+
+    MouseArea{
+        //mouse area is under calendar. need to catch mouse's click out of calendar
+        id:underCalendar
+        z:2
+        anchors.fill: parent
+        enabled: false
+        onClicked: {
+            enabled = false;
+            calendar.visible = false;
+        }
+    }
+
+
+    contentItem.states: [
+        State {
+            name: "CALENDAR_HIDE"
+            PropertyChanges { target: calendar ; visible: false }
+            PropertyChanges { target: underCalendar ; enabled: false }
+
+        },
+        State {
+            name: "CALENDAR_SHOW"
+            PropertyChanges { target: calendar ; visible: true }
+            PropertyChanges { target: underCalendar ; enabled: true }
+
+        }
+    ]
 
 }
