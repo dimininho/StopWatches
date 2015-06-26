@@ -198,6 +198,7 @@ Window {
             buttonText: "<"
             onButtonClick: {
                 day.setDate(day.getDate()-1)
+                console.log(day)
                 dateField.text =  day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
                 getDataFromDB();
             }
@@ -386,8 +387,9 @@ Window {
         onShowStatistics: {
             repaint();
             Control.clockDoubleClick(false);//for correct running clocks display
-            console.log("get data");
+           // console.log("get data");
             getDataFromDB();//try with Control.delay
+           // Control.delay(2000,getDataFromDB);
         }
 
 
@@ -406,18 +408,23 @@ Window {
         weekNumbersVisible: true
         focus: true
         style: CalendarStyle {
+           // background: Rectangle {
+           //     color: "blue"
+           // }
+
             dayDelegate: Item {
-                readonly property color sameMonthDateTextColor: "#444"
+                readonly property color sameMonthDateTextColor: "yellow"
                 readonly property color selectedDateColor: "magenta"
                 readonly property color selectedDateTextColor: "white"
-                readonly property color differentMonthDateTextColor: "#bbb"
-                readonly property color invalidDatecolor: "#dddddd"
+                readonly property color differentMonthDateTextColor: "blue"
+                readonly property color invalidDatecolor: "red"
 
                 Rectangle {
                     anchors.fill: parent
                     border.color: "transparent"
-                    color: styleData.date !== undefined && styleData.selected ? selectedDateColor : "transparent"
+                   // color: styleData.date !== undefined && styleData.selected ? selectedDateColor : "transparent"
                     anchors.margins: styleData.selected ? -1 : 0
+                    color:"blue"
                 }
 
 
@@ -438,6 +445,22 @@ Window {
                     }
                 }
             }
+        }
+
+        onClicked: {
+            var previousDate = dateField.text;
+            day.setDate(calendar.selectedDate.getDate());
+            day.setMonth(calendar.selectedDate.getMonth());
+            day.setYear(calendar.selectedDate.getFullYear());
+            dateField.text =   day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd");
+           // console.log (previousDate + "     " + calendar.selectedDate + "  d " + day)
+
+            if (dateField.text !== previousDate) {
+                getDataFromDB();
+            } else console.log("same date");
+            underCalendar.enabled = false;
+            calendar.visible = false;
+
         }
 
 

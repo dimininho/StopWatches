@@ -50,6 +50,7 @@ var dark = new Theme();
     dark.statisticsSumTimeColor = "#F6EFE4"
     dark.statisticsLabelColor = "white"
     dark.statisticsBarColor = "white"
+    dark.calendarOtherMonthDate = "white"
 
 
 var white = new Theme();
