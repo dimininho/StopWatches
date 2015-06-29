@@ -11,13 +11,17 @@ import QtQuick.LocalStorage 2.0
 Window {
     id: statisticsWindow
 
-    property var locale: Qt.locale()
+    property var locale: Qt.locale("en_EN")
     property var day: new Date();
     property int minHour:0
     property int maxHour:24
+    property int diagramRightMargin: 40
+    property int diagramIndent: 7
 
     width: 700;
     height: 500;
+    maximumWidth: width
+    minimumWidth: width
     color: Global.currentTheme.mainItemColor;
     contentItem.state: "CALENDAR_HIDE"
 
@@ -34,8 +38,8 @@ Window {
     function timeToCoorinate(time){
         var arr = time.split(':');
         var seconds = +arr[0]*3600 + arr[1]*60 + arr[2]*1;
-        var endPos = statData.width-40- statData.xPos;
-        var startPos = 0;
+        var endPos = statData.width - statData.xPos - diagramRightMargin - 2*diagramIndent;
+        var startPos = diagramIndent;
         var minTime = minHour*3600;
         var maxTime = maxHour*3600;
         var normCoef = (maxTime-minTime)/(endPos-startPos);
@@ -120,7 +124,7 @@ Window {
         minHour = +getMinHour(db,curDate);
         maxHour = +getMaxHour(db,curDate)+1;
         Control.drawCoordinates(labels,minHour,maxHour);
-        console.log(minHour  +  " ^  " + maxHour);
+        //console.log(minHour  +  " ^  " + maxHour);
 
        db.transaction(
            function(tx) {
@@ -198,8 +202,7 @@ Window {
             buttonText: "<"
             onButtonClick: {
                 day.setDate(day.getDate()-1)
-                console.log(day)
-                dateField.text =  day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
+                dateField.text =  day.toLocaleDateString(locale,"yyyy-MMM-dd")
                 getDataFromDB();
             }
         }
@@ -208,7 +211,7 @@ Window {
 
         TextField {
             id: dateField;
-            text: day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
+            text: day.toLocaleDateString(locale,"yyyy-MMM-dd")
 
             font.pixelSize: 15
             horizontalAlignment: TextInput.AlignHCenter
@@ -227,7 +230,7 @@ Window {
             buttonText: ">"
             onButtonClick: {
                 day.setDate(day.getDate()+1)
-                dateField.text =  day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd")
+                dateField.text =  day.toLocaleDateString(locale,"yyyy-MMM-dd")
                 getDataFromDB();
             }
         }
@@ -263,8 +266,7 @@ Window {
             model: clocks
 
             delegate: Rectangle{
-                id: parentRec
-                property Rectangle rrr: Rectangle{color:"blue"; width:20;height:20;}
+                id: parentRec    
                 width: parent.width
                 height: 42
                 color: Global.currentTheme.mainItemColor
@@ -290,16 +292,18 @@ Window {
                     anchors.left: parent.left
                     anchors.leftMargin: 20
                     font.pointSize: 19
-                    font.weight: Font.Bold
+                    //font.weight: Font.Bold
                     color: Global.currentTheme.buttonLabelColor
                     text: Name
                 }
 
                 Text {
                     id: sumTime
+                    anchors.left: nam.left
                     anchors.bottom: parent.bottom
-                    x: 120
-                    font.pointSize: 10
+                    anchors.bottomMargin: 3
+                   // x: 120
+                    font.pointSize: 9
                     color: Global.currentTheme.statisticsSumTimeColor
                     text:""
 
@@ -308,8 +312,8 @@ Window {
                 Rectangle {
                     id: diagram
                     x: statData.xPos
-                    height:42;
-                    width: statData.width - statData.xPos - 40;
+                    height:45;
+                    width: statData.width - statData.xPos - diagramRightMargin;
                     color: Global.currentTheme.mainPanelColor
                 }
 
@@ -324,7 +328,7 @@ Window {
 
             property int xPos: statData.xPos
 
-            height:40
+            height:60
             width:statData.width
             anchors.bottom: statData.bottom
             anchors.left: statData.left
@@ -342,7 +346,7 @@ Window {
             Rectangle{
                 id: abscissa
                 height: 7
-                width:parent.width - statData.xPos
+                width:parent.width - statData.xPos - diagramRightMargin + 10
                 x: statData.xPos
                 color:Global.currentTheme.statisticsLabelColor
                 function repaint() {
@@ -350,16 +354,13 @@ Window {
                 }
                 anchors{
                     top: parent.top
-                    right:parent.right
+                    //left: parent.left
+                    //right:parent.right
                 }
             }
 
         }
-       //MouseArea {
-       //    anchors.fill: statData
-       //    onClicked: statData.visible = false;
-       //    propagateComposedEvents: true
-       //}
+
 
 /*
         Rectangle {
@@ -405,55 +406,17 @@ Window {
         selectedDate: new Date()
         visible: false
         frameVisible: true
-        weekNumbersVisible: true
+        //weekNumbersVisible: true
         focus: true
-        style: CalendarStyle {
-           // background: Rectangle {
-           //     color: "blue"
-           // }
-
-            dayDelegate: Item {
-                readonly property color sameMonthDateTextColor: "yellow"
-                readonly property color selectedDateColor: "magenta"
-                readonly property color selectedDateTextColor: "white"
-                readonly property color differentMonthDateTextColor: "blue"
-                readonly property color invalidDatecolor: "red"
-
-                Rectangle {
-                    anchors.fill: parent
-                    border.color: "transparent"
-                   // color: styleData.date !== undefined && styleData.selected ? selectedDateColor : "transparent"
-                    anchors.margins: styleData.selected ? -1 : 0
-                    color:"blue"
-                }
-
-
-                Label {
-                    id: dayDelegateText
-                    text: styleData.date.getDate()
-                    anchors.centerIn: parent
-                    color: {
-                        var color = invalidDatecolor;
-                        if (styleData.valid) {
-                            // Date is within the valid range.
-                            color = styleData.visibleMonth ? sameMonthDateTextColor : differentMonthDateTextColor;
-                            if (styleData.selected) {
-                                color = selectedDateTextColor;
-                            }
-                        }
-                        color;
-                    }
-                }
-            }
-        }
+        style: calendarstyle
+        __locale: locale
 
         onClicked: {
             var previousDate = dateField.text;
             day.setDate(calendar.selectedDate.getDate());
             day.setMonth(calendar.selectedDate.getMonth());
             day.setYear(calendar.selectedDate.getFullYear());
-            dateField.text =   day.toLocaleDateString(Qt.locale(),"yyyy-MMM-dd");
-           // console.log (previousDate + "     " + calendar.selectedDate + "  d " + day)
+            dateField.text =   day.toLocaleDateString(locale,"yyyy-MMM-dd");
 
             if (dateField.text !== previousDate) {
                 getDataFromDB();
@@ -462,9 +425,14 @@ Window {
             calendar.visible = false;
 
         }
-
+        function repaint(){
+            style = nullstyle;
+            style = calendarstyle
+        }
 
     }
+    property Component calendarstyle: VarCalendarStyle{}
+    property Component nullstyle: CalendarStyle{}
 
 
     MouseArea{

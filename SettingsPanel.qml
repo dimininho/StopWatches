@@ -48,16 +48,14 @@ Rectangle {
 
     GridLayout{
         id: grid
-        //columns: 2
-        //anchors.centerIn:  settingPanel
+        columns: 1
         rowSpacing: 12
         columnSpacing: 30
         anchors.top: parent.top
         anchors.left: parent.left
+        anchors.right: parent.right
        // anchors.horizontalCenter: parent.horizontalCenter
         anchors.margins: 30
-        Layout.alignment: Qt.AlignLeft
-
         function repaint() {
            var children = grid.children;
             for(var i = 0; i<children.length;++i) {
@@ -94,11 +92,15 @@ Rectangle {
                 id: enableSecs
                 text: "Enable seconds"
                 checked: false;
+
                 style:  checkBoxMenuStyle
                 function repaint() {
                     style = null
                     style = checkBoxMenuStyle
                 }
+
+
+
 
             }
             CheckBox{
@@ -112,6 +114,7 @@ Rectangle {
                 }
 
             }
+
             Row {
                 id : row1
                 function repaint() {
@@ -157,6 +160,7 @@ Rectangle {
                     id: defaultNameField
                     text:"Project name"
                     font.pointSize: 11
+                    width: 130
 
                 }
                 Text{
@@ -170,15 +174,25 @@ Rectangle {
                 }
             }
 
+
+
+
         }
+
+
+
+
+
+
+
 
 
         MenuButton{
             id: saveButton
             buttonText: "Save"
             Layout.row : 1
-            Layout.alignment: Qt.AlignRight
-            anchors.leftMargin: 50
+            Layout.alignment: Qt.AlignRight | Qt.AlignTop
+           // anchors.leftMargin: 50
             onButtonClick: {
                 Control.saveSettings(enableSecs.checked,countingRegime.checked,loadSavedClocks.checked,
                                     themeChoice.currentText,themeChoice.currentIndex,defaultNameField.text);
@@ -192,7 +206,7 @@ Rectangle {
 
     property Component checkBoxMenuStyle:CheckBoxStyle {
         id : checkBoxMenuStyleID
-        indicator: Rectangle {
+        indicator: Rectangle {               
                 implicitWidth: 16
                 implicitHeight: 16
                 radius: 3
@@ -207,23 +221,30 @@ Rectangle {
                     anchors.fill: parent
                 }
         }
+
+
+
         label: Text {
             text: control.text
             font.pointSize: 11
             //font.capitalization: Font.SmallCaps
             color: Global.currentTheme.buttonLabelColor
         }
+
     }
 
 
      property Component comboBoxMenuStyle: ComboBoxStyle {
         id: comboBox
-   /*     background: Rectangle {
+        background: Rectangle {
             id: rect
-            radius: 2
-            border.width: 2
+            radius: 1
+            border.width: 1
+            border.color: control.activeFocus ? "#47b" : "#999"
             color: "#fff"
-        }*/
+            implicitHeight: 14
+            implicitWidth: 130
+        }
         label: Text {
             horizontalAlignment: Text.AlignLeft
             font.pointSize: 11
@@ -293,3 +314,73 @@ Rectangle {
     ]
 }
 
+
+
+
+
+
+
+/*
+
+            Row {
+                id : row1
+                function repaint() {
+                   var children = row1.children;
+                    for(var i = 0; i<children.length;++i) {
+                        if (typeof (children[i].repaint) === "function")
+                            children[i].repaint();
+                    }
+                }
+                spacing: 40
+                ComboBox {
+                    id: themeChoice
+                    model: [Control.whiteThemeName,Control.darkThemeName]
+                    style: comboBoxMenuStyle
+                    function repaint() {
+                        //style = null
+                        style = comboBoxMenuStyle
+                    }
+
+                }
+                Text{
+                    text: "Application theme "
+                    font.pointSize: 11
+
+                    color: Global.currentTheme.buttonLabelColor
+                    function repaint() {
+                        color = Global.currentTheme.buttonLabelColor
+                    }
+
+                }
+            }
+            Row{
+                id : row2
+                function repaint() {
+                   var children = row2.children;
+                    for(var i = 0; i<children.length;++i) {
+                        if (typeof (children[i].repaint) === "function")
+                            children[i].repaint();
+                    }
+                }
+                spacing: 40
+                TextField {
+                    id: defaultNameField
+                    text:"Project name"
+                    font.pointSize: 11
+                    width: 130
+
+                }
+                Text{
+                    text: "Default clock's name "
+                    font.pointSize: 11
+                    //font.capitalization: Font.SmallCaps
+                    color: Global.currentTheme.buttonLabelColor
+                    function repaint() {
+                        color = Global.currentTheme.buttonLabelColor
+                    }
+                }
+            }
+
+        }
+
+*/

@@ -6,6 +6,7 @@ Rectangle {
 
     property int buttonWidth: 100
     property int buttonHeigth: 30
+    property int buttonRadius: 6
 /*
     property color fillColor: "#383838"
     property color borderColor: "transparent"
@@ -38,7 +39,7 @@ Rectangle {
 
     width: buttonWidth
     height: buttonHeigth
-    radius: 6
+    radius: buttonRadius
     smooth: true
     antialiasing: true
 

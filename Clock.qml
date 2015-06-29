@@ -70,7 +70,7 @@ Rectangle {
            // console.log(endTime);
             writeTime(moment.toLocaleDateString(Qt.locale(),"yyyy-MM-dd") ,
                       clock.clockName,clock.serialNr,startTime,endTime);
-            console.log(endTime);
+            //console.log(endTime);
         }
     }
 
@@ -81,12 +81,14 @@ Rectangle {
 
     width: 180
     height: 180
-    //color: fillColor
+    color: fillColor
+    /*
     gradient: Gradient {
         GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.3) }
         GradientStop { position: 0.67; color: Qt.darker(fillColor, 1.35) }
     }
-    radius: 26
+    */
+    radius: 10
     border.width: 0
     border.color: "#1b50da"
 
@@ -107,13 +109,13 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 40
         font.pointSize: 17
-        color: parent.labelColor
+        color: parent.labelColor   
     }
 
     Rectangle {
-        width:10
-        height: 10
-        radius: 5
+        width:9
+        height: 9
+        radius: 2
         anchors{
             top:clock.top
             right:clock.right
@@ -163,7 +165,7 @@ Rectangle {
 
         TextInput {
             id: input
-            //text: clock.clockName
+            //MS Shell Dlg 2
             text: "Project name"
             font.pixelSize: 15
             color: clock.labelColor
@@ -172,6 +174,7 @@ Rectangle {
             wrapMode: TextInput.WordWrap
             horizontalAlignment:  TextInput.AlignHCenter
             maximumLength: 50
+            //Component.onCompleted: console.log(text.length);
         }
 
     }
@@ -198,6 +201,7 @@ Rectangle {
             onTriggered: {
                 input.selectAll();
                 input.focus = true;
+                input.forceActiveFocus();
             }
         }
 

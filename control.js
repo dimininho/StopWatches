@@ -39,6 +39,7 @@ function addClock(parentItem,main) {
                                                       "height":main.clockWidth,
                                                       "clockName":settings.defName,
                                                       "seeSeconds": settings.enableSeconds});
+    //buttonObject.Layout.alignment = 3
 //console.log("clock  " + serialNr);
    // Global.clocksContainer[serialNr] = buttonObject;
     clocksContainer.push(buttonObject);
@@ -71,8 +72,9 @@ function getMinDivider(number) {
 
 function drawCoordinates(parentItem,from,to) {
     var label;
-    var xStart = parentItem.xPos;
-    var xEnd = parentItem.width-40;
+    var label00;
+    var xStart = parentItem.xPos+7;
+    var xEnd = parentItem.width-40-2*7;
     var divCoef = getMinDivider(to-from);
     var step = divCoef*(xEnd - xStart)/(to-from);
     //console.log(from + " @ " +to);
@@ -80,12 +82,23 @@ function drawCoordinates(parentItem,from,to) {
     var j = 0;
     removeCoordinateLabels();
     for(var i=from;i<=to;i+=divCoef,++j) {
+        //forming label like "13:00"
+        //where "13" is label and "00" is label00
         label = Qt.createQmlObject('import QtQuick 2.0; Text {font.pointSize: 13; y:13;}',
             parentItem, "label");
+        label00 = Qt.createQmlObject('import QtQuick 2.0; Text {font.pointSize: 7; y:13; text:"00";}',
+            parentItem, "label00");
+
         label.text = i;
         label.color = Global.currentTheme.statisticsLabelColor
         label.x = xStart + j*step;
+        label00.color = Global.currentTheme.statisticsLabelColor
+        label00.x = xStart + j*step + 10*label.text.length;
+
+
         labelContainer.push(label);
+        labelContainer.push(label00);
+
 //console.log(i);
        // console.log(label.text + " :" + label.x);
     }
@@ -139,7 +152,7 @@ function delay(delayTime, cb) {
     timer.start();
 }
 
-//this function needs for correct display running clocks
+//this function needs for correct display of running clocks
 // (we write current time to database and run clock again)
 
 
@@ -151,7 +164,6 @@ function clockDoubleClick(pause)
              clocksContainer[runnedClocks[j]].run = true;
          }
     }
-
     for(var i=0; i< Global.clocksContainer.length;++i)
     {
         if (clocksContainer[i]){
@@ -164,10 +176,9 @@ function clockDoubleClick(pause)
     }
 
     if (pause)
-        delay(3000,innerClockDoubleClick);
+        delay(2100,innerClockDoubleClick);
     else
         innerClockDoubleClick();
-    console.log("double click");
 }
 
 

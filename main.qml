@@ -5,10 +5,6 @@ import QtQuick.Controls 1.2
 import QtQuick.LocalStorage 2.0
 import "control.js" as Control
 import "global.js" as Global
-//import "Statistics.qml" as Statistics
-//import "../" as Root
-//884 323 319
-//5xcq75
 import QtQuick.Controls.Styles 1.3
 
 Window {
@@ -19,8 +15,8 @@ Window {
 
     width:500
     height: 500
-    minimumWidth: clockWidth
-    minimumHeight: clockWidth
+    minimumWidth: clockWidth + 20
+    minimumHeight: clockWidth + 100
     visible: true
     color: Control.currentTheme.mainItemColor
    // flags: Qt.FramelessWindowHint;
@@ -59,7 +55,7 @@ Window {
             mainItem.timerStep();
             var time = new Date();
             var timestr = "" + time.getHours() + time.getMinutes() + time.getSeconds();
-            if (timestr === "235959") mainItem.newDay();
+            if (timestr === "235958") mainItem.newDay();
         }
     }
 
@@ -83,22 +79,27 @@ Window {
         }
 
 
-       /* RowLayout{
+        GridLayout{
             id: rowlayout
-            anchors.centerIn:  mainPanel
+            rowSpacing:  20
+            //columns: 2
+            anchors.verticalCenter:  mainPanel.verticalCenter
+           // anchors.horizontalCenter: mainPanel.horizontalCenter
+            anchors.left: mainPanel.left
+            anchors.right: mainPanel.right
 
-*/
         Button {
             id: mainMenuButton
             //text:"="
             menu: mainMenu
+            Layout.alignment: Qt.AlignLeft
 
             //width: 60
             style: menuButtonStyle
             iconSource: "./img/" + Control.currentTheme.mainMenuIcon
             //iconSource: "./img/white_menu1.png"          
-            anchors.left:mainPanel.left
-            anchors.verticalCenter:  mainPanel.verticalCenter
+            //anchors.left:mainPanel.left
+            //anchors.verticalCenter:  mainPanel.verticalCenter
 
             function repaint() {
               iconSource =  "./img/" + Global.currentTheme.mainMenuIcon;
@@ -108,15 +109,7 @@ Window {
 
         }
 
-        Row{
-           // anchors.top : parent.top
-            //anchors.horizontalCenter:  mainPanel.horizontalCenter
-            //anchors.centerIn:  mainPanel
-            anchors.verticalCenter:  mainPanel.verticalCenter
-            anchors.horizontalCenter: mainPanel.horizontalCenter
-            anchors.left: mainMenuButton.right
 
-            spacing: 20
 
 
             function repaint() {
@@ -130,6 +123,7 @@ Window {
             MenuButton{
                 id: startButton
                 buttonText: "Start all"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 onButtonClick: {
                     mainItem.startClocks()
                 }
@@ -138,6 +132,7 @@ Window {
             MenuButton  {
                 id: stopButton
                 buttonText: "Stop all"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 onButtonClick: {
                     mainItem.stopClocks()
                 }
@@ -146,6 +141,7 @@ Window {
             MenuButton  {
                 id: addNew
                 buttonText: "Add new"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 onButtonClick: {
                     Control.addClock(layout,mainItem);
                 }
@@ -241,20 +237,21 @@ Window {
         width: mainItem.width
         height:mainItem.height
         anchors.top: settingPanel.bottom
-        //anchors.top :mainPanel.bottom
-        anchors.left: mainItem.left
-        anchors.right: mainItem.right
+        anchors.left:  mainItem.contentItem.left
+        anchors.right: mainItem.contentItem.right
+        //anchors.horizontalCenter: mainItem.contentItem.horizontalCenter
+        //anchors.verticalCenter:  mainItem.contentItem.verticalCenter
+        anchors.margins: 10
+
 
     GridLayout {
+
         id:layout
         property int colNumber: 2
-       // anchors.top: settingPanel.bottom
-        //anchors.top :mainPanel.bottom
-       // anchors.left: mainItem.left
-       // anchors.right: mainItem.right
+        rowSpacing: 10
+        columnSpacing: 10
+        //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         columns: colNumber
-
-
     }
     }
 
@@ -278,9 +275,117 @@ Window {
 
     onNewDay: Control.clockDoubleClick(true);
 
-
-    function tt() {console.log("CLOSE")}
-
     Component.onDestruction: Control.clockDoubleClick(false);
 
 }
+
+
+
+
+/*
+
+    Rectangle {
+        id: mainPanel
+        width: mainItem.width
+        height: 50
+        color: Control.currentTheme.mainPanelColor
+        //color: "white"
+        anchors.top: parent.top
+        z:2
+
+        function repaint() {
+           mainPanel.color = Global.currentTheme.mainPanelColor
+           var children = mainPanel.children;
+            for(var i = 0; i<children.length;++i) {
+                if (typeof (children[i].repaint) === "function")
+                    children[i].repaint();
+            }
+        }
+
+
+
+        Button {
+            id: mainMenuButton
+            //text:"="
+            menu: mainMenu
+
+            //width: 60
+            style: menuButtonStyle
+            iconSource: "./img/" + Control.currentTheme.mainMenuIcon
+            //iconSource: "./img/white_menu1.png"
+            anchors.left:mainPanel.left
+            anchors.verticalCenter:  mainPanel.verticalCenter
+
+            function repaint() {
+              iconSource =  "./img/" + Global.currentTheme.mainMenuIcon;
+              style = null;
+              style = menuButtonStyle; //need for correct updating
+            }
+
+        }
+
+        RowLayout{
+           // anchors.top : parent.top
+            //anchors.horizontalCenter:  mainPanel.horizontalCenter
+            //anchors.centerIn:  mainPanel
+            anchors.verticalCenter:  mainPanel.verticalCenter
+           // anchors.horizontalCenter: mainPanel.horizontalCenter
+            anchors.left: mainMenuButton.right
+            anchors.right: mainPanel.right
+
+            spacing: 20
+
+
+            function repaint() {
+               var children = this.children;
+                for(var i = 0; i<children.length;++i) {
+                    if (typeof (children[i].repaint) === "function")
+                        children[i].repaint();
+                }
+            }
+
+            MenuButton{
+                id: startButton
+                buttonText: "Start all"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                onButtonClick: {
+                    mainItem.startClocks()
+                }
+            }
+
+            MenuButton  {
+                id: stopButton
+                buttonText: "Stop all"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                onButtonClick: {
+                    mainItem.stopClocks()
+                }
+            }
+
+            MenuButton  {
+                id: addNew
+                buttonText: "Add new"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                onButtonClick: {
+                    Control.addClock(layout,mainItem);
+                }
+            }
+        }
+
+        //}
+
+        Rectangle {
+            width: mainPanel.width
+            height:3
+            anchors.bottom: mainPanel.bottom
+            color: "blue"
+            visible: (Global.settings.theme==="White") ? true : false
+            function repaint() {
+                visible = (Global.settings.theme==="White") ? true : false
+            }
+        }
+
+    }
+
+
+*/

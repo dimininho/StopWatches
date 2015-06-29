@@ -13,5 +13,6 @@
         <file>SettingsPanel.qml</file>
         <file>PopupMenuStyle.qml</file>
         <file>Statistics.qml</file>
+        <file>VarCalendarStyle.qml</file>
     </qresource>
 </RCC>
