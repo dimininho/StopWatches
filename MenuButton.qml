@@ -7,14 +7,7 @@ Rectangle {
     property int buttonWidth: 100
     property int buttonHeigth: 30
     property int buttonRadius: 6
-/*
-    property color fillColor: "#383838"
-    property color borderColor: "transparent"
-    property color onPressBorderColor: "white"
-    property color onHoverFillColor: "#888888"
-    property color labelColor: "white"
 
- */
     property color fillColor: Global.currentTheme.buttonFillColor
     property color borderColor: Global.currentTheme.buttonBorderColor
     property color onPressBorderColor: Global.currentTheme.buttonOnPressBorderColor
@@ -31,7 +24,6 @@ Rectangle {
        button.color = fillColor; //need for correct colour updating
     }
 
-    //onColorChanged: console.log("Button color changed");
 
     property string buttonText: "Button"
     property int fontSize: 13

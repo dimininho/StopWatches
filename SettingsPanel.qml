@@ -33,11 +33,6 @@ Rectangle {
 
     function repaint() {
        settingPanel.color = Global.currentTheme.settingsPanelColor
-       var children = settingPanel.children;
-        for(var i = 0; i<children.length;++i) {
-            if (typeof (children[i].repaint) === "function")
-                children[i].repaint();
-        }
     }
 
 
@@ -56,25 +51,11 @@ Rectangle {
         anchors.right: parent.right
        // anchors.horizontalCenter: parent.horizontalCenter
         anchors.margins: 30
-        function repaint() {
-           var children = grid.children;
-            for(var i = 0; i<children.length;++i) {
-                if (typeof (children[i].repaint) === "function")
-                    children[i].repaint();
-            }
-        }
+
 
         ColumnLayout{
             anchors.margins: 50
             id: colLayout
-
-            function repaint() {
-               var children = colLayout.children;
-                for(var i = 0; i<children.length;++i) {
-                    if (typeof (children[i].repaint) === "function")
-                        children[i].repaint();
-                }
-            }
 
             CheckBox{
                 id: countingRegime
@@ -117,13 +98,6 @@ Rectangle {
 
             Row {
                 id : row1
-                function repaint() {
-                   var children = row1.children;
-                    for(var i = 0; i<children.length;++i) {
-                        if (typeof (children[i].repaint) === "function")
-                            children[i].repaint();
-                    }
-                }
                 spacing: 40
                 ComboBox {
                     id: themeChoice
@@ -148,13 +122,6 @@ Rectangle {
             }
             Row{
                 id : row2
-                function repaint() {
-                   var children = row2.children;
-                    for(var i = 0; i<children.length;++i) {
-                        if (typeof (children[i].repaint) === "function")
-                            children[i].repaint();
-                    }
-                }
                 spacing: 40
                 TextField {
                     id: defaultNameField

@@ -26,12 +26,16 @@ Window {
     contentItem.state: "CALENDAR_HIDE"
 
     function repaint() {
-        statisticsWindow.color = Global.currentTheme.mainItemColor
-        var children = statisticsWindow.contentItem.children;
-        for(var i = 0; i<children.length;++i) {
-            if (typeof (children[i].repaint) === "function")
-                children[i].repaint();
+        function repaintInner(parentItem) {
+            if (typeof (parentItem.repaint) === "function")
+                                  parentItem.repaint();
+            var children = parentItem.children
+            for(var i = 0; i<children.length;++i)
+                    repaintInner( children[i]);
+
         }
+        statisticsWindow.color = Global.currentTheme.mainItemColor;
+        repaintInner(statisticsWindow.contentItem);
     }
 
 
@@ -152,7 +156,10 @@ Window {
                        rectPositions[j] =new RectRange(from,to,timeDiff);
 
                    }
-                    clocks.append({"Name": rs.rows.item(i).name,
+                   var itemName =  rs.rows.item(i).name;
+                   if (itemName.length>13)
+                        itemName = itemName.substr(0,13) + "..."
+                    clocks.append({"Name": itemName,
                                    "Intervals": rectPositions});
                }
 
@@ -169,11 +176,6 @@ Window {
         color: Control.currentTheme.mainPanelColor
         function repaint() {
             topPanel.color = Global.currentTheme.mainPanelColor
-            var children = topPanel.children;
-            for(var i = 0; i<children.length;++i) {
-                if (typeof (children[i].repaint) === "function")
-                    children[i].repaint();
-            }
         }
 
 
@@ -186,14 +188,6 @@ Window {
         anchors.verticalCenter:  parent.verticalCenter
         //anchors.leftMargin: 50
         spacing: 20
-
-        function repaint() {
-            var children = dates.children;
-            for(var i = 0; i<children.length;++i) {
-                if (typeof (children[i].repaint) === "function")
-                    children[i].repaint();
-            }
-        }
 
         MenuButton {
             id: backButton
@@ -251,12 +245,7 @@ Window {
         property int xPos: 200
 
         function repaint() {
-        statData.color = Global.currentTheme.mainItemColor
-            var children = statData.children;
-            for(var i = 0; i<children.length;++i) {
-                if (typeof (children[i].repaint) === "function")
-                    children[i].repaint();
-            }
+            statData.color = Global.currentTheme.mainItemColor
         }
 
         ListView {
@@ -336,11 +325,6 @@ Window {
             color:Global.currentTheme.mainItemColor
             function repaint() {
                 labels.color = Global.currentTheme.mainItemColor
-                var children = labels.children;
-                for(var i = 0; i<children.length;++i) {
-                    if (typeof (children[i].repaint) === "function")
-                        children[i].repaint();
-                }
             }
 
             Rectangle{

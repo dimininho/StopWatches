@@ -37,14 +37,24 @@ Window {
     signal showStatistics
     signal newDay
 
-    function repaint() {
-       mainItem.color = Global.currentTheme.mainItemColor
-       var children = mainItem.contentItem.children;
-        for(var i = 0; i<children.length;++i) {
-            if (typeof (children[i].repaint) === "function")
-                children[i].repaint();
+
+
+    function repaintMain() {
+
+        function repaintInner(parentItem) {
+            if (typeof (parentItem.repaint) === "function")
+                                  parentItem.repaint();
+            var children = parentItem.children
+            for(var i = 0; i<children.length;++i)
+                    repaintInner( children[i]);
+
         }
+        mainItem.color = Global.currentTheme.mainItemColor;
+        repaintInner(mainItem.contentItem);
+
     }
+
+
 
     Timer{
         id: mainTimer
@@ -71,12 +81,9 @@ Window {
 
         function repaint() {
            mainPanel.color = Global.currentTheme.mainPanelColor
-           var children = mainPanel.children;
-            for(var i = 0; i<children.length;++i) {
-                if (typeof (children[i].repaint) === "function")
-                    children[i].repaint();
-            }
         }
+
+
 
 
         GridLayout{
@@ -109,16 +116,6 @@ Window {
 
         }
 
-
-
-
-            function repaint() {
-               var children = this.children;
-                for(var i = 0; i<children.length;++i) {
-                    if (typeof (children[i].repaint) === "function")
-                        children[i].repaint();
-                }
-            }
 
             MenuButton{
                 id: startButton

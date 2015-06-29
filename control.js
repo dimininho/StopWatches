@@ -274,7 +274,7 @@ function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName
     Global.changeTheme(theme);
 
     console.log(Global.currentTheme.mainItemColor);
-    mainItem.repaint();
+    mainItem.repaintMain();
 }
 
 
@@ -309,7 +309,8 @@ function loadSettingsFromFile() {
             settings.themeNr = +temp;   //from string to integer
         settings.theme = fileio.read(settingFile);
         Global.changeTheme(settings.theme);
-        mainItem.repaint();
+        //mainItem.repaint();
+        mainItem.repaintMain();
         do{
             subName = fileio.read(settingFile);
             if (subName)
