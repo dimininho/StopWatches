@@ -19,6 +19,7 @@ Window {
     minimumHeight: clockWidth + 100
     visible: true
     color: Control.currentTheme.mainItemColor
+
    // flags: Qt.FramelessWindowHint;
 
     //width: JS.getSettings(windowWidth)
@@ -258,14 +259,24 @@ Window {
          layout.colNumber = mainItem.width / mainItem.clockWidth;
     }
 
+    function checkDB() {// Create the database if it doesn't already exist
+        var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
+        db.transaction(
+            function(tx) {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Data(date DATE, name CHAR,serialNr SMALLINT,startTime TIME, endTime TIME)');
+            }
+         )
+    }
+
     onSceneGraphInitialized:  {
        // Control.initializeSettings();
-      Control.loadSettingsFromFile();
+       Control.loadSettingsFromFile();
        settingPanel.setSettingToPanel(); 
-        if (Control.settings.loadOnStart)
-            Control.readClocksFromFile(layout);
-        else
-            Control.addClock(layout,mainItem);
+       if (Control.settings.loadOnStart)
+           Control.readClocksFromFile(layout);
+       else
+           Control.addClock(layout,mainItem);
+       checkDB();
     }
 
 
@@ -276,113 +287,3 @@ Window {
 
 }
 
-
-
-
-/*
-
-    Rectangle {
-        id: mainPanel
-        width: mainItem.width
-        height: 50
-        color: Control.currentTheme.mainPanelColor
-        //color: "white"
-        anchors.top: parent.top
-        z:2
-
-        function repaint() {
-           mainPanel.color = Global.currentTheme.mainPanelColor
-           var children = mainPanel.children;
-            for(var i = 0; i<children.length;++i) {
-                if (typeof (children[i].repaint) === "function")
-                    children[i].repaint();
-            }
-        }
-
-
-
-        Button {
-            id: mainMenuButton
-            //text:"="
-            menu: mainMenu
-
-            //width: 60
-            style: menuButtonStyle
-            iconSource: "./img/" + Control.currentTheme.mainMenuIcon
-            //iconSource: "./img/white_menu1.png"
-            anchors.left:mainPanel.left
-            anchors.verticalCenter:  mainPanel.verticalCenter
-
-            function repaint() {
-              iconSource =  "./img/" + Global.currentTheme.mainMenuIcon;
-              style = null;
-              style = menuButtonStyle; //need for correct updating
-            }
-
-        }
-
-        RowLayout{
-           // anchors.top : parent.top
-            //anchors.horizontalCenter:  mainPanel.horizontalCenter
-            //anchors.centerIn:  mainPanel
-            anchors.verticalCenter:  mainPanel.verticalCenter
-           // anchors.horizontalCenter: mainPanel.horizontalCenter
-            anchors.left: mainMenuButton.right
-            anchors.right: mainPanel.right
-
-            spacing: 20
-
-
-            function repaint() {
-               var children = this.children;
-                for(var i = 0; i<children.length;++i) {
-                    if (typeof (children[i].repaint) === "function")
-                        children[i].repaint();
-                }
-            }
-
-            MenuButton{
-                id: startButton
-                buttonText: "Start all"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                onButtonClick: {
-                    mainItem.startClocks()
-                }
-            }
-
-            MenuButton  {
-                id: stopButton
-                buttonText: "Stop all"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                onButtonClick: {
-                    mainItem.stopClocks()
-                }
-            }
-
-            MenuButton  {
-                id: addNew
-                buttonText: "Add new"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                onButtonClick: {
-                    Control.addClock(layout,mainItem);
-                }
-            }
-        }
-
-        //}
-
-        Rectangle {
-            width: mainPanel.width
-            height:3
-            anchors.bottom: mainPanel.bottom
-            color: "blue"
-            visible: (Global.settings.theme==="White") ? true : false
-            function repaint() {
-                visible = (Global.settings.theme==="White") ? true : false
-            }
-        }
-
-    }
-
-
-*/

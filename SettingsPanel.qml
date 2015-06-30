@@ -59,7 +59,7 @@ Rectangle {
 
             CheckBox{
                 id: countingRegime
-                text: "Only one clock can go"
+                text: "Only one clock is active"
                 checked: false;
                 style:  checkBoxMenuStyle
                 function repaint() {
@@ -71,7 +71,7 @@ Rectangle {
 
             CheckBox{
                 id: enableSecs
-                text: "Enable seconds"
+                text: "Show seconds"
                 checked: false;
 
                 style:  checkBoxMenuStyle
@@ -181,7 +181,7 @@ Rectangle {
                 border.width: 1
                 Rectangle {
                     visible: control.checked
-                    color: "#555"
+                    color: "#152641"
                     border.color: "#333"
                     radius: 2
                     anchors.margins: 4
@@ -205,7 +205,7 @@ Rectangle {
         id: comboBox
         background: Rectangle {
             id: rect
-            radius: 1
+            radius: 2
             border.width: 1
             border.color: control.activeFocus ? "#47b" : "#999"
             color: "#fff"
@@ -234,8 +234,7 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 11
               //  font.capitalization: Font.SmallCaps
-                //color: styleData.selected ? "white" : "black"
-                color: Global.currentTheme.buttonLabelColor
+                color:styleData.selected ? Global.currentTheme.mainMenuLabelOnHoverColor : Global.currentTheme.buttonLabelColor
                 text: styleData.text
             }
 

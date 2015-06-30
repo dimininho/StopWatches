@@ -290,9 +290,9 @@ Window {
                     id: sumTime
                     anchors.left: nam.left
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 3
+                    anchors.bottomMargin: 2
                    // x: 120
-                    font.pointSize: 9
+                    font.pointSize: 8
                     color: Global.currentTheme.statisticsSumTimeColor
                     text:""
 
@@ -332,9 +332,9 @@ Window {
                 height: 7
                 width:parent.width - statData.xPos - diagramRightMargin + 10
                 x: statData.xPos
-                color:Global.currentTheme.statisticsLabelColor
+                color:Global.currentTheme.statisticsBarColor
                 function repaint() {
-                    abscissa.color = Global.currentTheme.statisticsLabelColor
+                    abscissa.color = Global.currentTheme.statisticsBarColor
                 }
                 anchors{
                     top: parent.top

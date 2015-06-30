@@ -122,7 +122,7 @@ Rectangle {
             rightMargin: 15
             topMargin: 15
         }
-        color: clock.run ? "yellow" : "grey"
+        color: clock.run ? Control.currentTheme.clockIndicatorColor : Control.currentTheme.clockIndicatorOffColor
 
     }
 
@@ -184,11 +184,11 @@ Rectangle {
         id: popupMenu
 
         MenuItem{
-            text: "Enable seconds"
+            text: "Show seconds"
             onTriggered: {
                 seeSeconds = !seeSeconds
-                if (seeSeconds) text = "Disable seconds"
-                else text = "Enable seconds"
+                if (seeSeconds) text = "Hide seconds"
+                else text = "Show seconds"
              }
         }
         MenuItem{

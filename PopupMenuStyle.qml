@@ -14,7 +14,7 @@ MenuStyle {
             //opacity: 0.7
             Rectangle {
                   anchors.fill: parent
-                  anchors.margins: 1
+                  anchors.margins: 1                  
                   color: styleData.selected ? Global.currentTheme.mainMenuOnHoverRowColor : Global.currentTheme.mainMenuRowColor
                   antialiasing: true
                   visible: true
@@ -23,7 +23,8 @@ MenuStyle {
         }
         itemDelegate.label: Text{
             text:  styleData.text
-            color: Global.currentTheme.buttonLabelColor
+            //color: Global.currentTheme.buttonLabelColor
+            color:styleData.selected ? Global.currentTheme.mainMenuLabelOnHoverColor : Global.currentTheme.buttonLabelColor
             font.pointSize: 12
             font.bold: styleData.pressed ? true : false
         }

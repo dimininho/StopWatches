@@ -15,8 +15,8 @@ CalendarStyle {/*
             property bool gridVisible: true
 
            readonly property color sameMonthDateTextColor: Global.currentTheme.buttonLabelColor
-           readonly property color selectedDateColor: Global.currentTheme.buttonOnHoverFillColor
-           readonly property color selectedDateTextColor: "white"
+           readonly property color selectedDateColor: Global.currentTheme.calendarSelectDate
+           readonly property color selectedDateTextColor: Global.currentTheme.mainMenuLabelOnHoverColor
            readonly property color fillDateColor: Global.currentTheme.mainItemColor
            readonly property color differentMonthDateTextColor: "gray"
            readonly property color invalidDatecolor: "red"
