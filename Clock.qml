@@ -10,7 +10,6 @@ Rectangle {
     id: clock
     property int serialNr:0
 
-    //property string clockName: "Project name"
     property alias clockName: input.text
     property int min: 0
     property int hour: 0
@@ -21,7 +20,6 @@ Rectangle {
     property string endTime: ""
     property bool run: false
 
-    //property color fillColor: "#434c53"
     property color fillColor: Control.currentTheme.clockFillColor;
     property color labelColor: Control.currentTheme.clockLabelColor
     property int clockWidth:180
@@ -64,13 +62,10 @@ Rectangle {
         var moment = new Date();
         if(clock.run) {
             startTime = moment.getHours() + ":" + moment.getMinutes() +":" + moment.getSeconds();
-           // console.log(startTime);
         } else {
             endTime = moment.getHours() + ":" + moment.getMinutes() +":" + moment.getSeconds();
-           // console.log(endTime);
             writeTime(moment.toLocaleDateString(Qt.locale(),"yyyy-MM-dd") ,
                       clock.clockName,clock.serialNr,startTime,endTime);
-            //console.log(endTime);
         }
     }
 

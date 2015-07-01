@@ -3,53 +3,66 @@
 .import QtQuick.LocalStorage 2.0 as Sql
 
 var component;
-var buttonObject;
+var clockObject;
 //var parentItem = "layout"
-var maxQty = 7;
+//var maxQty = 7;
 var serialNr = Global.serialNr;
 var endingChar = "#^#"
 var settingFile = "settings.txt"
 var fileName = "clocks.txt";
-//var currentTheme = new Global.Theme();
 var currentTheme = Global.currentTheme;
-
 var settings = Global.settings;
 var clocksContainer = Global.clocksContainer;
-var darkThemeName = "Dark";
+var darkThemeName = "Blue";
 var whiteThemeName = "White";
 var labelContainer = [];
 
-function ClockType(object){
-    this.number = object.serialNr;
-    this.name = object.clockName;
-    this.color = object.fillColor;
-    this.time = object.time
-}
-
+//-----------OPERATIONS WITH CLOCKS---------------------
 
 function addClock(parentItem,main) {
 
     if (component === undefined)
         component = Qt.createComponent("Clock.qml");
 
-
-    buttonObject = component.createObject(parentItem,{
+    clockObject = component.createObject(parentItem,{
                                                       "serialNr": serialNr,
                                                       "width":main.clockWidth,
                                                       "height":main.clockWidth,
                                                       "clockName":settings.defName,
                                                       "seeSeconds": settings.enableSeconds});
-    //buttonObject.Layout.alignment = 3
-//console.log("clock  " + serialNr);
-   // Global.clocksContainer[serialNr] = buttonObject;
-    clocksContainer.push(buttonObject);
+    clocksContainer.push(clockObject);
     ++serialNr;
 
-    for(var i=0; i<maxQty;++i){
-        //console.log(Global.watchesContainer[i] +"  n:" +i +"  +++");
-    }
+   // for(var i=0; i<maxQty;++i){
+   //     //console.log(Global.watchesContainer[i] +"  n:" +i +"  +++");
+   // }
 
 }
+
+function destroyItem(number)
+{
+   clocksContainer[number].destroy();
+   //clocksContainer[number] = null;
+   delete clocksContainer[number];
+}
+
+function removeAllClocks()
+{
+    for(var i=0; i< Global.clocksContainer.length;++i)
+    {
+        if (clocksContainer[i])
+            destroyItem(i);
+    }
+}
+
+
+function stopAllClocks()
+{
+    mainItem.stopClocks();
+}
+
+
+//--------------DRAW COORDINATE AXIS AND LABELS    IN STATISTICS WINDOW------------------
 
 
 function removeCoordinateLabels()
@@ -61,6 +74,7 @@ function removeCoordinateLabels()
     labelContainer.length = 0;
 }
 
+//change step of axis
 function getMinDivider(number) {
     var divider = 1;
     if (number>10) {
@@ -77,7 +91,7 @@ function drawCoordinates(parentItem,from,to) {
     var xEnd = parentItem.width-40-2*7;
     var divCoef = getMinDivider(to-from);
     var step = divCoef*(xEnd - xStart)/(to-from);
-    //console.log(from + " @ " +to);
+
 //console.log(parentItem.id + "   " + xStart +"-"+xEnd + "  step" + step);
     var j = 0;
     removeCoordinateLabels();
@@ -99,46 +113,14 @@ function drawCoordinates(parentItem,from,to) {
         labelContainer.push(label);
         labelContainer.push(label00);
 
-//console.log(i);
-       // console.log(label.text + " :" + label.x);
     }
 }
 
 
-/*
-function changeColumnsNumber(){
-    layout.colNumber = mainItem.width / mainItem.watchWidth;
-}
-*/
 
 
-function destroyItem(number)
-{
-    for(var i=0; i< clocksContainer.length;++i)
-    { if (clocksContainer[i])
-        console.log(clocksContainer[i].clockName +"  i " +i + "   ser " + clocksContainer[i].serialNr);
-    }
 
-   clocksContainer[number].destroy();
-   //clocksContainer[number] = null;
-   delete clocksContainer[number];
-    console.log("----------")
-    for(var i=0; i< clocksContainer.length;++i)
-    {
-        if (clocksContainer[i])
-         console.log(clocksContainer[i].clockName +"   " +i);
-    }
-}
-
-function removeAllClocks()
-{
-    for(var i=0; i< Global.clocksContainer.length;++i)
-    {
-        if (clocksContainer[i])
-            destroyItem(i);
-    }
-}
-
+//---------- AUXILIARY FUNCTIONS FOR WORK WITH DB-------------
 
 function Timer() {
     return Qt.createQmlObject("import QtQuick 2.2; Timer {}", mainItem);
@@ -154,8 +136,6 @@ function delay(delayTime, cb) {
 
 //this function needs for correct display of running clocks
 // (we write current time to database and run clock again)
-
-
 function clockDoubleClick(pause)
 {
     var runnedClocks = [];
@@ -164,6 +144,7 @@ function clockDoubleClick(pause)
              clocksContainer[runnedClocks[j]].run = true;
          }
     }
+
     for(var i=0; i< Global.clocksContainer.length;++i)
     {
         if (clocksContainer[i]){
@@ -176,11 +157,13 @@ function clockDoubleClick(pause)
     }
 
     if (pause)
-        delay(2100,innerClockDoubleClick);
+        delay(2100,innerClockDoubleClick); //for correct writing in DB when date changes
     else
         innerClockDoubleClick();
 }
 
+
+//------------------------SAVING(READING) FROM FILE   ------------------
 
 function writeClocksToFile()
 {
@@ -238,7 +221,7 @@ function readClocksFromFile(parentItem)
         reading = ((fillcolor) ? true : false);
 
         if (reading){
-            buttonObject = component.createObject(parentItem,{
+            clockObject = component.createObject(parentItem,{
                                                               "serialNr": number,
                                                               "clockName": name,
                                                               "fillColor": fillcolor,
@@ -247,9 +230,9 @@ function readClocksFromFile(parentItem)
                                                               "seeSeconds": seeSecs,
                                                               "time": time      });
 
-            //clocksContainer.push(buttonObject);
+            //clocksContainer.push(clockObject);
             lastSerNr = +number;
-            clocksContainer[lastSerNr] =buttonObject;
+            clocksContainer[lastSerNr] =clockObject;
         }
 
     }
@@ -257,11 +240,7 @@ function readClocksFromFile(parentItem)
     clockDoubleClick(false);
 }
 
-/*
-function initializeSettings() {
-    settings = new Global.Settings(false,false,false,"Dark",1,"Task");
-}
-*/
+
 
 function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName){
     settings.enableSeconds = enableSeconds;
@@ -325,18 +304,12 @@ function loadSettingsFromFile() {
 
 
 /*
-
-
     for (var prop in  Global.settings) {
 
       console.log(prop +" :"+ Global.settings[prop]);
 
     }
 
-
 */
 
-function stopAllClocks()
-{
-    mainItem.stopClocks();
-}
+

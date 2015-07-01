@@ -2,17 +2,16 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Clock.qml</file>
-        <file>MenuButton.qml</file>
-        <file>global.js</file>
         <file>control.js</file>
-        <file>main.cpp</file>
+        <file>global.js</file>
+        <file>MenuButton.qml</file>
+        <file>PopupMenuStyle.qml</file>
+        <file>SettingsPanel.qml</file>
+        <file>Statistics.qml</file>
+        <file>VarCalendarStyle.qml</file>
         <file>img/black_menu1.png</file>
         <file>img/black_menu2.png</file>
         <file>img/white_menu1.png</file>
         <file>img/white_menu2.png</file>
-        <file>SettingsPanel.qml</file>
-        <file>PopupMenuStyle.qml</file>
-        <file>Statistics.qml</file>
-        <file>VarCalendarStyle.qml</file>
     </qresource>
 </RCC>

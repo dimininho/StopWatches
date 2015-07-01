@@ -13,4 +13,9 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
+    fileio.h \
     fileio.h
+
+
+win32: RC_ICONS = logo.ico
+macx: ICON = logo.icns

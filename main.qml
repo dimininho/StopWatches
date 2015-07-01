@@ -39,7 +39,9 @@ Window {
     signal newDay
 
 
-
+    //calls when theme changes
+    //if item should redraws after theme changing, it must contains repaint() function
+    //repaintMain() calls all repaint()s  from window.
     function repaintMain() {
 
         function repaintInner(parentItem) {
@@ -86,7 +88,6 @@ Window {
 
 
 
-
         GridLayout{
             id: rowlayout
             rowSpacing:  20
@@ -98,15 +99,10 @@ Window {
 
         Button {
             id: mainMenuButton
-            //text:"="
             menu: mainMenu
             Layout.alignment: Qt.AlignLeft
-
-            //width: 60
             style: menuButtonStyle
             iconSource: "./img/" + Control.currentTheme.mainMenuIcon
-            //iconSource: "./img/white_menu1.png"          
-            //anchors.left:mainPanel.left
             //anchors.verticalCenter:  mainPanel.verticalCenter
 
             function repaint() {
@@ -242,24 +238,24 @@ Window {
         anchors.margins: 10
 
 
-    GridLayout {
+        GridLayout {
 
-        id:layout
-        property int colNumber: 2
-        rowSpacing: 10
-        columnSpacing: 10
-        //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        columns: colNumber
-    }
+            id:layout
+            property int colNumber: 2
+            rowSpacing: 10
+            columnSpacing: 10
+            //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            columns: colNumber
+        }
     }
 
 
     onWidthChanged: {
-       // Control.changeColumnsNumber()
          layout.colNumber = mainItem.width / mainItem.clockWidth;
     }
 
-    function checkDB() {// Create the database if it doesn't already exist
+
+    function checkDB() {// Create the database if it hasn't already exist
         var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
         db.transaction(
             function(tx) {
@@ -269,9 +265,8 @@ Window {
     }
 
     onSceneGraphInitialized:  {
-       // Control.initializeSettings();
        Control.loadSettingsFromFile();
-       settingPanel.setSettingToPanel(); 
+       settingPanel.setSettingToPanel();
        if (Control.settings.loadOnStart)
            Control.readClocksFromFile(layout);
        else
@@ -281,9 +276,9 @@ Window {
 
 
 
-    onNewDay: Control.clockDoubleClick(true);
+    onNewDay: Control.clockDoubleClick(true);           //save current clocks to DB with delay
 
-    Component.onDestruction: Control.clockDoubleClick(false);
+    Component.onDestruction: Control.clockDoubleClick(false);//save current clocks to DB
 
 }
 

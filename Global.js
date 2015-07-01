@@ -15,7 +15,7 @@ function Settings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName) {
     this.defName = defName
 }
 
-var settings =  new Settings(false,false,false,"Dark",1,"Task");
+var settings =  new Settings(false,false,false,"Blue",1,"Task");
 
 
 
@@ -30,29 +30,29 @@ function Theme() {
     this.clockIndicatorColor = "#ffffff"
 }
 
-var dark = new Theme();
-    dark.buttonFillColor = "#152641";
-    dark.buttonLabelColor = "white"
-    dark.buttonBorderColor = "transparent"
-    dark.buttonOnHoverFillColor = "#8498A9"
-    dark.buttonOnPressBorderColor = "white"
-    dark.mainPanelColor = "#152641"
-    dark.mainItemColor = "#4A6587"
-    dark.settingsPanelColor = "#8498A9"
-    dark.clockFillColor = "#152641"
-    dark.clockLabelColor = "white"
-    dark.clockIndicatorColor = "white"
-    dark.clockIndicatorOffColor = "#485365"
-    dark.mainMenuIcon = "white_menu1.png"
-    dark.mainMenuBackColor = "#8498A9"
-    dark.mainMenuRowColor = "#8498A9"
-    dark.mainMenuOnHoverRowColor = "white"
-    dark.mainMenuBorderColor = "transparent"
-    dark.mainMenuLabelOnHoverColor = "#152641"
-    dark.statisticsSumTimeColor = "#F6EFE4"
-    dark.statisticsLabelColor = "white"
-    dark.statisticsBarColor = "white"
-    dark.calendarSelectDate = "#8498A9"
+var blue = new Theme();
+    blue.buttonFillColor = "#152641";
+    blue.buttonLabelColor = "white"
+    blue.buttonBorderColor = "transparent"
+    blue.buttonOnHoverFillColor = "#8498A9"
+    blue.buttonOnPressBorderColor = "white"
+    blue.mainPanelColor = "#152641"
+    blue.mainItemColor = "#4A6587"
+    blue.settingsPanelColor = "#8498A9"
+    blue.clockFillColor = "#152641"
+    blue.clockLabelColor = "white"
+    blue.clockIndicatorColor = "white"
+    blue.clockIndicatorOffColor = "#485365"
+    blue.mainMenuIcon = "white_menu1.png"
+    blue.mainMenuBackColor = "#8498A9"
+    blue.mainMenuRowColor = "#8498A9"
+    blue.mainMenuOnHoverRowColor = "white"
+    blue.mainMenuBorderColor = "transparent"
+    blue.mainMenuLabelOnHoverColor = "#152641"
+    blue.statisticsSumTimeColor = "#F6EFE4"
+    blue.statisticsLabelColor = "white"
+    blue.statisticsBarColor = "white"
+    blue.calendarSelectDate = "#8498A9"
 
 
 var white = new Theme();
@@ -79,16 +79,16 @@ var white = new Theme();
     white.statisticsBarColor = "#195871"
     white.calendarSelectDate = "#D8EDFD"
 
-var currentTheme = dark;
-var darkThemeName = "Dark";
+var currentTheme = blue;
+var blueThemeName = "Blue";
 var whiteThemeName = "White";
 
 
 function changeTheme(theme){
     switch (theme) {
-    case darkThemeName :
-        currentTheme = dark;
-       // console.log("DARK");
+    case blueThemeName :
+        currentTheme = blue;
+       // console.log("Blue");
         break;
     case whiteThemeName:
         currentTheme = white;
@@ -106,58 +106,3 @@ var black = new Theme();
 black.buttonFillColor = "#80aa00";
 */
 
-
-/*
-
-
-var dark = new Theme();
-    dark.buttonFillColor = "#383838";
-    dark.buttonLabelColor = "white"
-    dark.buttonBorderColor = "transparent"
-    dark.buttonOnHoverFillColor = "#888888"
-    dark.buttonOnPressBorderColor = "white"
-    dark.mainPanelColor = "#383838"
-    dark.mainItemColor = "#676767"
-    dark.settingsPanelColor = "#8498A9"
-    dark.clockFillColor = "#434c53"
-    dark.clockLabelColor = "white"
-    dark.clockIndicatorColor = "#ffffff"
-    dark.mainMenuIcon = "white_menu1.png"
-    dark.mainMenuBackColor = "gray"
-    dark.mainMenuRowColor = "#333333"
-    dark.mainMenuOnHoverRowColor = "#999999"
-    dark.mainMenuBorderColor = "black"
-    dark.statisticsSumTimeColor = "#F6EFE4"
-    dark.statisticsLabelColor = "white"
-    dark.statisticsBarColor = "white"
-    dark.calendarOtherMonthDate = "white"
-
-
-var white = new Theme();
-    white.buttonFillColor = "#D8EDFD";
-//white.buttonFillColor = "white";
-    white.buttonLabelColor = "black"
-    white.buttonBorderColor = "transparent"
-    white.buttonOnHoverFillColor = "#64BCED"
-
-    white.buttonOnPressBorderColor = "white"
-   // white.mainPanelColor = "white"
-    white.mainPanelColor = "#D8EDFD"
-    white.mainItemColor = "white"
-    white.settingsPanelColor = "#EAF8FA"
-    white.clockFillColor = "#D1E8FA"
-    white.clockLabelColor = "black"
-    white.clockIndicatorColor = "#ffffff"
-    white.mainMenuIcon = "black_menu1.png"
-    white.mainMenuBackColor = "white"
-    white.mainMenuRowColor = "white"
-    white.mainMenuOnHoverRowColor = "#CDE1FE"
-    white.mainMenuBorderColor = "transparent"
-    white.statisticsSumTimeColor = "red"
-    white.statisticsLabelColor = "black"
-    white.statisticsBarColor = "#266CE8"
-
-
-
-
-*/

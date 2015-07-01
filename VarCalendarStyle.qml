@@ -46,7 +46,6 @@ CalendarStyle {/*
                                color = selectedDateTextColor;
                            }
                        }
-                       //color;
                    }
 
                }

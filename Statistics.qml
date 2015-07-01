@@ -23,7 +23,7 @@ Window {
     maximumWidth: width
     minimumWidth: width
     color: Global.currentTheme.mainItemColor;
-    contentItem.state: "CALENDAR_HIDE"
+   // contentItem.state: "CALENDAR_HIDE"
 
     function repaint() {
         function repaintInner(parentItem) {
@@ -114,6 +114,12 @@ Window {
 
     }
 
+    //gets DB data and calculates rectangles for diagram
+    //Model:
+    //          Task1: (100,150); (190;195)
+    //          Task2: (130,131)
+    //Numbers are coordinates of the start and end of rectangle on diagram
+    //
     function getDataFromDB() {
        var db = LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
        clocks.clear();
@@ -152,7 +158,6 @@ Window {
                        from =timeToCoorinate(rs2.rows.item(j).startTime);
                        to = timeToCoorinate(rs2.rows.item(j).endTime);
                        timeDiff = timeDifference(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
-                      // console.log(from +"  -  " + to);
                        rectPositions[j] =new RectRange(from,to,timeDiff);
 
                    }
@@ -182,8 +187,6 @@ Window {
 
     Row{
         id: dates
-        //anchors.fill: parent
-        //anchors.top: parent.top
         anchors.left: parent.left
         anchors.verticalCenter:  parent.verticalCenter
         //anchors.leftMargin: 50
@@ -248,6 +251,7 @@ Window {
             statData.color = Global.currentTheme.mainItemColor
         }
 
+        //represents current model of diagram
         ListView {
             id:view
             anchors.fill:parent
@@ -314,7 +318,6 @@ Window {
 
         Rectangle {
             id: labels
-
             property int xPos: statData.xPos
 
             height:60
@@ -338,26 +341,11 @@ Window {
                 }
                 anchors{
                     top: parent.top
-                    //left: parent.left
-                    //right:parent.right
                 }
             }
 
         }
 
-
-/*
-        Rectangle {
-            id: divider
-            x: parent.xPos - 1
-            width: 1
-            height: parent.height
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            color: "black"
-        }
-
-*/
     }
 
 
@@ -371,8 +359,7 @@ Window {
         target: mainItem
         onShowStatistics: {
             repaint();
-            Control.clockDoubleClick(false);//for correct running clocks display
-           // console.log("get data");
+            Control.clockDoubleClick(false);//for correct display of running clocks
             getDataFromDB();//try with Control.delay
            // Control.delay(2000,getDataFromDB);
         }
@@ -390,7 +377,6 @@ Window {
         selectedDate: new Date()
         visible: false
         frameVisible: true
-        //weekNumbersVisible: true
         focus: true
         style: calendarstyle
         __locale: locale
@@ -420,7 +406,7 @@ Window {
 
 
     MouseArea{
-        //mouse area is under calendar. need to catch mouse's click out of calendar
+        //mouse area lies under calendar.It need to catch mouse's click out of calendar
         id:underCalendar
         z:2
         anchors.fill: parent
@@ -432,19 +418,5 @@ Window {
     }
 
 
-    contentItem.states: [
-        State {
-            name: "CALENDAR_HIDE"
-            PropertyChanges { target: calendar ; visible: false }
-            PropertyChanges { target: underCalendar ; enabled: false }
-
-        },
-        State {
-            name: "CALENDAR_SHOW"
-            PropertyChanges { target: calendar ; visible: true }
-            PropertyChanges { target: underCalendar ; enabled: true }
-
-        }
-    ]
 
 }
