@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>TimeKeeper</Name>
+    <Version>1.0.0</Version>
+    <Title>Start Menu TimeKeeper</Title>
+    <Publisher>Hnatiuk Dmytro</Publisher>
+    <InstallerApplicationIcon>icon</InstallerApplicationIcon>
+    <InstallerWindowIcon>icon</InstallerWindowIcon>
+    <!-- Directory name is used in component.xml -->
+    <StartMenuDir>TimeKeeper</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/TimeKeeper</TargetDir>
+    <MaintenanceToolName>Uninstall</MaintenanceToolName>
+</Installer>

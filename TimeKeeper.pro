@@ -15,5 +15,5 @@ include(deployment.pri)
 HEADERS += \
     fileio.h
 
-win32: RC_ICONS = logo.ico
-macx: ICON = logo.icns
+win32: RC_ICONS = icon.ico
+macx: ICON = icon.icns
