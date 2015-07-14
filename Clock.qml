@@ -58,12 +58,17 @@ Rectangle {
         }
     }
 
+
+
     function whenRunChanged() {
         var moment = new Date();
+        var hour = moment.getHours();
+        if (hour<10) hour = "0"+hour; //problems with reading of DB
+
         if(clock.run) {
-            startTime = moment.getHours() + ":" + moment.getMinutes() +":" + moment.getSeconds();
+            startTime = hour + ":" + moment.getMinutes() +":" + moment.getSeconds();
         } else {
-            endTime = moment.getHours() + ":" + moment.getMinutes() +":" + moment.getSeconds();
+            endTime = hour + ":" + moment.getMinutes() +":" + moment.getSeconds();
             writeTime(moment.toLocaleDateString(Qt.locale(),"yyyy-MM-dd") ,
                       clock.clockName,clock.serialNr,startTime,endTime);
         }

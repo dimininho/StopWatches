@@ -47,9 +47,7 @@ Window {
         var minTime = minHour*3600;
         var maxTime = maxHour*3600;
         var normCoef = (maxTime-minTime)/(endPos-startPos);
-//console.log("norma " + normCoef + "  endPos " + endPos);
-        return startPos + (seconds - minTime)/normCoef;
-
+        return startPos + (seconds - minTime)/normCoef;        
     }
 
     function secondsToTime(seconds) {
@@ -103,7 +101,7 @@ Window {
         var hour
         db.transaction(
             function(tx) {
-                var query = "SELECT MAX(startTime) as max
+                var query = "SELECT MAX(endTime) as max
                              FROM Data WHERE date= " +curDate;
                 var time = (tx.executeSql(query)).rows.item(0).max;
                 hour =  parseHour(time);
@@ -134,7 +132,7 @@ Window {
         minHour = +getMinHour(db,curDate);
         maxHour = +getMaxHour(db,curDate)+1;
         Control.drawCoordinates(labels,minHour,maxHour);
-        //console.log(minHour  +  " ^  " + maxHour);
+       // console.log(minHour  +  " ^  " + maxHour);
 
        db.transaction(
            function(tx) {
@@ -158,6 +156,7 @@ Window {
                        from =timeToCoorinate(rs2.rows.item(j).startTime);
                        to = timeToCoorinate(rs2.rows.item(j).endTime);
                        timeDiff = timeDifference(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
+
                        rectPositions[j] =new RectRange(from,to,timeDiff);
 
                    }
