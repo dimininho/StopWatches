@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += qml quick
 
 SOURCES += main.cpp
 
@@ -13,7 +13,10 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    fileio.h
+    fileio.h \
+    dbtoexcel.h
+
+include(QtXlsx/qtxlsx.pri)
 
 win32: RC_ICONS = icon.ico
 macx: ICON = icon.icns
