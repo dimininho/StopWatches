@@ -13,5 +13,6 @@
         <file>img/black_menu2.png</file>
         <file>img/white_menu1.png</file>
         <file>img/white_menu2.png</file>
+        <file>ExportPanel.qml</file>
     </qresource>
 </RCC>

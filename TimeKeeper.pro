@@ -2,7 +2,8 @@ TEMPLATE = app
 
 QT += qml quick
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    dbtoexcel.cpp
 
 RESOURCES += qml.qrc
 

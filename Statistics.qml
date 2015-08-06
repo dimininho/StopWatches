@@ -176,6 +176,7 @@ Window {
         anchors.top: parent.top
         anchors.left: parent.left
         height:40
+        z:2
         width: parent.width
         color: Control.currentTheme.mainPanelColor
         function repaint() {
@@ -231,8 +232,34 @@ Window {
             }
         }
 
+
     }
 
+        MenuButton {
+            id: exportShowButton
+            anchors.right: parent.right
+            anchors.rightMargin: 30
+            anchors.verticalCenter:  parent.verticalCenter
+            buttonWidth: 100
+            buttonHeigth: 25
+            buttonText: "Export"
+            onButtonClick: {
+                exportPanel.state = "ExportPanel_OPEN"
+                DBExport.createFile();
+                DBExport.printDate("12.12.2002");
+                DBExport.saveFile("A.xlsx");
+            }
+        }
+
+    }
+
+    ExportPanel{
+        id: exportPanel
+        z: 1        //above statData
+        width: topPanel.width
+        yPos: topPanel.height
+        anchors.left: topPanel.left
+        anchors.right: topPanel.right
     }
 
     Rectangle {
