@@ -312,4 +312,31 @@ function loadSettingsFromFile() {
 
 */
 
+//-----------------------------WORKING WITH TIME------------------------------------------
 
+function secondsToTime(seconds) {
+    Number.prototype.div = function(by) {
+        return (this - this % by)/by
+    }
+
+    var hour = seconds.div(3600);
+    seconds -= hour*3600;
+    var min = seconds.div(60);
+    seconds -= min*60;
+    var sec = seconds;
+    var timeStr;
+    timeStr = (hour>9) ? hour : "0"+hour;
+    timeStr = (min>9) ? timeStr + ":" + min : timeStr + ":0" + min
+    timeStr = (sec>9) ? timeStr + ":" + sec : timeStr + ":0" + sec
+    return timeStr;
+}
+
+
+
+function timeDifference(time1,time2) {
+    var arr = time1.split(':');
+    var arr2 = time2.split(':');
+    var seconds = +arr[0]*3600 + arr[1]*60 + arr[2]*1;
+    var seconds2 = +arr2[0]*3600 + arr2[1]*60 + arr2[2]*1;
+    return seconds2-seconds;
+}

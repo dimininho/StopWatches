@@ -18,6 +18,7 @@ Window {
     property int diagramRightMargin: 40
     property int diagramIndent: 7
 
+
     width: 700;
     height: 500;
     maximumWidth: width
@@ -49,7 +50,7 @@ Window {
         var normCoef = (maxTime-minTime)/(endPos-startPos);
         return startPos + (seconds - minTime)/normCoef;        
     }
-
+/*
     function secondsToTime(seconds) {
         Number.prototype.div = function(by) {
             return (this - this % by)/by
@@ -76,7 +77,7 @@ Window {
         var seconds2 = +arr2[0]*3600 + arr2[1]*60 + arr2[2]*1;
         return seconds2-seconds;
     }
-
+*/
     function parseHour(time){
         if (time) {
             if (time[2]===':') return time.substr(0,2);
@@ -155,7 +156,7 @@ Window {
                    for (var j = 0; j<rs2.rows.length; j++) {
                        from =timeToCoorinate(rs2.rows.item(j).startTime);
                        to = timeToCoorinate(rs2.rows.item(j).endTime);
-                       timeDiff = timeDifference(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
+                       timeDiff = Control.timeDifference(rs2.rows.item(j).startTime,rs2.rows.item(j).endTime);
 
                        rectPositions[j] =new RectRange(from,to,timeDiff);
 
@@ -245,9 +246,7 @@ Window {
             buttonText: "Export"
             onButtonClick: {
                 exportPanel.state = "ExportPanel_OPEN"
-                DBExport.createFile();
-                DBExport.printDate("12.12.2002");
-                DBExport.saveFile("A.xlsx");
+               // console.log(exportPanel.yPos + "     " + exportPanel.height)
             }
         }
 
@@ -256,7 +255,6 @@ Window {
     ExportPanel{
         id: exportPanel
         z: 1        //above statData
-        width: topPanel.width
         yPos: topPanel.height
         anchors.left: topPanel.left
         anchors.right: topPanel.right
@@ -302,7 +300,7 @@ Window {
                         sumSeconds += rectPositions.get(i).timeDifference;
                     }
                    // console.log(sumSeconds);
-                    sumTime.text = secondsToTime(sumSeconds);
+                    sumTime.text = Control.secondsToTime(sumSeconds);
                 }
 
                 Text{

@@ -2,6 +2,7 @@
 #include <QColor>
 
 DBtoExcel::DBtoExcel(){
+    pXlsx = new QXlsx::Document();
     headerFormat.setFontBold(true);
     dateFormat.setFontBold(true);
     dateFormat.setFontSize(12);
