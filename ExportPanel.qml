@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 import QtQuick.LocalStorage 2.0
 import QtQuick.Controls.Styles 1.2
+import QtQuick.Dialogs 1.2
 import "global.js" as Global
 import "control.js" as Control
 
@@ -10,7 +11,7 @@ import "control.js" as Control
 Rectangle {
     id: exportPanel
 
-    property int yPos:40
+    property int yPos:130
     property var locale: Qt.locale("en_EN")
     property var fromDay: new Date();
     property var toDay: new Date();
@@ -18,7 +19,7 @@ Rectangle {
     color: Global.currentTheme.mainPanelColor
     width: 400
     state: "ExportPanel_CLOSE"
-    height: 50
+    height: 130
 
 
     function repaint() {
@@ -77,16 +78,19 @@ Rectangle {
 
     MouseArea{
         anchors.fill:exportPanel
-        onClicked: exportPanel.state = "SETTINGS_CLOSE"
+        onClicked: exportPanel.state = "ExportPanel_CLOSE"
             //console.log(exportPanel.yPos + "     " + exportPanel.height)}
     }
 
-    Row{
-        anchors.left: parent.left
-        anchors.leftMargin: 50
-        anchors.verticalCenter:  parent.verticalCenter
-        spacing: 20
 
+    GridLayout{
+        columns: 3
+        rows: 2
+        anchors.fill: parent
+        anchors.margins: 30
+        rowSpacing:  30
+
+        //1 row
         Text{
             text: "Select period "
             font.pointSize: 11
@@ -97,88 +101,115 @@ Rectangle {
 
         }
 
-        TextField {
-            id: fromDate;
-            text: fromDay.toLocaleDateString(locale,"yyyy-MMM-dd")
-            font.pixelSize: 15
-            horizontalAlignment: TextInput.AlignHCenter
-            onActiveFocusChanged: {
-                underCalendar.enabled = true;
-                calendar.field = fromDate
-                calendar.visible = true;
-                calendar.focus = true;
-              }
+        Row{
+            Layout.alignment: Qt.AlignCenter
+            spacing: 15
+            TextField {
+                id: fromDate;
+                text: fromDay.toLocaleDateString(locale,"yyyy-MMM-dd")
+                font.pixelSize: 15
+                horizontalAlignment: TextInput.AlignHCenter
+                onActiveFocusChanged: {
+                    underCalendar.enabled = true;
+                    calendar.field = fromDate
+                    calendar.visible = true;
+                    calendar.focus = true;
+                  }
+
+            }
+
+            Text{
+                text: ":"
+                font.pointSize: 11
+                color: Global.currentTheme.buttonLabelColor
+                function repaint() {
+                    color = Global.currentTheme.buttonLabelColor
+                }
+
+
+            }
+
+            TextField {
+                id: toDate;
+                text: toDay.toLocaleDateString(locale,"yyyy-MMM-dd")
+                font.pixelSize: 15
+                horizontalAlignment: TextInput.AlignHCenter
+                onActiveFocusChanged: {
+                    underCalendar.enabled = true;
+                    calendar.field = toDate
+                    calendar.visible = true;
+                    calendar.focus = true;
+                  }
+
+            }
 
         }
 
+        MenuButton {
+            id: exportExcelButton
+            buttonWidth: 150
+            buttonHeigth: 25
+            buttonText: "Export to Excel"
+            onButtonClick: {
+                exportPanel.state = "ExportPanel_CLOSE"
+                var nextDay = new Date();
+                var partName = "(exported " + nextDay.toLocaleDateString(locale,"yyyy-MMM-dd") + ")";
+                nextDay.setDate(fromDay.getDate());
+
+                var dailyTasks = []
+                DBExport.createFile();
+
+                do {
+                    dailyTasks = getDataFromDB(nextDay);
+                    DBExport.printDate(nextDay.toLocaleDateString(locale,"yyyy-MMM-dd"));
+                    DBExport.printHeader("Activity","Total time");
+                    console.log(nextDay);
+
+                    for(var i=0;i<dailyTasks.length;++i){
+                        console.log(dailyTasks[i].name + "  :  " + dailyTasks[i].time)
+                        DBExport.exportTask(dailyTasks[i].name,dailyTasks[i].time)
+                    }
+                    DBExport.addLine()
+                    nextDay.setDate(nextDay.getDate()+1);
+
+                }while(nextDay < toDay)
+
+                DBExport.saveFile(folderPath.text+"/TimeKeeper data" + partName + ".xlsx");
+console.log(folderPath.text+"/TimeKeeper data" + partName + ".xlsx");
+            }
+        }
+
+        //2 row
         Text{
-            text: ":"
+            text: "Folder "
             font.pointSize: 11
             color: Global.currentTheme.buttonLabelColor
             function repaint() {
                 color = Global.currentTheme.buttonLabelColor
             }
 
-
         }
 
         TextField {
-            id: toDate;
-            text: toDay.toLocaleDateString(locale,"yyyy-MMM-dd")
+            id: folderPath;
+            Layout.preferredWidth: 324
+            Layout.alignment: Qt.AlignCenter
+            text: "Documents/a/asdasd/asdddasd"
             font.pixelSize: 15
             horizontalAlignment: TextInput.AlignHCenter
-            onActiveFocusChanged: {
-                underCalendar.enabled = true;
-                calendar.field = toDate
-                calendar.visible = true;
-                calendar.focus = true;
-              }
-
         }
 
-
-    }
-
-
-
-
-    MenuButton {
-        id: exportExcelButton
-        anchors.right: parent.right
-        anchors.rightMargin: 30
-        anchors.verticalCenter:  parent.verticalCenter
-        buttonWidth: 150
-        buttonHeigth: 25
-        buttonText: "Export to Excel"
-        onButtonClick: {
-            exportPanel.state = "ExportPanel_CLOSE"
-            var nextDay = new Date();
-            var partName = "(exported " + nextDay.toLocaleDateString(locale,"yyyy-MMM-dd") + ")";
-            nextDay.setDate(fromDay.getDate());
-
-            var dailyTasks = []
-            DBExport.createFile();
-
-            do {
-                dailyTasks = getDataFromDB(nextDay);
-                DBExport.printDate(nextDay.toLocaleDateString(locale,"yyyy-MMM-dd"));
-                DBExport.printHeader("Activity","Total time");
-                console.log(nextDay);
-
-                for(var i=0;i<dailyTasks.length;++i){
-                    console.log(dailyTasks[i].name + "  :  " + dailyTasks[i].time)
-                    DBExport.exportTask(dailyTasks[i].name,dailyTasks[i].time)
-                }
-                DBExport.addLine()
-                nextDay.setDate(nextDay.getDate()+1);
-
-            }while(nextDay < toDay)
-
-            DBExport.saveFile("TimeKeeper data" + partName + ".xlsx");
-
+        MenuButton{
+            id: chooseFolder
+            buttonText: "Choose"
+            buttonWidth: 100
+            buttonHeigth: 25
+            onButtonClick: {
+                fileDialog.visible = true
+            }
         }
-    }
 
+    }
 
 
     Calendar {
@@ -237,6 +268,20 @@ Rectangle {
             calendar.visible = false;
         }
     }
+
+
+    FileDialog{
+        id: fileDialog
+        selectFolder: true
+        title: "Choose a folder"
+        visible: false
+        onAccepted: {
+            //folderPath.text = fileUrl
+            var path = folder + ""
+            folderPath.text = path.slice(8,path.length) //trunc  "file:///" from path
+        }
+    }
+
 
 
     states: [
