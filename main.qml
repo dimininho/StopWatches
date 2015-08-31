@@ -260,6 +260,10 @@ Window {
         db.transaction(
             function(tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS Data(date DATE, name CHAR,serialNr SMALLINT,startTime TIME, endTime TIME)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Settings(enableSeconds TINYTEXT, onlyOneRun TINYTEXT,loadOnStart TINYTEXT,theme TINYTEXT, themeNr SMALLINT, defName TINYTEXT, exportFolder TINYTEXT)');
+                var rws =tx.executeSql('SELECT * FROM Settings')
+                if (rws.rows.length===0)
+                    tx.executeSql('INSERT INTO Settings VALUES(?, ?, ?, ? ,?,?,?)', ["false" ,"false","false","Blue","1","Task","/C:progrma files"]);
             }
          )
     }

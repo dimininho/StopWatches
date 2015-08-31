@@ -240,7 +240,7 @@ function readClocksFromFile(parentItem)
     clockDoubleClick(false);
 }
 
-
+/*
 
 function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName){
     settings.enableSeconds = enableSeconds;
@@ -254,6 +254,60 @@ function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName
 
     console.log(Global.currentTheme.mainItemColor);
     mainItem.repaintMain();
+}*/
+
+function saveSettings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName){
+    settings.enableSeconds = enableSeconds;
+    settings.onlyOneRun = onlyOneRun;
+    settings.loadOnStart = loadOnStart
+    settings.theme = theme
+    settings.themeNr = themeNr
+    settings.defName = defName
+
+    Global.changeTheme(theme);
+
+   // console.log(Global.currentTheme.mainItemColor);
+    mainItem.repaintMain();
+
+    var db =Sql.LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
+    db.transaction(
+        function(tx) {
+            // Create the database if it doesn't already exist
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Settings(enableSeconds TINYTEXT, onlyOneRun TINYTEXT,loadOnStart TINYTEXT,theme TINYTEXT, themeNr SMALLINT, defName TINYTEXT, exportFolder TINYTEXT)');
+            tx.executeSql('UPDATE Settings SET enableSeconds='+"'" + enableSeconds + "'"
+                          + ',onlyOneRun=' +"'" + onlyOneRun +"'"
+                          + ',loadOnStart=' +"'" + loadOnStart +"'"
+                          + ',theme=' +"'" + theme +"'"
+                          + ',themeNr=' +"'" + themeNr +"'"
+                          + ',defName=' +"'" + defName +"'"
+                          );
+
+        }
+     )
+
+}
+
+function saveExportFolder(exportFolder){
+    settings.exportFolder = exportFolder;
+
+    var db =Sql.LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
+    db.transaction(
+        function(tx) {
+            tx.executeSql('UPDATE Settings SET exportFolder='+"'" + exportFolder + "'");
+        }
+     )
+}
+
+function getSettingFromDB(setting)
+{
+    var db =Sql.LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
+    db.transaction(
+        function(tx) {
+            var rw = tx.executeSql('Select ' + setting + 'FROM Settings');
+            console.log(rw.rows.item(0))
+            return rw.rows.item(0)
+        }
+     )
 }
 
 

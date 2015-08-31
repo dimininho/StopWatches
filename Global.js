@@ -6,16 +6,17 @@ var maxQty = 10;
 var clocksContainer = [];
 
 
-function Settings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName) {
+function Settings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName,exportFolder) {
     this.enableSeconds = enableSeconds
     this.onlyOneRun = onlyOneRun
     this.loadOnStart = loadOnStart
     this.theme = theme
     this.themeNr = themeNr
     this.defName = defName
+    this.exportFolder = exportFolder
 }
 
-var settings =  new Settings(false,false,false,"Blue",1,"Task");
+var settings =  new Settings(false,false,false,"Blue",1,"Task","");
 
 
 
