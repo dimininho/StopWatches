@@ -4,6 +4,7 @@ import QtQuick.Controls 1.2
 import QtQuick.LocalStorage 2.0
 import QtQuick.Controls.Styles 1.2
 import QtQuick.Dialogs 1.2
+import QtQml 2.2
 import "global.js" as Global
 import "control.js" as Control
 
@@ -154,7 +155,9 @@ Rectangle {
                 exportPanel.state = "ExportPanel_CLOSE"
                 var nextDay = new Date();
                 var partName = "(exported " + nextDay.toLocaleDateString(locale,"yyyy-MMM-dd") + ")";
-                nextDay.setDate(fromDay.getDate());
+                var filename;                
+                //nextDay.setDate(fromDay.getDate());
+                nextDay = fromDay;
 
                 var dailyTasks = []
                 DBExport.createFile();
@@ -163,7 +166,7 @@ Rectangle {
                     dailyTasks = getDataFromDB(nextDay);
                     DBExport.printDate(nextDay.toLocaleDateString(locale,"yyyy-MMM-dd"));
                     DBExport.printHeader("Activity","Total time");
-                    console.log(nextDay);
+                    //console.log(nextDay);
 
                     for(var i=0;i<dailyTasks.length;++i){
                         console.log(dailyTasks[i].name + "  :  " + dailyTasks[i].time)
@@ -173,9 +176,10 @@ Rectangle {
                     nextDay.setDate(nextDay.getDate()+1);
 
                 }while(nextDay < toDay)
+                filename = folderPath.text+"/TimeKeeper data" + partName + ".xlsx"
+                DBExport.saveFile(filename);
+                Qt.openUrlExternally("file:///"+filename);
 
-                DBExport.saveFile(folderPath.text+"/TimeKeeper data" + partName + ".xlsx");
-console.log(folderPath.text+"/TimeKeeper data" + partName + ".xlsx");
             }
         }
 
@@ -194,7 +198,7 @@ console.log(folderPath.text+"/TimeKeeper data" + partName + ".xlsx");
             id: folderPath;
             Layout.preferredWidth: 324
             Layout.alignment: Qt.AlignCenter
-            text: "Documents/a/asdasd/asdddasd"
+            text: Control.getSettingFromDB("exportFolder")==="" ? defaults.defaultPath(): Control.getSettingFromDB("exportFolder") ; //improve!!
             font.pixelSize: 15
             horizontalAlignment: TextInput.AlignHCenter
         }
@@ -246,7 +250,6 @@ console.log(folderPath.text+"/TimeKeeper data" + partName + ".xlsx");
             }
             underCalendar.enabled = false;
             calendar.visible = false;
-
         }
         function repaint(){
             style = nullstyle;
@@ -276,9 +279,8 @@ console.log(folderPath.text+"/TimeKeeper data" + partName + ".xlsx");
         title: "Choose a folder"
         visible: false
         onAccepted: {
-            //folderPath.text = fileUrl
-            var path = folder + ""
-            folderPath.text = path.slice(8,path.length) //trunc  "file:///" from path
+            folderPath.text = folder.toString().replace("file:///","");
+            Control.saveExportFolder(folderPath.text)
         }
     }
 
