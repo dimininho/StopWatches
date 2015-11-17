@@ -300,14 +300,27 @@ function saveExportFolder(exportFolder){
 
 function getSettingFromDB(setting)
 {
+    var value
     var db =Sql.LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
     db.transaction(
         function(tx) {
-            var rw = tx.executeSql('Select ' + setting + 'FROM Settings');
-            console.log(rw.rows.item(0))
-            return rw.rows.item(0)
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Settings(enableSeconds TINYTEXT, onlyOneRun TINYTEXT,loadOnStart TINYTEXT,theme TINYTEXT, themeNr SMALLINT, defName TINYTEXT, exportFolder TINYTEXT)');
+            var rw = tx.executeSql('Select ' + setting + ' FROM Settings');
+
+            if (rw.rows.length>0) {                
+                switch(setting) {                   
+                    case "enableSeconds": value = rw.rows.item(0).enableSeconds
+                    case "onlyOneRun": value = rw.rows.item(0).onlyOneRun
+                    case "loadOnStart": value = rw.rows.item(0).loadOnStart
+                    case "theme": value = rw.rows.item(0).theme
+                    case "themeNr": value = rw.rows.item(0).themeNr
+                    case "defName": value = rw.rows.item(0).defName
+                    case "exportFolder": value = rw.rows.item(0).exportFolder
+                }
+            }else value = ""
         }
      )
+    return value
 }
 
 
@@ -328,30 +341,24 @@ function writeSettingsToFile() {
 
 
 function loadSettingsFromFile() {
-    var subName,name = "";
-    var temp = "";
 
-    fileio.resetStream();
+    var db =Sql.LocalStorage.openDatabaseSync("ClocksData", "1.0", "The data of clock working", 10001);
+    db.transaction(
+        function(tx) {
+            var rw = tx.executeSql('Select * FROM Settings');
 
-    if (fileio.exist(settingFile))  {
-        settings.enableSeconds = (fileio.read(settingFile)==="true");
-        settings.onlyOneRun = (fileio.read(settingFile)==="true");
-        settings.loadOnStart = (fileio.read(settingFile)==="true");
-        temp = fileio.read(settingFile);
-        if (!isNaN(temp))
-            settings.themeNr = +temp;   //from string to integer
-        settings.theme = fileio.read(settingFile);
-        Global.changeTheme(settings.theme);
-        //mainItem.repaint();
-        mainItem.repaintMain();
-        do{
-            subName = fileio.read(settingFile);
-            if (subName)
-               name += subName;
-        }while(subName);
-        settings.defName = name;
+            if (rw.rows.length>0) {
+                settings.enableSeconds = (rw.rows.item(0).enableSeconds==="true");
+                settings.onlyOneRun = rw.rows.item(0).onlyOneRun==="true";
+                settings.loadOnStart = rw.rows.item(0).loadOnStart==="true";
+                settings.theme = rw.rows.item(0).theme;
+                settings.themeNr = rw.rows.item(0).themeNr;
+                settings.defName = rw.rows.item(0).defName;
+                settings.exportFolder = rw.rows.item(0).exportFolder;
 
-    }
+            }
+        }
+     )
 
 }
 

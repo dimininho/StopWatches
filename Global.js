@@ -16,7 +16,7 @@ function Settings(enableSeconds,onlyOneRun,loadOnStart,theme,themeNr,defName,exp
     this.exportFolder = exportFolder
 }
 
-var settings =  new Settings(false,false,false,"Blue",1,"Task","");
+var settings =  new Settings(true,false,false,"Blue",1,"Task","");
 
 
 

@@ -10,6 +10,8 @@ Rectangle {
     id: settingPanel
 
     property int yPos:200
+
+    signal showSeconds
 /*
     property alias onlyOne: countingRegime.checked
     property alias enableSeconds: enableSecs.checked
@@ -164,7 +166,7 @@ Rectangle {
                 Control.saveSettings(enableSecs.checked,countingRegime.checked,loadSavedClocks.checked,
                                     themeChoice.currentText,themeChoice.currentIndex,defaultNameField.text);
                 Control.writeSettingsToFile();
-                //settingPanel.update();
+                showSeconds();
                 settingPanel.state = "SETTINGS_CLOSE";
             }
         }

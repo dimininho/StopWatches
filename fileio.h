@@ -21,7 +21,6 @@ public slots:
         if (!file.open(QFile::WriteOnly | QFile::Truncate))
             return false;
 
-
         QTextStream out(&file);
         //out.setDevice(&file);
        // out.seek(writePos);
@@ -32,7 +31,6 @@ public slots:
 
         return true;
     }
-
 
 
     QString read(const QString& source)
@@ -79,6 +77,25 @@ private:
    // QTextStream in;
     //QTextStream out;
     //QFile file;
+};
+
+
+
+class Defaults: public QObject{
+    Q_OBJECT
+public:
+    Defaults() {}
+public slots:
+    void setDefaultPath(QString path) {
+        defPath = path;
+    }
+    QString defaultPath(){
+        return defPath;
+    }
+
+ private:
+    QString defPath;
+
 };
 
 

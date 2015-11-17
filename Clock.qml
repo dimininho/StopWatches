@@ -235,6 +235,10 @@ Rectangle {
         onStartClocks: clock.run = true
         onStopClocks: clock.run = false       
     }
+    Connections{
+        target: settingPanel
+        onShowSeconds: clock.seeSeconds = Global.settings.enableSeconds
+    }
 
 
 
