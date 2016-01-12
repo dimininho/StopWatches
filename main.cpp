@@ -1,21 +1,16 @@
+#include <QCoreApplication>
 #include <QGuiApplication>
-//#include <QApplication>
 #include <QQmlApplicationEngine>
-//#include <QStyle>
 #include <QQmlContext>
-#include "fileio.h"
 #include <QDebug>
 #include "dbtoexcel.h"
-#include <QCoreApplication>
+#include "fileio.h"
+
 
 QTXLSX_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-
-   // QApplication app(argc, argv);
-    //app.style()->pixelMetric(QStyle::PM_LargeIconSize);
-
 
     QGuiApplication app(argc, argv);
 
@@ -31,7 +26,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("defaults",&defaults);
     engine.rootContext()->setContextProperty("DBExport",&DBExport);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
 
 
    //qDebug()<<QCoreApplication::applicationDirPath();

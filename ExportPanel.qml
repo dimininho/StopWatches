@@ -166,10 +166,9 @@ Rectangle {
                     dailyTasks = getDataFromDB(nextDay);
                     DBExport.printDate(nextDay.toLocaleDateString(locale,"yyyy-MMM-dd"));
                     DBExport.printHeader("Activity","Total time");
-                    //console.log(nextDay);
 
                     for(var i=0;i<dailyTasks.length;++i){
-                        console.log(dailyTasks[i].name + "  :  " + dailyTasks[i].time)
+                        //console.log(dailyTasks[i].name + "  :  " + dailyTasks[i].time)
                         DBExport.exportTask(dailyTasks[i].name,dailyTasks[i].time)
                     }
                     DBExport.addLine()
@@ -183,7 +182,7 @@ Rectangle {
             }
         }
 
-        //2 row
+        //2-nd row
         Text{
             text: "Folder "
             font.pointSize: 11

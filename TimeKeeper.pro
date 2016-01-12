@@ -1,6 +1,7 @@
 TEMPLATE = app
 
 QT += qml quick
+macx: QT+= core sql
 
 SOURCES += main.cpp \
     dbtoexcel.cpp

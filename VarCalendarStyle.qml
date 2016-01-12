@@ -4,14 +4,7 @@ import QtQuick.Controls.Styles 1.2
 import QtQuick.Controls.Private 1.0
 import "global.js" as Global
 
-CalendarStyle {/*
-           background: Rectangle {
-               color: "blue"
-              // width: 200
-               implicitWidth: 200
-              // height:200
-               implicitHeight: 200
-           }*/
+CalendarStyle {
             property bool gridVisible: true
 
            readonly property color sameMonthDateTextColor: Global.currentTheme.buttonLabelColor

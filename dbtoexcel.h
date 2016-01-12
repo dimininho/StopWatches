@@ -1,3 +1,8 @@
+/*In this class used module QXlsx written by dbzhang800
+ * source:   http://qtxlsx.debao.me
+ * DBtoExcel contains functionality for handling export from database
+*/
+
 #ifndef DBTOEXCEL
 #define DBTOEXCEL
 #include "QtXlsx/xlsxdocument.h"

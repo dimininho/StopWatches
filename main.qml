@@ -40,7 +40,7 @@ Window {
 
 
     //calls when theme changes
-    //if item should redraws after theme changing, it must contains repaint() function
+    //if an item should be redrawn after theme changing, it must contain repaint() function
     //repaintMain() calls all repaint()s  from window.
     function repaintMain() {
 
