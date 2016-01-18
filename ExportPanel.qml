@@ -276,7 +276,8 @@ Rectangle {
         id: fileDialog
         selectFolder: true
         title: "Choose a folder"
-        visible: false
+        //visible: false        //problems with MacOS
+        Component.onCompleted: visible = false;
         onAccepted: {
             folderPath.text = folder.toString().replace("file:///","");
             Control.saveExportFolder(folderPath.text)
