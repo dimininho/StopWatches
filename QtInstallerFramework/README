@@ -1,9 +1,0 @@
-------------Installer with Qt Installer Framework:-----------
-
-..\packages\TimeKeeper\data  should contain all libraries and TimeKeeper.exe
-Libraries are collected with programm:  windeployqt.exe (Windows),  macdeployqt(MacOS)
-
-
-Generate installer with
-binarycreator --offline-only -c config/config.xml -p packages TimeKeeperInstaller
-
